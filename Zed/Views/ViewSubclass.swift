@@ -59,8 +59,6 @@ class PointHeaderView: UIView {
     }
     
     
-    
-    
 }
 //MARK: - Card Info View
 class CardInfoView: UIView {
@@ -331,6 +329,8 @@ class MenuTypeContentTableViewCell: UITableViewCell {
     }
 }
 
+//MARK: - SurveyView
+
 //MARK: - Extension UI
 extension UILabel {
     
@@ -345,3 +345,5 @@ extension UILabel {
     }
     
 }
+
+
