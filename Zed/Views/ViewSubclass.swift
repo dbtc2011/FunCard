@@ -204,7 +204,7 @@ class CardInfoView: UIView {
     
     
 }
-
+//MARK: - MenuTypeTableViewCell
 class MenuTypeTableViewCell: UITableViewCell {
     
     //MARK: Properties
@@ -243,6 +243,7 @@ class MenuTypeTableViewCell: UITableViewCell {
     
 }
 
+//MARK: - MenuTypeContentTableViewCell
 class MenuTypeContentTableViewCell: UITableViewCell {
     
     //MARK: Properties
@@ -329,7 +330,25 @@ class MenuTypeContentTableViewCell: UITableViewCell {
     }
 }
 
-//MARK: - SurveyView
+//MARK: - OptionCell
+class OptionTableViewCell: UITableViewCell {
+    
+    //MARK: Properties
+    @IBOutlet weak var labelOption: UILabel!
+    
+    @IBOutlet weak var imageCircle: UIImageView!
+    //MARK: Method
+//    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+//        super.init(style: style, reuseIdentifier: reuseIdentifier)
+//    }
+//    
+//    required init?(coder aDecoder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
+    
+    
+}
+
 
 //MARK: - Extension UI
 extension UILabel {
