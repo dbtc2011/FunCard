@@ -121,6 +121,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Mwe-Ak-0Mw" id="d3U-Nh-pr7">
+                                                    <rect key="frame" x="0.0" y="0.0" width="240" height="99"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gl7-aw-XoY">
@@ -173,12 +174,12 @@
                                                             <exclude reference="AH1-8q-EOM"/>
                                                         </mask>
                                                         <mask key="constraints">
-                                                            <exclude reference="hUt-iV-Sqv"/>
-                                                            <exclude reference="hh8-Qg-svr"/>
                                                             <exclude reference="GJK-dI-Sxc"/>
                                                             <exclude reference="KYQ-4Q-5XG"/>
                                                             <exclude reference="VcW-88-e0j"/>
                                                             <exclude reference="Zpq-5a-Vw9"/>
+                                                            <exclude reference="hUt-iV-Sqv"/>
+                                                            <exclude reference="hh8-Qg-svr"/>
                                                         </mask>
                                                     </variation>
                                                     <variation key="heightClass=regular-widthClass=compact">
@@ -187,12 +188,12 @@
                                                             <include reference="AH1-8q-EOM"/>
                                                         </mask>
                                                         <mask key="constraints">
-                                                            <include reference="hUt-iV-Sqv"/>
-                                                            <include reference="hh8-Qg-svr"/>
                                                             <include reference="GJK-dI-Sxc"/>
                                                             <include reference="KYQ-4Q-5XG"/>
                                                             <include reference="VcW-88-e0j"/>
                                                             <include reference="Zpq-5a-Vw9"/>
+                                                            <include reference="hUt-iV-Sqv"/>
+                                                            <include reference="hh8-Qg-svr"/>
                                                         </mask>
                                                     </variation>
                                                 </tableViewCellContentView>
