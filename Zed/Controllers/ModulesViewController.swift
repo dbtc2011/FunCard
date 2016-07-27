@@ -427,6 +427,11 @@ class PulsifyViewController : UIViewController {
 //MARK: - Pasa Points View Controller
 class PasaPointsViewController : UIViewController {
     
+    @IBOutlet weak var labelPoints: UILabel!
+    
+    @IBOutlet weak var textCardNumber: UITextField!
+    
+    @IBOutlet weak var textAmount: UITextField!
     
     
 }
