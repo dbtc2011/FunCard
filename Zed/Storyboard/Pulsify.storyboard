@@ -70,6 +70,9 @@
                                                 <include reference="sBb-Cn-FQu"/>
                                             </mask>
                                         </variation>
+                                        <connections>
+                                            <action selector="buttonCityClicked:" destination="pGZ-de-0V5" eventType="touchUpInside" id="mgR-pV-Q4v"/>
+                                        </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Angeles" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dC7-DB-Csq">
                                         <rect key="frame" x="-42" y="-21" width="42" height="21"/>
@@ -201,6 +204,9 @@
                                                 <include reference="urn-lV-veP"/>
                                             </mask>
                                         </variation>
+                                        <connections>
+                                            <action selector="buttonBranchClicked:" destination="pGZ-de-0V5" eventType="touchUpInside" id="Omp-aJ-dXo"/>
+                                        </connections>
                                     </button>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rUP-n1-V98">
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>

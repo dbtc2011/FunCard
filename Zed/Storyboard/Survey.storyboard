@@ -155,6 +155,9 @@
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                             <nil key="highlightedColor"/>
+                                                            <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                                <rect key="frame" x="56" y="5" width="164" height="89"/>
+                                                            </variation>
                                                         </label>
                                                     </subviews>
                                                     <animations/>

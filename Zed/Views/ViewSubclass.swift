@@ -349,7 +349,106 @@ class OptionTableViewCell: UITableViewCell {
     
 }
 
-
+//MARK: - Custom Picker View
+protocol CustomPickerViewDelegate {
+    
+    func pickerDidSelect(value: String, index: Int)
+    
+}
+class CustomPickerView : UIView, UIPickerViewDataSource, UIPickerViewDelegate {
+    
+    //MARK: Properties
+    var contents: NSMutableArray = NSMutableArray()
+    var picker: UIPickerView = UIPickerView()
+    var delegate: CustomPickerViewDelegate?
+    
+    
+    //MARK: Setup
+    func setupPicker(title: String, content: NSMutableArray) {
+        
+        self.contents.removeAllObjects()
+        self.contents.addObjectsFromArray(content as [AnyObject])
+        
+        
+        let image = UIImageView(frame: CGRectMake(0, 0, self.frame.size.width, self.frame.size.height))
+        image.backgroundColor = UIColor.blackColor()
+        image.alpha = 0.8
+        self.addSubview(image)
+        
+        let viewHolder = UIView(frame: CGRectMake(0, (self.frame.size.height/2)-(300/2), self.frame.size.width, 300))
+        viewHolder.backgroundColor = UIColor.whiteColor()
+        self.addSubview(viewHolder)
+        
+        let labelTitle = UILabel(frame: CGRectMake(0, 0, 300, 50))
+        labelTitle.text = title
+        labelTitle.font = UIFont.boldSystemFontOfSize(24)
+        labelTitle.textAlignment = NSTextAlignment.Center
+        viewHolder.addSubview(labelTitle)
+        
+        picker.frame = CGRectMake(0, 50, self.frame.size.width, 200)
+        picker.delegate = self
+        picker.dataSource = self
+        viewHolder.addSubview(picker)
+        
+        let buttonCancel = UIButton(type: UIButtonType.Custom)
+        buttonCancel.frame = CGRectMake(0, 250, self.frame.size.width/2, 50)
+        buttonCancel.addTarget(self, action: "cancelButtonClicked:", forControlEvents: UIControlEvents.TouchUpInside)
+        buttonCancel.titleLabel?.textColor = UIColor.blackColor()
+        buttonCancel.backgroundColor = UIColor.blueColor()
+        buttonCancel.setTitle("Cancel", forState: UIControlState.Normal)
+        viewHolder.addSubview(buttonCancel)
+        
+        
+        let buttonOkay = UIButton(type: UIButtonType.Custom)
+        buttonOkay.frame = CGRectMake(self.frame.size.width/2, 250, self.frame.size.width/2, 50)
+        buttonOkay.backgroundColor = UIColor.blueColor()
+        buttonOkay.titleLabel?.textColor = UIColor.blackColor()
+        buttonOkay.addTarget(self, action: "okayButtonClicked:", forControlEvents: UIControlEvents.TouchUpInside)
+        buttonOkay.setTitle("Okay", forState: UIControlState.Normal)
+        viewHolder.addSubview(buttonOkay)
+        
+        
+    }
+    
+    //MARK: Picker Data Source and Delegate
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+        
+        return 1
+        
+    }
+    
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        
+        return contents.count
+        
+    }
+    
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        
+        return self.contents[row] as? String
+        
+    }
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        
+    }
+    
+    //MARK: Button Actions
+    func cancelButtonClicked(sender: UIButton) {
+        
+        self.removeFromSuperview()
+        
+    }
+    
+    func okayButtonClicked(sender: UIButton) {
+        
+        self.removeFromSuperview()
+        
+    }
+    
+    
+    
+}
 //MARK: - Extension UI
 extension UILabel {
     

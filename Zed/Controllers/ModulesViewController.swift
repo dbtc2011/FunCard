@@ -126,6 +126,10 @@ class PulsifyViewController : UIViewController {
     
     var answers: NSMutableDictionary = NSMutableDictionary()
     var contents: NSMutableArray = NSMutableArray()
+    var cities: NSMutableArray = NSMutableArray()
+    var branches: NSMutableArray = NSMutableArray()
+    
+    var customPicker: CustomPickerView?
     
     //MARK: View life cycle
     override func viewDidLoad() {
@@ -138,8 +142,6 @@ class PulsifyViewController : UIViewController {
         self.resetButtons()
         self.resetValues()
         self.setButtonColors()
-        
-        
         
     }
     
@@ -214,6 +216,28 @@ class PulsifyViewController : UIViewController {
         
         
         self.labelNumber.text = "\(self.counter + 1)"
+        
+        self.cities.addObject("ANGELES")
+        self.cities.addObject("BACOLOD")
+        self.cities.addObject("BAGUIO")
+        self.cities.addObject("ANGELES")
+        self.cities.addObject("CEBU")
+        self.cities.addObject("DAVAO")
+        self.cities.addObject("MAKATI")
+        self.cities.addObject("MANILA")
+        self.cities.addObject("NAVOTAS")
+        self.cities.addObject("PARANAQUE")
+        self.cities.addObject("STA ROSA")
+        self.cities.addObject("TAGAYTAY")
+        self.cities.addObject("QUEZON CITY")
+        self.cities.addObject("VALENZUELA")
+        
+        self.branches.addObject("1")
+        self.branches.addObject("2")
+        self.branches.addObject("3")
+        self.branches.addObject("4")
+        self.branches.addObject("5")
+        self.branches.addObject("6")
         
     }
     func updateContent() {
@@ -376,6 +400,32 @@ class PulsifyViewController : UIViewController {
         
     }
     
+    @IBAction func buttonCityClicked(sender: UIButton) {
+        
+        self.customPicker = nil
+        self.customPicker = CustomPickerView()
+        self.customPicker?.frame = CGRectMake(0, 0, UIScreen.mainScreen().bounds.size.width, UIScreen.mainScreen().bounds.size.height)
+        self.customPicker?.setupPicker("City", content: self.cities)
+        self.view.addSubview(self.customPicker!)
+        
+        
+    }
+    
+    @IBAction func buttonBranchClicked(sender: UIButton) {
+        
+        self.customPicker = nil
+        self.customPicker = CustomPickerView()
+        self.customPicker?.frame = CGRectMake(0, 0, UIScreen.mainScreen().bounds.size.width, UIScreen.mainScreen().bounds.size.height)
+        self.customPicker?.setupPicker("Branch", content: self.branches)
+        self.view.addSubview(self.customPicker!)
+        
+    }
+    
+    
+}
+
+//MARK: - Pasa Points View Controller
+class PasaPointsViewController : UIViewController {
     
     
     
