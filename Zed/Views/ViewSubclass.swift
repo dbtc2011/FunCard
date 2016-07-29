@@ -54,10 +54,7 @@ class PointHeaderView: UIView {
         buttonLogOff.setImage(UIImage(named: "logoff"), forState: UIControlState.Normal)
         self.addSubview(buttonLogOff)
         
-
-        
     }
-    
     
 }
 //MARK: - Card Info View
@@ -346,6 +343,36 @@ class OptionTableViewCell: UITableViewCell {
 //        fatalError("init(coder:) has not been implemented")
 //    }
     
+    
+}
+
+//MARK: - Text Form TableView Cell
+class TextFormTableViewCell : UITableViewCell {
+    
+    @IBOutlet weak var viewLabelHolder: UIView!
+    @IBOutlet weak var viewTextHolder: UIView!
+    
+    @IBOutlet weak var textContent: UITextField!
+    
+    @IBOutlet weak var labelContent: UILabel!
+    
+}
+
+//MARK: - Date Form TableView Cell
+class DateFormTableViewCell : UITableViewCell {
+    
+    @IBOutlet weak var viewContentHolder: UIView!
+    
+    @IBOutlet weak var button: UIButton!
+    
+    @IBOutlet weak var labelContent: UILabel!
+    
+    @IBOutlet weak var labelQuestion: UILabel!
+    @IBOutlet weak var viewLabelHolder: UIView!
+}
+
+//MARK: - DropDown Form TableView Cell
+class DropDownFormTableViewCell : UITableViewCell {
     
 }
 

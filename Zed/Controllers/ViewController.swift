@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Foundation
+
 
 //MARK: - View Controller
 class ViewController: UIViewController , UIScrollViewDelegate{
@@ -290,3 +292,161 @@ class MenuViewController : UIViewController, UITableViewDataSource, UITableViewD
     
 }
 
+//MARK: - Registration Form View Controller
+class RegsitrationFormViewController : UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
+    
+    //MARK: Properties
+    
+    @IBOutlet weak var tableView: UITableView!
+    
+    var tableContents: NSMutableArray = NSMutableArray()
+    
+    //MARK: View life cycle
+    override func viewDidLoad() {
+        
+        self.tableView.scrollEnabled = false
+        self.tableView.backgroundColor = UIColor.clearColor()
+        self.presetValues()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        
+    }
+    
+    //MARK: Method
+    func presetValues() {
+        
+        let firstName = NSMutableDictionary()
+        firstName.setObject("First Name:", forKey: "label")
+        firstName.setObject("", forKey: "value")
+        firstName.setObject("text", forKey: "type")
+        
+        let lastName = NSMutableDictionary()
+        lastName.setObject("Last Name:", forKey: "label")
+        lastName.setObject("", forKey: "value")
+        lastName.setObject("text", forKey: "type")
+        
+        let birthdate = NSMutableDictionary()
+        birthdate.setObject("Birth Date:", forKey: "label")
+        birthdate.setObject("", forKey: "value")
+        birthdate.setObject("date", forKey: "type")
+        birthdate.setObject("image_name", forKey: "button_icon")
+        
+        let gender = NSMutableDictionary()
+        gender.setObject("Gender:", forKey: "label")
+        gender.setObject("", forKey: "value")
+        gender.setObject("gender", forKey: "type")
+        gender.setObject("image_name", forKey: "button_icon")
+        
+        
+        let address = NSMutableDictionary()
+        address.setObject("Address:", forKey: "label")
+        address.setObject("", forKey: "value")
+        address.setObject("text", forKey: "type")
+        
+        let email = NSMutableDictionary()
+        email.setObject("Email:", forKey: "label")
+        email.setObject("", forKey: "value")
+        email.setObject("text", forKey: "type")
+        
+        let pin = NSMutableDictionary()
+        pin.setObject("Pin Code:", forKey: "label")
+        pin.setObject("", forKey: "value")
+        pin.setObject("text", forKey: "type")
+        
+        self.tableContents.addObject(firstName)
+        self.tableContents.addObject(lastName)
+        self.tableContents.addObject(birthdate)
+        self.tableContents.addObject(gender)
+        self.tableContents.addObject(address)
+        self.tableContents.addObject(email)
+        self.tableContents.addObject(pin)
+        
+    
+    }
+    
+    //MARK: Delegate
+    //MARK: Tableview
+    // MARK: UITableViewDataSource
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        return self.tableContents.count
+    }
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
+        
+        let dictionary = self.tableContents[indexPath.row] as! NSMutableDictionary
+        
+        if dictionary["type"] as? String == "text" {
+            
+            let cellIdentifier = "textForm"
+            
+            let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! TextFormTableViewCell
+            
+            cell.contentView.backgroundColor = UIColor.clearColor()
+            cell.labelContent.text = dictionary["label"] as? String
+//            cell.textContent.placeholder = dictionary["label"] as? String
+            cell.textContent.text = dictionary["value"] as? String
+            cell.labelContent.backgroundColor = UIColor.clearColor()
+            cell.textContent.delegate = self
+            cell.viewTextHolder.layer.cornerRadius = 10
+            cell.viewLabelHolder.layer.cornerRadius = 10
+            cell.selectionStyle = UITableViewCellSelectionStyle.None
+            
+            return cell
+            
+        }
+        
+        let cellIdentifier = "dateForm"
+        
+        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! DateFormTableViewCell
+        cell.contentView.backgroundColor = UIColor.clearColor()
+        cell.viewLabelHolder.layer.cornerRadius = 10
+        cell.viewContentHolder.layer.cornerRadius = 10
+        cell.labelQuestion.text = dictionary["label"] as? String
+        cell.labelContent.text = dictionary["value"] as? String
+        
+        cell.selectionStyle = UITableViewCellSelectionStyle.None
+        
+        return cell
+    }
+    
+    // MARK: UITableViewDelegate
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        
+        
+        return 45
+        
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        
+        
+        
+    }
+    
+    //MARK: TextField Delegate
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        
+        return true
+    }
+    
+    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+        
+        return true
+        
+    }
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        
+        textField.resignFirstResponder()
+        
+        return true
+        
+    }
+
+    
+}
