@@ -202,6 +202,32 @@
                                             <outlet property="delegate" destination="P2w-be-Kvi" id="Kup-MV-Sjx"/>
                                         </connections>
                                     </tableView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7qI-VZ-9Wj">
+                                        <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="BnI-ua-b0p"/>
+                                            <constraint firstAttribute="width" constant="100" id="XDU-yC-aOv"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                        <state key="normal" title="Next &gt;">
+                                            <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="BnI-ua-b0p"/>
+                                                <exclude reference="XDU-yC-aOv"/>
+                                            </mask>
+                                        </variation>
+                                        <variation key="heightClass=regular-widthClass=compact">
+                                            <mask key="constraints">
+                                                <include reference="BnI-ua-b0p"/>
+                                                <include reference="XDU-yC-aOv"/>
+                                            </mask>
+                                        </variation>
+                                        <connections>
+                                            <action selector="nextClicked:" destination="P2w-be-Kvi" eventType="touchUpInside" id="ZAl-m5-Kt9"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -213,28 +239,35 @@
                                     <constraint firstItem="Htx-xJ-MUI" firstAttribute="height" secondItem="uDB-N9-oPg" secondAttribute="height" id="IIR-x9-Eii"/>
                                     <constraint firstItem="uDB-N9-oPg" firstAttribute="top" secondItem="Zlb-d9-Qwl" secondAttribute="top" constant="15" id="JIh-aw-8su"/>
                                     <constraint firstItem="Utw-z0-AZP" firstAttribute="leading" secondItem="Zlb-d9-Qwl" secondAttribute="leading" constant="15" id="Mpt-6B-LkJ"/>
+                                    <constraint firstItem="7qI-VZ-9Wj" firstAttribute="centerX" secondItem="Zlb-d9-Qwl" secondAttribute="centerX" id="QHj-Qd-LSF"/>
                                     <constraint firstItem="uDB-N9-oPg" firstAttribute="leading" secondItem="Zlb-d9-Qwl" secondAttribute="leading" constant="15" id="Qtb-Mf-u1L"/>
                                     <constraint firstAttribute="trailing" secondItem="Utw-z0-AZP" secondAttribute="trailing" constant="15" id="X2h-fh-WLg"/>
                                     <constraint firstItem="Htx-xJ-MUI" firstAttribute="top" secondItem="uDB-N9-oPg" secondAttribute="top" id="Y9F-qL-5Pf"/>
-                                    <constraint firstAttribute="bottom" secondItem="Utw-z0-AZP" secondAttribute="bottom" constant="20" id="l5d-ru-Srh"/>
+                                    <constraint firstAttribute="bottom" secondItem="Utw-z0-AZP" secondAttribute="bottom" constant="20" id="l5d-ru-Srh">
+                                        <variation key="heightClass=regular-widthClass=compact" constant="65"/>
+                                    </constraint>
+                                    <constraint firstAttribute="bottom" secondItem="7qI-VZ-9Wj" secondAttribute="bottom" constant="20" id="rXL-L2-9uK"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="subviews">
                                         <exclude reference="uDB-N9-oPg"/>
                                         <exclude reference="Htx-xJ-MUI"/>
                                         <exclude reference="Utw-z0-AZP"/>
+                                        <exclude reference="7qI-VZ-9Wj"/>
                                     </mask>
                                     <mask key="constraints">
+                                        <exclude reference="JIh-aw-8su"/>
+                                        <exclude reference="Qtb-Mf-u1L"/>
                                         <exclude reference="337-tl-cHK"/>
                                         <exclude reference="4aN-vU-5bq"/>
                                         <exclude reference="IIR-x9-Eii"/>
                                         <exclude reference="Y9F-qL-5Pf"/>
-                                        <exclude reference="JIh-aw-8su"/>
-                                        <exclude reference="Qtb-Mf-u1L"/>
                                         <exclude reference="2Bt-AQ-kCH"/>
                                         <exclude reference="Mpt-6B-LkJ"/>
                                         <exclude reference="X2h-fh-WLg"/>
                                         <exclude reference="l5d-ru-Srh"/>
+                                        <exclude reference="QHj-Qd-LSF"/>
+                                        <exclude reference="rXL-L2-9uK"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
@@ -242,18 +275,21 @@
                                         <include reference="uDB-N9-oPg"/>
                                         <include reference="Htx-xJ-MUI"/>
                                         <include reference="Utw-z0-AZP"/>
+                                        <include reference="7qI-VZ-9Wj"/>
                                     </mask>
                                     <mask key="constraints">
+                                        <include reference="JIh-aw-8su"/>
+                                        <include reference="Qtb-Mf-u1L"/>
                                         <include reference="337-tl-cHK"/>
                                         <include reference="4aN-vU-5bq"/>
                                         <include reference="IIR-x9-Eii"/>
                                         <include reference="Y9F-qL-5Pf"/>
-                                        <include reference="JIh-aw-8su"/>
-                                        <include reference="Qtb-Mf-u1L"/>
                                         <include reference="2Bt-AQ-kCH"/>
                                         <include reference="Mpt-6B-LkJ"/>
                                         <include reference="X2h-fh-WLg"/>
                                         <include reference="l5d-ru-Srh"/>
+                                        <include reference="QHj-Qd-LSF"/>
+                                        <include reference="rXL-L2-9uK"/>
                                     </mask>
                                 </variation>
                             </view>
@@ -350,6 +386,7 @@
                         </variation>
                     </view>
                     <connections>
+                        <outlet property="buttonNext" destination="QHj-Qd-LSF" id="j3f-is-CxK"/>
                         <outlet property="buttonSubmit" destination="2Rc-zQ-vr7" id="g4p-aF-juD"/>
                         <outlet property="labelNumber" destination="uDB-N9-oPg" id="kNQ-mP-Kui"/>
                         <outlet property="labelQuestion" destination="Htx-xJ-MUI" id="xAf-uq-LYh"/>

@@ -9,7 +9,7 @@
         <!--Pasa Points View Controller-->
         <scene sceneID="k3j-52-MYC">
             <objects>
-                <viewController id="AZd-WC-kta" customClass="PasaPointsViewController" customModule="Zed" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="pasaPoints" id="AZd-WC-kta" customClass="PasaPointsViewController" customModule="Zed" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="CUp-yC-2rX"/>
                         <viewControllerLayoutGuide type="bottom" id="9VS-Hv-PEK"/>
@@ -139,6 +139,9 @@
                                                 <include reference="zLi-pk-VFG"/>
                                             </mask>
                                         </variation>
+                                        <connections>
+                                            <action selector="goClicked:" destination="AZd-WC-kta" eventType="touchUpInside" id="3DE-6Z-wxO"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -254,6 +257,31 @@
                                     </mask>
                                 </variation>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wy6-Ad-BJ3">
+                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="5LQ-BJ-XoY"/>
+                                    <constraint firstAttribute="width" constant="35" id="ve2-gP-EiV"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="&lt;"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="5LQ-BJ-XoY"/>
+                                        <exclude reference="ve2-gP-EiV"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="5LQ-BJ-XoY"/>
+                                        <include reference="ve2-gP-EiV"/>
+                                    </mask>
+                                </variation>
+                                <connections>
+                                    <action selector="backClicked:" destination="AZd-WC-kta" eventType="touchUpInside" id="9DL-0A-FIN"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -261,7 +289,9 @@
                             <constraint firstItem="9VS-Hv-PEK" firstAttribute="top" secondItem="cfx-hi-nwq" secondAttribute="bottom" id="QxC-Eh-ipG"/>
                             <constraint firstAttribute="trailing" secondItem="cfx-hi-nwq" secondAttribute="trailing" id="VQq-dh-F5E"/>
                             <constraint firstItem="cfx-hi-nwq" firstAttribute="leading" secondItem="ij7-ib-mFD" secondAttribute="leading" id="YZ0-5c-kgy"/>
+                            <constraint firstAttribute="trailing" secondItem="wy6-Ad-BJ3" secondAttribute="trailing" constant="10" id="Yan-e3-0OV"/>
                             <constraint firstItem="ity-sm-p8q" firstAttribute="leading" secondItem="ij7-ib-mFD" secondAttribute="leading" id="ZRa-41-7ix"/>
+                            <constraint firstItem="wy6-Ad-BJ3" firstAttribute="top" secondItem="CUp-yC-2rX" secondAttribute="bottom" constant="10" id="dLU-m5-9SB"/>
                             <constraint firstAttribute="trailing" secondItem="ity-sm-p8q" secondAttribute="trailing" id="f4e-hC-LBi"/>
                             <constraint firstItem="cfx-hi-nwq" firstAttribute="top" secondItem="CUp-yC-2rX" secondAttribute="bottom" id="mkX-BZ-Tqi"/>
                         </constraints>
@@ -269,30 +299,36 @@
                             <mask key="subviews">
                                 <exclude reference="cfx-hi-nwq"/>
                                 <exclude reference="ity-sm-p8q"/>
+                                <exclude reference="wy6-Ad-BJ3"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="QxC-Eh-ipG"/>
                                 <exclude reference="VQq-dh-F5E"/>
                                 <exclude reference="YZ0-5c-kgy"/>
                                 <exclude reference="mkX-BZ-Tqi"/>
                                 <exclude reference="GuI-pS-vZe"/>
                                 <exclude reference="ZRa-41-7ix"/>
                                 <exclude reference="f4e-hC-LBi"/>
+                                <exclude reference="Yan-e3-0OV"/>
+                                <exclude reference="dLU-m5-9SB"/>
+                                <exclude reference="QxC-Eh-ipG"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
                             <mask key="subviews">
                                 <include reference="cfx-hi-nwq"/>
                                 <include reference="ity-sm-p8q"/>
+                                <include reference="wy6-Ad-BJ3"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="QxC-Eh-ipG"/>
                                 <include reference="VQq-dh-F5E"/>
                                 <include reference="YZ0-5c-kgy"/>
                                 <include reference="mkX-BZ-Tqi"/>
                                 <include reference="GuI-pS-vZe"/>
                                 <include reference="ZRa-41-7ix"/>
                                 <include reference="f4e-hC-LBi"/>
+                                <include reference="Yan-e3-0OV"/>
+                                <include reference="dLU-m5-9SB"/>
+                                <include reference="QxC-Eh-ipG"/>
                             </mask>
                         </variation>
                     </view>

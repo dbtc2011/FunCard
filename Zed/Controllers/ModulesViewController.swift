@@ -20,6 +20,9 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
     
     @IBOutlet weak var buttonSubmit: UIButton!
     
+    @IBOutlet weak var buttonNext: NSLayoutConstraint!
+    
+    
     var tempOption: NSMutableArray = NSMutableArray()
     
     //MARK: View life cycle
@@ -58,6 +61,13 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
         }
         
     }
+    
+    @IBAction func nextClicked(sender: UIButton) {
+        
+        
+    }
+    
+    
     //MARK: Delegate Table View
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
@@ -449,11 +459,40 @@ class PulsifyViewController : UIViewController {
 //MARK: - Pasa Points View Controller
 class PasaPointsViewController : UIViewController {
     
+    //MARK: Properties
     @IBOutlet weak var labelPoints: UILabel!
     
     @IBOutlet weak var textCardNumber: UITextField!
     
     @IBOutlet weak var textAmount: UITextField!
+    
+    //MARK: View life cycle
+    override func viewDidLoad() {
+        
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+     
+    }
+    
+    //MARK: Button Actions
+    @IBAction func backClicked(sender: UIButton) {
+        
+        self.dismissViewControllerAnimated(true) { 
+            
+            
+        }
+        
+    }
+    
+    @IBAction func goClicked(sender: UIButton) {
+        
+        
+    }
+    
+    
     
     
 }

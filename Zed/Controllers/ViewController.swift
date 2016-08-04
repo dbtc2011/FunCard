@@ -110,6 +110,16 @@ class ViewController: UIViewController , UIScrollViewDelegate{
         
     }
     
+    func goToPasaPoints() {
+        //PasaPoints
+        
+        let storyboard = UIStoryboard(name: "PasaPoints", bundle: nil)
+        let vc = storyboard.instantiateViewControllerWithIdentifier("pasaPoints")
+        self.presentViewController(vc, animated: true, completion: nil)
+        
+        
+    }
+    
     //MARK: Delegate
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
@@ -129,7 +139,7 @@ class ViewController: UIViewController , UIScrollViewDelegate{
         }else if sender.tag == 3 {
             
         }else if sender.tag == 4 {
-            
+            self.goToPasaPoints()
         }else if sender.tag == 5 {
             
         }else if sender.tag == 6 {

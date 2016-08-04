@@ -1,0 +1,6 @@
+framework module Pods_Zed {
+  umbrella header "Pods-Zed-umbrella.h"
+
+  export *
+  module * { export * }
+}
