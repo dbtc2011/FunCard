@@ -13,6 +13,7 @@ import Foundation
 //MARK: - View Controller
 class ViewController: UIViewController , UIScrollViewDelegate{
     
+    //MARK: Properties
     var counter = 0
     let cardInfo: CardInfoView = CardInfoView()
     let header: PointHeaderView = PointHeaderView()
@@ -20,6 +21,7 @@ class ViewController: UIViewController , UIScrollViewDelegate{
     @IBOutlet weak var pageIndicator: UIPageControl!
     @IBOutlet weak var scrollView: UIScrollView!
     
+    //MARK: View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -49,6 +51,7 @@ class ViewController: UIViewController , UIScrollViewDelegate{
             button.tag = index
             button.frame = CGRectMake(xLocation, 15, buttonHeight, buttonHeight)
             button.setImage(UIImage(named: imageName), forState: UIControlState.Normal)
+            button.addTarget(self, action: #selector(ViewController.buttonsClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             self.scrollView.addSubview(button)
             
             xLocation = xLocation + self.view.frame.size.width
@@ -90,6 +93,23 @@ class ViewController: UIViewController , UIScrollViewDelegate{
         // Dispose of any resources that can be recreated.
     }
     
+    //MARK: Method
+    func goToSurvey() {
+        
+        let storyboard = UIStoryboard(name: "Survey", bundle: nil)
+        let vc = storyboard.instantiateViewControllerWithIdentifier("surveyController")
+        self.presentViewController(vc, animated: true, completion: nil)
+        
+    }
+    
+    func goToPulsify() {
+        
+        let storyboard = UIStoryboard(name: "Pulsify", bundle: nil)
+        let vc = storyboard.instantiateViewControllerWithIdentifier("pulsify")
+        self.presentViewController(vc, animated: true, completion: nil)
+        
+    }
+    
     //MARK: Delegate
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
@@ -100,6 +120,28 @@ class ViewController: UIViewController , UIScrollViewDelegate{
     }
     
     //MARK: Button Actions
+    func buttonsClicked(sender: UIButton) {
+        
+        if sender.tag == 1 {
+            
+        }else if sender.tag == 2 {
+            
+        }else if sender.tag == 3 {
+            
+        }else if sender.tag == 4 {
+            
+        }else if sender.tag == 5 {
+            
+        }else if sender.tag == 6 {
+            
+        }else if sender.tag == 7 {
+            self.goToPulsify()
+        }else if sender.tag == 8 {
+            self.goToSurvey()
+        }
+        
+    }
+    
    
 
 }
@@ -390,6 +432,7 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
             cell.textContent.text = dictionary["value"] as? String
             cell.labelContent.backgroundColor = UIColor.clearColor()
             cell.textContent.delegate = self
+            cell.textContent.tag = indexPath.row
             cell.viewTextHolder.layer.cornerRadius = 10
             cell.viewLabelHolder.layer.cornerRadius = 10
             cell.selectionStyle = UITableViewCellSelectionStyle.None
@@ -423,13 +466,20 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-        
-        
+
         
     }
     
     //MARK: TextField Delegate
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        
+        let textNSString = textField.text! as NSString
+        
+        let text = textNSString.stringByReplacingCharactersInRange(range, withString: string)
+        
+        let dictionary = self.tableContents[textField.tag] as! NSMutableDictionary
+        dictionary.setObject(text, forKey: "value")
+        self.tableContents.replaceObjectAtIndex(textField.tag, withObject: dictionary)
         
         return true
     }
@@ -447,6 +497,133 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
         return true
         
     }
+    
+    
+    //MARK: Button Actions
 
+    @IBAction func saveButtonClicked(sender: UIButton) {
+        
+        for content in self.tableContents {
+            
+            let dictionary = content as! NSMutableDictionary
+            
+            print("Label: \(dictionary["label"] as! String) \(dictionary["value"] as! String)")
+            
+        }
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewControllerWithIdentifier("main") 
+        self.presentViewController(vc, animated: true, completion: nil)
+        
+        
+    }
+    
+    @IBAction func resendButtonClicked(sender: UIButton) {
+        
+        
+    }
+}
+
+//MARK: - Registration Card View Controller
+class RegistrationCardViewController : UIViewController {
+    
+    //MARK: Properties
+    
+    
+    //MARK: View life cycle
+    override func viewDidLoad() {
+        
+       
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        
+    }
+   
+    
+    @IBAction func withCardClicked(sender: UIButton) {
+        
+        
+        
+    }
+    
+    
+    @IBAction func withoutCardClicked(sender: UIButton) {
+        
+        
+        self.performSegueWithIdentifier("goToMobileNumber", sender: nil)
+        
+        
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        
+    }
+   
+    
+}
+
+//MARK: - Registration Mobile Number View Controller
+class RegistrationMobileNumberViewController : UIViewController {
+    
+    //MARK: Properties
+    
+    @IBOutlet weak var textNumber: UITextField!
+    
+    //MARK: View life cycle
+    override func viewDidLoad() {
+        
+        
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        
+    }
+    
+    @IBAction func buttonClicked(sender: UIButton) {
+        
+        self.performSegueWithIdentifier("goToConnectToFacebook", sender: nil)
+        
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        
+    }
+}
+
+//MARK: - Registration Facebook View Controller
+class RegistrationFacebookViewController : UIViewController {
+    
+    //MARK: Properties
+    
+    
+    //MARK: View life cycle
+    override func viewDidLoad() {
+        
+        
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        
+    }
+    
+    @IBAction func buttonClicked(sender: UIButton) {
+        
+        self.performSegueWithIdentifier("goToForm", sender: nil)
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        
+    }
+    
     
 }

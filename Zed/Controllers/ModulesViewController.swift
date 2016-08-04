@@ -44,9 +44,20 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
     //MARK: Button Actions
     @IBAction func submitClicked(sender: UIButton) {
         
-        
+        self.dismissViewControllerAnimated(true) {
+            
+            
+        }
     }
     
+    @IBAction func backClicked(sender: UIButton) {
+        
+        self.dismissViewControllerAnimated(true) { 
+            
+            
+        }
+        
+    }
     //MARK: Delegate Table View
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
@@ -245,6 +256,9 @@ class PulsifyViewController : UIViewController {
         self.counter = self.counter + 1
         
         if self.counter >= self.contents.count {
+            self.dismissViewControllerAnimated(true, completion: { 
+                
+            })
             return
         }
         
@@ -421,6 +435,14 @@ class PulsifyViewController : UIViewController {
         
     }
     
+    @IBAction func backButtonClicked(sender: UIButton) {
+        
+        self.dismissViewControllerAnimated(true) { 
+            
+            
+        }
+        
+    }
     
 }
 
