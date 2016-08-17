@@ -20,6 +20,8 @@
 		509701141D4897E700E866AD /* PasaPoints.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 509701131D4897E700E866AD /* PasaPoints.storyboard */; };
 		50E116D61D49DFA90012F6DB /* Registration.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50E116D51D49DFA90012F6DB /* Registration.storyboard */; };
 		50EAD4291D409D160086704F /* Pulsify.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50EAD4281D409D160086704F /* Pulsify.storyboard */; };
+		50F5FCD51D6366FD00071B2F /* WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F5FCD31D6366FD00071B2F /* WebService.swift */; };
+		50F5FCD61D6366FD00071B2F /* XMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F5FCD41D6366FD00071B2F /* XMLParser.swift */; };
 		A756E49C980244889A36123A /* Pods_Zed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A46C81A50E1D170E037957D /* Pods_Zed.framework */; };
 /* End PBXBuildFile section */
 
@@ -41,6 +43,8 @@
 		509701131D4897E700E866AD /* PasaPoints.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PasaPoints.storyboard; sourceTree = "<group>"; };
 		50E116D51D49DFA90012F6DB /* Registration.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Registration.storyboard; path = Storyboard/Registration.storyboard; sourceTree = "<group>"; };
 		50EAD4281D409D160086704F /* Pulsify.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Pulsify.storyboard; path = Storyboard/Pulsify.storyboard; sourceTree = "<group>"; };
+		50F5FCD31D6366FD00071B2F /* WebService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WebService.swift; path = Subclass/WebService.swift; sourceTree = "<group>"; };
+		50F5FCD41D6366FD00071B2F /* XMLParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XMLParser.swift; path = Subclass/XMLParser.swift; sourceTree = "<group>"; };
 		F68C8322F13D4FDD1AFE2C8D /* Pods-Zed.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Zed.release.xcconfig"; path = "Pods/Target Support Files/Pods-Zed/Pods-Zed.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -87,6 +91,7 @@
 		358553811CD880F300C1DD55 /* Zed */ = {
 			isa = PBXGroup;
 			children = (
+				50F5FCD21D6366D500071B2F /* Subclass */,
 				358553821CD880F300C1DD55 /* AppDelegate.swift */,
 				358553941CD8811400C1DD55 /* ObjectModel.swift */,
 				5025E4851D34DB8200699AFB /* Storyboard */,
@@ -126,6 +131,15 @@
 				50E116D51D49DFA90012F6DB /* Registration.storyboard */,
 			);
 			name = Storyboard;
+			sourceTree = "<group>";
+		};
+		50F5FCD21D6366D500071B2F /* Subclass */ = {
+			isa = PBXGroup;
+			children = (
+				50F5FCD31D6366FD00071B2F /* WebService.swift */,
+				50F5FCD41D6366FD00071B2F /* XMLParser.swift */,
+			);
+			name = Subclass;
 			sourceTree = "<group>";
 		};
 		83B65E1C20E92921AD016778 /* Pods */ = {
@@ -262,6 +276,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				50F5FCD61D6366FD00071B2F /* XMLParser.swift in Sources */,
+				50F5FCD51D6366FD00071B2F /* WebService.swift in Sources */,
 				5025E48B1D34E93300699AFB /* ViewController.swift in Sources */,
 				5025E4821D34D99900699AFB /* ModulesViewController.swift in Sources */,
 				358553951CD8811400C1DD55 /* ObjectModel.swift in Sources */,
