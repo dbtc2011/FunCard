@@ -712,24 +712,25 @@ class RegistrationCardNumberViewController : UIViewController, WebServiceDelegat
             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
             let timeStamp = dateFormatter.stringFromDate(NSDate())
             
-            let transactionId = "FUNAPP_\(timeStamp.stringByTrimmingCharactersInSet(NSCharacterSet(charactersInString: "0123456789.").invertedSet))"
+            let trimmedTimeStamp = String(timeStamp.characters.filter { String($0).rangeOfCharacterFromSet(NSCharacterSet(charactersInString: "0123456789.")) != nil })
+            let transactionId = "FUNAPP_\(trimmedTimeStamp)"
             
             let dictParams = NSMutableDictionary()
             dictParams["transactionId"] = transactionId
             dictParams["userId"] = userID
             dictParams["password"] = password
             dictParams["merchantId"] = merchantID
-            dictParams["cardNumber"] = "6788880000007534"
+            dictParams["cardNumber"] = self.txtCardNumber.text!
             dictParams["msisdn"] = self.txtMobileNumber.text!
             dictParams["channel"] = channel
             dictParams["requestTimezone"] = timezone
             dictParams["requestTimestamp"] = timeStamp
-            
+        
             self.webService.connectAndRegisterWithInfo(dictParams)
             
             break
             
-        case  WebServiceFor.CheckMsisdn.rawValue:
+        case  WebServiceFor.Register.rawValue:
             let status = parsedDictionary["Status"] as! String
             
             if status != "0" {
