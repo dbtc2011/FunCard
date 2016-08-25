@@ -98,7 +98,8 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
     }
     
     private func startLossTimer() {
-        self.timer = NSTimer.scheduledTimerWithTimeInterval(timeOut, target: self, selector:  #selector(WebService.didReachSendingTimeout), userInfo: nil, repeats: false)
+        //uncomment
+        //self.timer = NSTimer.scheduledTimerWithTimeInterval(timeOut, target: self, selector:  #selector(WebService.didReachSendingTimeout), userInfo: nil, repeats: false)
     }
     
     private func stopLossTimer() {

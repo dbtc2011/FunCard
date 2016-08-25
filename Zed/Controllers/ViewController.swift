@@ -9,6 +9,11 @@
 import UIKit
 import Foundation
 
+let userID = "7E177E8A450562B7B65F77881C817B47"
+let password = "FDFE29DF7FF33EC5078B03F468B7A04C"
+let merchantID = "581"
+let timezone = "GMT+800"
+let channel = "app"
 
 //MARK: - View Controller
 class ViewController: UIViewController , UIScrollViewDelegate{
@@ -24,7 +29,6 @@ class ViewController: UIViewController , UIScrollViewDelegate{
     //MARK: View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         
         // Do any additional setup after loading the view, typically from a nib.
         
@@ -51,7 +55,8 @@ class ViewController: UIViewController , UIScrollViewDelegate{
             button.tag = index
             button.frame = CGRectMake(xLocation, 15, buttonHeight, buttonHeight)
             button.setImage(UIImage(named: imageName), forState: UIControlState.Normal)
-            button.addTarget(self, action: #selector(ViewController.buttonsClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            //uncomment
+            //button.addTarget(self, action: #selector(ViewController.buttonsClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             self.scrollView.addSubview(button)
             
             xLocation = xLocation + self.view.frame.size.width
@@ -524,8 +529,6 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewControllerWithIdentifier("main") 
         self.presentViewController(vc, animated: true, completion: nil)
-        
-        
     }
     
     @IBAction func resendButtonClicked(sender: UIButton) {
@@ -556,6 +559,8 @@ class RegistrationCardViewController : UIViewController {
     @IBAction func withCardClicked(sender: UIButton) {
         
         
+        self.performSegueWithIdentifier("goToCardNumber", sender: nil)
+        
         
     }
     
@@ -577,16 +582,16 @@ class RegistrationCardViewController : UIViewController {
 }
 
 //MARK: - Registration Mobile Number View Controller
-class RegistrationMobileNumberViewController : UIViewController {
+class RegistrationMobileNumberViewController : UIViewController, WebServiceDelegate {
     
     //MARK: Properties
+    let webService = WebService()
     
     @IBOutlet weak var textNumber: UITextField!
     
     //MARK: View life cycle
     override func viewDidLoad() {
-        
-        
+        self.webService.delegate = self
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -595,14 +600,95 @@ class RegistrationMobileNumberViewController : UIViewController {
         
     }
     
+    //MARK: IBAction Delegate
     @IBAction func buttonClicked(sender: UIButton) {
         
-        self.performSegueWithIdentifier("goToConnectToFacebook", sender: nil)
+        let number = self.textNumber.text!
         
+        if number.hasPrefix("639") == false {
+            print("incorrect format")
+            //alert
+            
+            return
+        }
+        
+        sender.enabled = false
+        self.webService.connectAndCheckMsisdnWithMsisdn(number)
     }
     
+    //MARK: WebService Delegate
+    func webServiceDidFinishLoadingWithResponseDictionary(parsedDictionary: NSDictionary) {
+        print(parsedDictionary)
+        
+        let isRegistered = parsedDictionary["IsRegistered"] as! String
+        
+        if isRegistered == "YES" {
+            let cardNumber = parsedDictionary["CardNumber"] as! String
+            let facebookID = parsedDictionary["FacebookId"] as! String
+            print("cardnumber: \(cardNumber)\nfacebookid: \(facebookID)")
+            
+            //proceed to dashboard
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let vc = storyboard.instantiateViewControllerWithIdentifier("main")
+            self.presentViewController(vc, animated: true, completion: nil)
+        } else {
+            //proceed with registration
+            self.performSegueWithIdentifier("goToConnectToFacebook", sender: nil)
+        }
+    }
+    
+    func webServiceDidTimeout() {
+        print("timeout")
+    }
+    
+    func webServiceDidFailWithError(error: NSError) {
+        print(error)
+    }
+    
+    //MARK: NavigationController Delegate
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
+    }
+}
+
+//MARK: - Registration Card Number View Controller
+class RegistrationCardNumberViewController : UIViewController, WebServiceDelegate {
+    
+    //MARK: Properties
+    let webService = WebService()
+    
+    @IBOutlet weak var textCardNumber: UITextField!
+    @IBOutlet weak var textMobileNumber: UITextField!
+    
+    //MARK: View life cycle
+    override func viewDidLoad() {
+        self.webService.delegate = self
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+    
+    //MARK: IBAction Delegate
+    @IBAction func buttonClicked(sender: UIButton) {
+        sender.enabled = false
+    }
+    
+    //MARK: WebService Delegate
+    func webServiceDidFinishLoadingWithResponseDictionary(parsedDictionary: NSDictionary) {
+        print(parsedDictionary)
+    }
+    
+    func webServiceDidTimeout() {
+        print("timeout")
+    }
+    
+    func webServiceDidFailWithError(error: NSError) {
+        print(error)
+    }
+    
+    //MARK: NavigationController Delegate
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
     }
 }

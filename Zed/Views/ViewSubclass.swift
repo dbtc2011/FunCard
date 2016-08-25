@@ -419,7 +419,8 @@ class CustomPickerView : UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         
         let buttonCancel = UIButton(type: UIButtonType.Custom)
         buttonCancel.frame = CGRectMake(0, 250, self.frame.size.width/2, 50)
-        buttonCancel.addTarget(self, action: #selector(CustomPickerView.cancelButtonClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        //uncomment
+        //buttonCancel.addTarget(self, action: #selector(CustomPickerView.cancelButtonClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         buttonCancel.titleLabel?.textColor = UIColor.blackColor()
         buttonCancel.backgroundColor = UIColor.blueColor()
         buttonCancel.setTitle("Cancel", forState: UIControlState.Normal)
@@ -430,7 +431,8 @@ class CustomPickerView : UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         buttonOkay.frame = CGRectMake(self.frame.size.width/2, 250, self.frame.size.width/2, 50)
         buttonOkay.backgroundColor = UIColor.blueColor()
         buttonOkay.titleLabel?.textColor = UIColor.blackColor()
-        buttonOkay.addTarget(self, action: #selector(CustomPickerView.okayButtonClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        //uncomment
+        //buttonOkay.addTarget(self, action: #selector(CustomPickerView.okayButtonClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         buttonOkay.setTitle("Okay", forState: UIControlState.Normal)
         viewHolder.addSubview(buttonOkay)
         
