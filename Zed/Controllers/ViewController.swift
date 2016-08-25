@@ -230,7 +230,7 @@ class MenuViewController : UIViewController, UITableViewDataSource, UITableViewD
                     
             })
             
-        }else {
+        } else {
             
             
             UIView.animateWithDuration(0.3, animations: { () -> Void in
@@ -657,8 +657,8 @@ class RegistrationCardNumberViewController : UIViewController, WebServiceDelegat
     //MARK: Properties
     let webService = WebService()
     
-    @IBOutlet weak var textCardNumber: UITextField!
-    @IBOutlet weak var textMobileNumber: UITextField!
+    @IBOutlet weak var txtCardNumber: UITextField!
+    @IBOutlet weak var txtMobileNumber: UITextField!
     
     //MARK: View life cycle
     override func viewDidLoad() {
@@ -671,12 +671,86 @@ class RegistrationCardNumberViewController : UIViewController, WebServiceDelegat
     
     //MARK: IBAction Delegate
     @IBAction func buttonClicked(sender: UIButton) {
+        let mobileNumber = self.txtMobileNumber.text!
+        
+        if mobileNumber.hasPrefix("639") == false {
+            print("incorrect format")
+            //alert
+            
+            return
+        }
+        
         sender.enabled = false
+        self.webService.connectAndCheckMsisdnWithMsisdn(mobileNumber)
     }
     
     //MARK: WebService Delegate
     func webServiceDidFinishLoadingWithResponseDictionary(parsedDictionary: NSDictionary) {
         print(parsedDictionary)
+        
+        let request = parsedDictionary["request"] as! String
+        
+        switch request {
+        case  WebServiceFor.CheckMsisdn.rawValue:
+            let isRegistered = parsedDictionary["IsRegistered"] as! String
+            
+            if isRegistered == "YES" {
+                let cardNumber = parsedDictionary["CardNumber"] as! String
+                let facebookID = parsedDictionary["FacebookId"] as! String
+                print("cardnumber: \(cardNumber)\nfacebookid: \(facebookID)")
+                
+                //proceed to dashboard
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let vc = storyboard.instantiateViewControllerWithIdentifier("main")
+                self.presentViewController(vc, animated: true, completion: nil)
+                
+                return
+            }
+            
+            //proceed with registration
+            let dateFormatter = NSDateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+            let timeStamp = dateFormatter.stringFromDate(NSDate())
+            
+            let transactionId = "FUNAPP_\(timeStamp.stringByTrimmingCharactersInSet(NSCharacterSet(charactersInString: "0123456789.").invertedSet))"
+            
+            let dictParams = NSMutableDictionary()
+            dictParams["transactionId"] = transactionId
+            dictParams["userId"] = userID
+            dictParams["password"] = password
+            dictParams["merchantId"] = merchantID
+            dictParams["cardNumber"] = "6788880000007534"
+            dictParams["msisdn"] = self.txtMobileNumber.text!
+            dictParams["channel"] = channel
+            dictParams["requestTimezone"] = timezone
+            dictParams["requestTimestamp"] = timeStamp
+            
+            self.webService.connectAndRegisterWithInfo(dictParams)
+            
+            break
+            
+        case  WebServiceFor.CheckMsisdn.rawValue:
+            let status = parsedDictionary["Status"] as! String
+            
+            if status != "0" {
+                //failed
+                let errorMessage = parsedDictionary["StatusDescription"] as! String
+                print("error >>>> \(errorMessage)")
+                
+                return
+            }
+            
+            let cardPin = parsedDictionary["CardPin"] as! String
+            print("cardpin: \(cardPin)")
+            
+            //proceed
+            
+            break
+            
+        default:
+            break
+        }
+
     }
     
     func webServiceDidTimeout() {
