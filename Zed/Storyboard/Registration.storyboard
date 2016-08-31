@@ -62,6 +62,9 @@
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="asi-4E-pP6">
                                                             <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                            <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                                <rect key="frame" x="10" y="0.0" width="76" height="35"/>
+                                                            </variation>
                                                         </view>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nbO-Ye-N2B">
                                                             <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
@@ -80,7 +83,8 @@
                                                                             <exclude reference="yaH-Lg-ujV"/>
                                                                         </mask>
                                                                     </variation>
-                                                                    <variation key="heightClass=regular-widthClass=compact">
+                                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                                        <rect key="frame" x="20" y="0.0" width="119" height="35"/>
                                                                         <mask key="constraints">
                                                                             <include reference="yaH-Lg-ujV"/>
                                                                         </mask>
@@ -112,7 +116,8 @@
                                                                     <exclude reference="ved-G9-tFE"/>
                                                                 </mask>
                                                             </variation>
-                                                            <variation key="heightClass=regular-widthClass=compact">
+                                                            <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                                <rect key="frame" x="86" y="0.0" width="144" height="35"/>
                                                                 <mask key="subviews">
                                                                     <include reference="dv3-pc-hgl"/>
                                                                 </mask>
@@ -141,7 +146,8 @@
                                                                     <exclude reference="jB4-7N-cyK"/>
                                                                 </mask>
                                                             </variation>
-                                                            <variation key="heightClass=regular-widthClass=compact">
+                                                            <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                                <rect key="frame" x="76" y="0.0" width="20" height="35"/>
                                                                 <mask key="constraints">
                                                                     <include reference="HXb-rW-Zwk"/>
                                                                     <include reference="jB4-7N-cyK"/>
@@ -164,7 +170,8 @@
                                                                     <exclude reference="l6e-PA-xWQ"/>
                                                                 </mask>
                                                             </variation>
-                                                            <variation key="heightClass=regular-widthClass=compact">
+                                                            <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                                <rect key="frame" x="10" y="0.0" width="76" height="35"/>
                                                                 <mask key="constraints">
                                                                     <include reference="l6e-PA-xWQ"/>
                                                                 </mask>
@@ -990,7 +997,7 @@
                                             </mask>
                                         </variation>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GOc-uB-cO9">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GOc-uB-cO9" customClass="FBSDKLoginButton">
                                         <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                         <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
@@ -1017,7 +1024,7 @@
                                             </mask>
                                         </variation>
                                         <connections>
-                                            <action selector="buttonClicked:" destination="Ocv-Wi-Mnj" eventType="touchUpInside" id="Gab-u7-PjY"/>
+                                            <action selector="fbButtonClicked:" destination="Ocv-Wi-Mnj" eventType="touchUpInside" id="v0v-xa-k2V"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -1113,6 +1120,7 @@
                         </variation>
                     </view>
                     <connections>
+                        <outlet property="facebookButton" destination="GOc-uB-cO9" id="UPx-0D-2WS"/>
                         <segue destination="3X2-rf-Ll4" kind="presentation" identifier="goToForm" id="rbP-9q-0V5"/>
                     </connections>
                 </viewController>

@@ -8,6 +8,11 @@
 
 import UIKit
 import Foundation
+import FBSDKCoreKit
+import FBSDKLoginKit
+
+
+
 
 let userID = "7E177E8A450562B7B65F77881C817B47"
 let password = "FDFE29DF7FF33EC5078B03F468B7A04C"
@@ -353,8 +358,10 @@ class MenuViewController : UIViewController, UITableViewDataSource, UITableViewD
 class RegsitrationFormViewController : UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
     
     //MARK: Properties
+    var user: UserModelRepresentation?
     
     @IBOutlet weak var tableView: UITableView!
+    
     
     var tableContents: NSMutableArray = NSMutableArray()
     
@@ -369,6 +376,28 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
+        if self.user != nil {
+            
+            let firstName = self.tableContents[0] as! NSMutableDictionary
+            firstName.setObject(self.user!.firstName, forKey: "value")
+            
+            let lastName = self.tableContents[1] as! NSMutableDictionary
+            lastName.setObject(self.user!.lastName, forKey: "value")
+            
+            let gender = self.tableContents[3] as! NSMutableDictionary
+            gender.setObject(self.user!.gender, forKey: "value")
+            
+            let email = self.tableContents[5] as! NSMutableDictionary
+            email.setObject(self.user!.email, forKey: "value")
+            
+            
+            self.tableContents.replaceObjectAtIndex(0, withObject: firstName)
+            self.tableContents.replaceObjectAtIndex(1, withObject: lastName)
+            self.tableContents.replaceObjectAtIndex(3, withObject: gender)
+            self.tableContents.replaceObjectAtIndex(5, withObject: email)
+            
+            self.tableView.reloadData()
+        }
         
     }
     
@@ -769,19 +798,37 @@ class RegistrationCardNumberViewController : UIViewController, WebServiceDelegat
 }
 
 //MARK: - Registration Facebook View Controller
-class RegistrationFacebookViewController : UIViewController {
+class RegistrationFacebookViewController : UIViewController, FBSDKLoginButtonDelegate {
     
     //MARK: Properties
+    var user: UserModelRepresentation?
     
     
+    @IBOutlet var facebookButton: FBSDKLoginButton!
+    
+
     //MARK: View life cycle
     override func viewDidLoad() {
+        
+//      
+        self.facebookButton.delegate = self
+        self.facebookButton.readPermissions = ["public_profile", "email", "user_friends"]
         
         
     }
     
+    
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        
+        
+    }
+    
+    
+    //MARK: Button Actions
+    
+    @IBAction func fbButtonClicked(sender: FBSDKLoginButton) {
+        
         
         
     }
@@ -791,7 +838,54 @@ class RegistrationFacebookViewController : UIViewController {
         self.performSegueWithIdentifier("goToForm", sender: nil)
     }
     
+    
+    //MARK: Facebook Delegate
+    // FBSDKLoginButton Delegate
+    func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
+        
+//        print(result.dictionaryWithValuesForKeys(["first_name", "last_name", "email"]))
+        
+        if (FBSDKAccessToken.currentAccessToken() != nil) {
+            
+            let parametersDictionary = NSMutableDictionary()
+            parametersDictionary.setObject("id", forKey: "fields")
+            parametersDictionary.setObject("first_name, last_name, picture, email, gender", forKey: "fields")
+            let request = FBSDKGraphRequest(graphPath: "me", parameters: parametersDictionary as AnyObject as! [NSObject : AnyObject], HTTPMethod: "GET")
+            request.startWithCompletionHandler({ (connection, result, error) -> Void in
+                
+                
+                
+                let dictionaryResult = result as! NSDictionary
+                print(result)
+//                let dictionaryPicture = dictionaryResult["picture"] as! NSDictionary
+//                let dictionaryData = dictionaryPicture["data"] as! NSDictionary
+                
+                self.user = nil
+                self.user = UserModelRepresentation()
+              
+                self.user?.firstName = dictionaryResult["first_name"] as! String
+                self.user?.email = dictionaryResult["email"] as! String
+                self.user?.lastName = dictionaryResult["last_name"] as! String
+                self.user?.facebookID = dictionaryResult["id"] as! String
+                self.user?.gender = dictionaryResult["gender"] as! String
+                
+                self.performSegueWithIdentifier("goToForm", sender: nil)
+
+                
+            })
+        }
+//
+    }
+    
+    func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) {
+        
+        
+    }
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        
+        let controller = segue.destinationViewController as! RegsitrationFormViewController
+        controller.user = self.user
         
         
     }

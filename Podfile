@@ -7,8 +7,8 @@ target 'Zed' do
 
   # Pods for Zed
   pod 'GoogleMaps'
-  pod ‘FBSDKCoreKit’
-  pod ‘FBSDKShareKit’
-  pod ‘FBSDKLoginKit’
+  pod 'FBSDKCoreKit'
+  pod 'FBSDKShareKit'
+  pod 'FBSDKLoginKit'
 
 end

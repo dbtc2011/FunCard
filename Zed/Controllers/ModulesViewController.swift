@@ -493,6 +493,4 @@ class PasaPointsViewController : UIViewController {
     }
     
     
-    
-    
 }

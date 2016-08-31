@@ -35,6 +35,7 @@ class UserModelRepresentation: NSObject {
     var firstName: String = ""
     var lastName: String = ""
     var middleName: String = ""
+    var gender: String = ""
     var birthday: String = ""
     var address: String = ""
     var email: String = ""
