@@ -8,11 +8,12 @@
 
 import UIKit
 
-let url = "http://180.87.143.45/ph.funloyalty.api/LoyaltySystemServiceSoapBinding.asmx?WSDL"
+let urlLSS = "http://180.87.143.45/ph.funloyalty.api/LoyaltySystemServiceSoapBinding.asmx?WSDL"
+let urlLS3PPS = "http://180.87.143.45/ph.funloyalty.api/LoyaltySystem3PPServiceSoapBinding.asmx?WSDL"
 let timeOut = 60.0
 
 enum WebServiceFor: String {
-    case CheckFbInfo = "checkFbInfo", CheckMsisdn = "checkMsisdn", Earn = "earn", EarnMsisdn = "earnMsisdn", EarnReversal = "earnReversal", Inquire = "inquire",  InquireMsisdn = "inquireMsisdn", MarkAsSold = "markAsSold", PasaPoints = "pasaPoints", PasaPointsMsisdn = "pasaPointsMsisdn", Redeem = "redeem", RedeemMsisdn = "redeemMsisdn", RedeemReversal = "redeemReversal", RedeemStamp = "redeemStamp", Register = "register", RegisterFbInfo = "registerFbInfo", ResendPin = "resendPin", UpdateFbInfo = "updateFbInfo", ValidateCardPin = "validateCardPin"
+    case CheckFbInfo = "checkFbInfo", CheckMsisdn = "checkMsisdn", Earn = "earn", EarnMsisdn = "earnMsisdn", EarnReversal = "earnReversal", Inquire = "inquire",  InquireMsisdn = "inquireMsisdn", MarkAsSold = "markAsSold", PasaPoints = "pasaPoints", PasaPointsMsisdn = "pasaPointsMsisdn", Redeem = "redeem", RedeemMsisdn = "redeemMsisdn", RedeemReversal = "redeemReversal", RedeemStamp = "redeemStamp", Register = "register", RegisterFbInfo = "registerFbInfo", ResendPin = "resendPin", UpdateFbInfo = "updateFbInfo", ValidateCardPin = "validateCardPin", RegisterVirtualCard = "TLCILSAPI3PP_REGVIRTUALCARD", ValidateVirtualCard = "TLCILSAPI3PP_VLDTVIRTUALCARD", GetDashboardInfo = "TLCILSAPI3PP_MOBILENUMBER"
 }
 
 protocol WebServiceDelegate {
@@ -34,7 +35,8 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
     
     //MARK: SOAP Request
     
-    private var strSoapAction = "http://www.tlc.com.ph/loyalty/wsdl/execute/"
+    private var strSoapActionLSS = "http://www.tlc.com.ph/loyalty/wsdl/execute/"
+    private var strSoapActionLS3PPS = "http://www.tlci.com.ph/"
     
     private var strHeading = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:exec=\"http://www.tlc.com.ph/loyalty/wsdl/execute/\"><soapenv:Header/><soapenv:Body>"
     
@@ -82,6 +84,7 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
     private func postWithDictionary(dictValues: NSDictionary) {
         let message = dictValues["soapMessage"] as! String
         let action = dictValues["soapAction"] as! String
+        let url = dictValues["url"] as! String
         
         let request = NSMutableURLRequest(URL: NSURL(string: url)!, cachePolicy: NSURLRequestCachePolicy.ReloadIgnoringCacheData, timeoutInterval: timeOut)
         request.addValue("text/xml; charset=utf-8", forHTTPHeaderField: "Content-Type")
@@ -199,6 +202,24 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
             
         case .ValidateCardPin:
             soapMessage = soapMessage.stringByAppendingString(self.messageForValidateCardPin())
+            break
+            
+        case .RegisterVirtualCard:
+            soapMessage = soapMessage.stringByReplacingOccurrencesOfString(":exec", withString: ":tlci")
+            soapMessage = soapMessage.stringByReplacingOccurrencesOfString(strSoapActionLSS, withString: strSoapActionLS3PPS)
+            soapMessage = soapMessage.stringByAppendingString(self.messageForRegVirtualCard())
+            break
+            
+        case .ValidateVirtualCard:
+            soapMessage = soapMessage.stringByReplacingOccurrencesOfString(":exec", withString: ":tlci")
+            soapMessage = soapMessage.stringByReplacingOccurrencesOfString(strSoapActionLSS, withString: strSoapActionLS3PPS)
+            soapMessage = soapMessage.stringByAppendingString(self.messageForVldtVirtualCard())
+            break
+            
+        case .GetDashboardInfo:
+            soapMessage = soapMessage.stringByReplacingOccurrencesOfString(":exec", withString: ":tlci")
+            soapMessage = soapMessage.stringByReplacingOccurrencesOfString(strSoapActionLSS, withString: strSoapActionLS3PPS)
+            soapMessage = soapMessage.stringByAppendingString(self.messageForGetDashboardInfo())
             break
         }
         
@@ -320,14 +341,33 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
         return message
     }
     
+    private func messageForRegVirtualCard() -> String {
+        let message = String(format: "<tlci:TLCILSAPI3PP_REGVIRTUALCARD><tlci:TLCILSAPI3PPRVCRequest><TRANSACTIONID>%@</TRANSACTIONID><MOBILENUMBER>%@</MOBILENUMBER></tlci:TLCILSAPI3PPRVCRequest></tlci:TLCILSAPI3PP_REGVIRTUALCARD>", self.dictParams["transactionId"] as! String, self.dictParams["mobileNumber"] as! String)
+        
+        return message
+    }
+    
+    private func messageForVldtVirtualCard() -> String {
+        let message = String(format: "<tlci:TLCILSAPI3PP_VLDTVIRTUALCARD><tlci:TLCILSAPI3PPVVCRequest><TRANSACTIONID>%@</TRANSACTIONID><MOBILENUMBER>%@</MOBILENUMBER><PIN>%@</PIN><CUSTOMER><FACEBOOKID>%@</FACEBOOKID><LASTNAME>%@</LASTNAME><FIRSTNAME>%@</FIRSTNAME><SECONDNAME>%@</SECONDNAME><BIRTHDAY>%@</BIRTHDAY><GENDER>%@</GENDER><ADDRESS>%@</ADDRESS><EMAIL>%@</EMAIL></CUSTOMER></tlci:TLCILSAPI3PPVVCRequest></tlci:TLCILSAPI3PP_VLDTVIRTUALCARD>", self.dictParams["transactionId"] as! String, self.dictParams["mobileNumber"] as! String, self.dictParams["cardPin"] as! String,  self.dictParams["facebookId"] as! String, self.dictParams["lastName"] as! String, self.dictParams["firstName"] as! String, self.dictParams["secondName"] as! String, self.dictParams["birthday"] as! String, self.dictParams["gender"] as! String, self.dictParams["address"] as! String, self.dictParams["email"] as! String)
+        
+        return message
+    }
+    
+    private func messageForGetDashboardInfo() -> String {
+        let message = String(format: "<tlci:TLCILSAPI3PP_MOBILENUMBER><tlci:TLCILSAPI3PPMNRequest><TRANSACTIONID>%@</TRANSACTIONID><MOBILENUMBER>%@</MOBILENUMBER></tlci:TLCILSAPI3PPMNRequest></tlci:TLCILSAPI3PP_MOBILENUMBER>", self.dictParams["transactionId"] as! String, self.dictParams["mobileNumber"] as! String)
+        
+        return message
+    }
+    
     //MARK: Public
     
     func connectAndCheckFBInfoWithId(id: String) {
         self.dictParams = NSMutableDictionary()
         self.dictParams["facebookId"] = id
         
-        let dictWebService = ["soapAction" : self.strSoapAction.stringByAppendingString(WebServiceFor.CheckFbInfo.rawValue),
-            "soapMessage" : self.getSoapMessageWithWebServiceFor(.CheckFbInfo)]
+        let dictWebService = ["soapAction" : self.strSoapActionLSS.stringByAppendingString(WebServiceFor.CheckFbInfo.rawValue),
+            "soapMessage" : self.getSoapMessageWithWebServiceFor(.CheckFbInfo),
+            "url" : urlLSS]
         self.postWithDictionary(dictWebService)
     }
     
@@ -335,8 +375,9 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
         self.dictParams = NSMutableDictionary()
         self.dictParams["msisdn"] = msisdn
         
-        let dictWebService = ["soapAction" : self.strSoapAction.stringByAppendingString(WebServiceFor.CheckMsisdn.rawValue),
-            "soapMessage" : self.getSoapMessageWithWebServiceFor(.CheckMsisdn)]
+        let dictWebService = ["soapAction" : self.strSoapActionLSS.stringByAppendingString(WebServiceFor.CheckMsisdn.rawValue),
+            "soapMessage" : self.getSoapMessageWithWebServiceFor(.CheckMsisdn),
+            "url" : urlLSS]
         self.postWithDictionary(dictWebService)
     }
     
@@ -355,8 +396,9 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
         self.dictParams["requestTimezone"] = dictInfo["requestTimezone"] as! String
         self.dictParams["requestTimestamp"] = dictInfo["requestTimestamp"] as! String
         
-        let dictWebService = ["soapAction" : self.strSoapAction.stringByAppendingString(WebServiceFor.Earn.rawValue),
-            "soapMessage" : self.getSoapMessageWithWebServiceFor(.Earn)]
+        let dictWebService = ["soapAction" : self.strSoapActionLSS.stringByAppendingString(WebServiceFor.Earn.rawValue),
+            "soapMessage" : self.getSoapMessageWithWebServiceFor(.Earn),
+            "url" : urlLSS]
         self.postWithDictionary(dictWebService)
     }
     
@@ -375,8 +417,9 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
         self.dictParams["requestTimezone"] = dictInfo["requestTimezone"] as! String
         self.dictParams["requestTimestamp"] = dictInfo["requestTimestamp"] as! String
         
-        let dictWebService = ["soapAction" : self.strSoapAction.stringByAppendingString(WebServiceFor.EarnMsisdn.rawValue),
-            "soapMessage" : self.getSoapMessageWithWebServiceFor(.EarnMsisdn)]
+        let dictWebService = ["soapAction" : self.strSoapActionLSS.stringByAppendingString(WebServiceFor.EarnMsisdn.rawValue),
+            "soapMessage" : self.getSoapMessageWithWebServiceFor(.EarnMsisdn),
+            "url" : urlLSS]
         self.postWithDictionary(dictWebService)
     }
     
@@ -390,8 +433,9 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
         self.dictParams["requestTimezone"] = dictInfo["requestTimezone"] as! String
         self.dictParams["requestTimestamp"] = dictInfo["requestTimestamp"] as! String
         
-        let dictWebService = ["soapAction" : self.strSoapAction.stringByAppendingString(WebServiceFor.EarnReversal.rawValue),
-            "soapMessage" : self.getSoapMessageWithWebServiceFor(.EarnReversal)]
+        let dictWebService = ["soapAction" : self.strSoapActionLSS.stringByAppendingString(WebServiceFor.EarnReversal.rawValue),
+            "soapMessage" : self.getSoapMessageWithWebServiceFor(.EarnReversal),
+            "url" : urlLSS]
         self.postWithDictionary(dictWebService)
     }
     
@@ -405,8 +449,9 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
         self.dictParams["requestTimezone"] = dictInfo["requestTimezone"] as! String
         self.dictParams["requestTimestamp"] = dictInfo["requestTimestamp"] as! String
         
-        let dictWebService = ["soapAction" : self.strSoapAction.stringByAppendingString(WebServiceFor.Inquire.rawValue),
-            "soapMessage" : self.getSoapMessageWithWebServiceFor(.Inquire)]
+        let dictWebService = ["soapAction" : self.strSoapActionLSS.stringByAppendingString(WebServiceFor.Inquire.rawValue),
+            "soapMessage" : self.getSoapMessageWithWebServiceFor(.Inquire),
+            "url" : urlLSS]
         self.postWithDictionary(dictWebService)
     }
     
@@ -420,8 +465,9 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
         self.dictParams["requestTimezone"] = dictInfo["requestTimezone"] as! String
         self.dictParams["requestTimestamp"] = dictInfo["requestTimestamp"] as! String
         
-        let dictWebService = ["soapAction" : self.strSoapAction.stringByAppendingString(WebServiceFor.InquireMsisdn.rawValue),
-            "soapMessage" : self.getSoapMessageWithWebServiceFor(.InquireMsisdn)]
+        let dictWebService = ["soapAction" : self.strSoapActionLSS.stringByAppendingString(WebServiceFor.InquireMsisdn.rawValue),
+            "soapMessage" : self.getSoapMessageWithWebServiceFor(.InquireMsisdn),
+            "url" : urlLSS]
         self.postWithDictionary(dictWebService)
     }
     
@@ -433,8 +479,9 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
         self.dictParams["requestTimezone"] = dictInfo["requestTimezone"] as! String
         self.dictParams["requestTimestamp"] = dictInfo["requestTimestamp"] as! String
         
-        let dictWebService = ["soapAction" : self.strSoapAction.stringByAppendingString(WebServiceFor.MarkAsSold.rawValue),
-            "soapMessage" : self.getSoapMessageWithWebServiceFor(.MarkAsSold)]
+        let dictWebService = ["soapAction" : self.strSoapActionLSS.stringByAppendingString(WebServiceFor.MarkAsSold.rawValue),
+            "soapMessage" : self.getSoapMessageWithWebServiceFor(.MarkAsSold),
+            "url" : urlLSS]
         self.postWithDictionary(dictWebService)
     }
     
@@ -449,8 +496,9 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
         self.dictParams["requestTimezone"] = dictInfo["requestTimezone"] as! String
         self.dictParams["requestTimestamp"] = dictInfo["requestTimestamp"] as! String
         
-        let dictWebService = ["soapAction" : self.strSoapAction.stringByAppendingString(WebServiceFor.PasaPoints.rawValue),
-            "soapMessage" : self.getSoapMessageWithWebServiceFor(.PasaPoints)]
+        let dictWebService = ["soapAction" : self.strSoapActionLSS.stringByAppendingString(WebServiceFor.PasaPoints.rawValue),
+            "soapMessage" : self.getSoapMessageWithWebServiceFor(.PasaPoints),
+            "url" : urlLSS]
         self.postWithDictionary(dictWebService)
     }
     
@@ -466,8 +514,9 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
         self.dictParams["requestTimezone"] = dictInfo["requestTimezone"] as! String
         self.dictParams["requestTimestamp"] = dictInfo["requestTimestamp"] as! String
         
-        let dictWebService = ["soapAction" : self.strSoapAction.stringByAppendingString(WebServiceFor.PasaPointsMsisdn.rawValue),
-            "soapMessage" : self.getSoapMessageWithWebServiceFor(.PasaPointsMsisdn)]
+        let dictWebService = ["soapAction" : self.strSoapActionLSS.stringByAppendingString(WebServiceFor.PasaPointsMsisdn.rawValue),
+            "soapMessage" : self.getSoapMessageWithWebServiceFor(.PasaPointsMsisdn),
+            "url" : urlLSS]
         self.postWithDictionary(dictWebService)
     }
     
@@ -486,8 +535,9 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
         self.dictParams["requestTimezone"] = dictInfo["requestTimezone"] as! String
         self.dictParams["requestTimestamp"] = dictInfo["requestTimestamp"] as! String
         
-        let dictWebService = ["soapAction" : self.strSoapAction.stringByAppendingString(WebServiceFor.Redeem.rawValue),
-            "soapMessage" : self.getSoapMessageWithWebServiceFor(.Redeem)]
+        let dictWebService = ["soapAction" : self.strSoapActionLSS.stringByAppendingString(WebServiceFor.Redeem.rawValue),
+            "soapMessage" : self.getSoapMessageWithWebServiceFor(.Redeem),
+            "url" : urlLSS]
         self.postWithDictionary(dictWebService)
     }
     
@@ -507,8 +557,9 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
         self.dictParams["requestTimezone"] = dictInfo["requestTimezone"] as! String
         self.dictParams["requestTimestamp"] = dictInfo["requestTimestamp"] as! String
         
-        let dictWebService = ["soapAction" : self.strSoapAction.stringByAppendingString(WebServiceFor.RedeemMsisdn.rawValue),
-            "soapMessage" : self.getSoapMessageWithWebServiceFor(.RedeemMsisdn)]
+        let dictWebService = ["soapAction" : self.strSoapActionLSS.stringByAppendingString(WebServiceFor.RedeemMsisdn.rawValue),
+            "soapMessage" : self.getSoapMessageWithWebServiceFor(.RedeemMsisdn),
+            "url" : urlLSS]
         self.postWithDictionary(dictWebService)
     }
     
@@ -522,8 +573,9 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
         self.dictParams["requestTimezone"] = dictInfo["requestTimezone"] as! String
         self.dictParams["requestTimestamp"] = dictInfo["requestTimestamp"] as! String
         
-        let dictWebService = ["soapAction" : self.strSoapAction.stringByAppendingString(WebServiceFor.RedeemReversal.rawValue),
-            "soapMessage" : self.getSoapMessageWithWebServiceFor(.RedeemReversal)]
+        let dictWebService = ["soapAction" : self.strSoapActionLSS.stringByAppendingString(WebServiceFor.RedeemReversal.rawValue),
+            "soapMessage" : self.getSoapMessageWithWebServiceFor(.RedeemReversal),
+            "url" : urlLSS]
         self.postWithDictionary(dictWebService)
     }
     
@@ -542,8 +594,9 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
         self.dictParams["requestTimezone"] = dictInfo["requestTimezone"] as! String
         self.dictParams["requestTimestamp"] = dictInfo["requestTimestamp"] as! String
         
-        let dictWebService = ["soapAction" : self.strSoapAction.stringByAppendingString(WebServiceFor.RedeemStamp.rawValue),
-            "soapMessage" : self.getSoapMessageWithWebServiceFor(.RedeemStamp)]
+        let dictWebService = ["soapAction" : self.strSoapActionLSS.stringByAppendingString(WebServiceFor.RedeemStamp.rawValue),
+            "soapMessage" : self.getSoapMessageWithWebServiceFor(.RedeemStamp),
+            "url" : urlLSS]
         self.postWithDictionary(dictWebService)
     }
     
@@ -559,8 +612,9 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
         self.dictParams["requestTimezone"] = dictInfo["requestTimezone"] as! String
         self.dictParams["requestTimestamp"] = dictInfo["requestTimestamp"] as! String
         
-        let dictWebService = ["soapAction" : self.strSoapAction.stringByAppendingString(WebServiceFor.Register.rawValue),
-            "soapMessage" : self.getSoapMessageWithWebServiceFor(.Register)]
+        let dictWebService = ["soapAction" : self.strSoapActionLSS.stringByAppendingString(WebServiceFor.Register.rawValue),
+            "soapMessage" : self.getSoapMessageWithWebServiceFor(.Register),
+            "url" : urlLSS]
         self.postWithDictionary(dictWebService)
     }
     
@@ -575,8 +629,9 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
         self.dictParams["email"] = dictInfo["email"] as! String
         self.dictParams["msisdn"] = dictInfo["msisdn"] as! String
         
-        let dictWebService = ["soapAction" : self.strSoapAction.stringByAppendingString(WebServiceFor.RegisterFbInfo.rawValue),
-            "soapMessage" : self.getSoapMessageWithWebServiceFor(.RegisterFbInfo)]
+        let dictWebService = ["soapAction" : self.strSoapActionLSS.stringByAppendingString(WebServiceFor.RegisterFbInfo.rawValue),
+            "soapMessage" : self.getSoapMessageWithWebServiceFor(.RegisterFbInfo),
+            "url" : urlLSS]
         self.postWithDictionary(dictWebService)
     }
     
@@ -585,8 +640,9 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
         self.dictParams["transactionId"] = dictInfo["transactionId"] as! String
         self.dictParams["mobileNumber"] = dictInfo["mobileNumber"] as! String
         
-        let dictWebService = ["soapAction" : self.strSoapAction.stringByAppendingString(WebServiceFor.ResendPin.rawValue),
-            "soapMessage" : self.getSoapMessageWithWebServiceFor(.ResendPin)]
+        let dictWebService = ["soapAction" : self.strSoapActionLSS.stringByAppendingString(WebServiceFor.ResendPin.rawValue),
+            "soapMessage" : self.getSoapMessageWithWebServiceFor(.ResendPin),
+            "url" : urlLSS]
         self.postWithDictionary(dictWebService)
     }
     
@@ -602,8 +658,9 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
         self.dictParams["email"] = dictInfo["email"] as! String
         self.dictParams["address"] = dictInfo["address"] as! String
         
-        let dictWebService = ["soapAction" : self.strSoapAction.stringByAppendingString(WebServiceFor.UpdateFbInfo.rawValue),
-            "soapMessage" : self.getSoapMessageWithWebServiceFor(.UpdateFbInfo)]
+        let dictWebService = ["soapAction" : self.strSoapActionLSS.stringByAppendingString(WebServiceFor.UpdateFbInfo.rawValue),
+            "soapMessage" : self.getSoapMessageWithWebServiceFor(.UpdateFbInfo),
+            "url" : urlLSS]
         self.postWithDictionary(dictWebService)
     }
     
@@ -620,8 +677,51 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
         self.dictParams["requestTimezone"] = dictInfo["requestTimezone"] as! String
         self.dictParams["requestTimestamp"] = dictInfo["requestTimestamp"] as! String
         
-        let dictWebService = ["soapAction" : self.strSoapAction.stringByAppendingString(WebServiceFor.ValidateCardPin.rawValue),
-            "soapMessage" : self.getSoapMessageWithWebServiceFor(.ValidateCardPin)]
+        let dictWebService = ["soapAction" : self.strSoapActionLSS.stringByAppendingString(WebServiceFor.ValidateCardPin.rawValue),
+            "soapMessage" : self.getSoapMessageWithWebServiceFor(.ValidateCardPin),
+            "url" : urlLSS]
+        self.postWithDictionary(dictWebService)
+    }
+    
+    func connectAndRegisterVirtualCardWithInfo(dictInfo: NSDictionary) {
+        self.dictParams = NSMutableDictionary()
+        self.dictParams["transactionId"] = dictInfo["transactionId"] as! String
+        self.dictParams["mobileNumber"] = dictInfo["mobileNumber"] as! String
+        
+        let dictWebService = ["soapAction" : self.strSoapActionLS3PPS.stringByAppendingString(WebServiceFor.RegisterVirtualCard.rawValue),
+            "soapMessage" : self.getSoapMessageWithWebServiceFor(.RegisterVirtualCard),
+            "url" : urlLS3PPS]
+        self.postWithDictionary(dictWebService)
+    }
+    
+    func connectAndValidateVirtualCardWithInfo(dictInfo: NSDictionary) {
+        self.dictParams = NSMutableDictionary()
+        self.dictParams["transactionId"] = dictInfo["transactionId"] as! String
+        self.dictParams["mobileNumber"] = dictInfo["mobileNumber"] as! String
+        self.dictParams["cardPin"] = dictInfo["cardPin"] as! String
+        self.dictParams["facebookId"] = dictInfo["facebookId"] as! String
+        self.dictParams["lastName"] = dictInfo["lastName"] as! String
+        self.dictParams["firstName"] = dictInfo["firstName"] as! String
+        self.dictParams["secondName"] = dictInfo["secondName"] as! String
+        self.dictParams["birthday"] = dictInfo["birthday"] as! String
+        self.dictParams["gender"] = dictInfo["gender"] as! String
+        self.dictParams["address"] = dictInfo["address"] as! String
+        self.dictParams["email"] = dictInfo["email"] as! String
+        
+        let dictWebService = ["soapAction" : self.strSoapActionLS3PPS.stringByAppendingString(WebServiceFor.ValidateVirtualCard.rawValue),
+            "soapMessage" : self.getSoapMessageWithWebServiceFor(.ValidateVirtualCard),
+            "url" : urlLS3PPS]
+        self.postWithDictionary(dictWebService)
+    }
+    
+    func connectAndGetDashboardInfo(dictInfo: NSDictionary) {
+        self.dictParams = NSMutableDictionary()
+        self.dictParams["transactionId"] = dictInfo["transactionId"] as! String
+        self.dictParams["mobileNumber"] = dictInfo["mobileNumber"] as! String
+        
+        let dictWebService = ["soapAction" : self.strSoapActionLS3PPS.stringByAppendingString(WebServiceFor.GetDashboardInfo.rawValue),
+            "soapMessage" : self.getSoapMessageWithWebServiceFor(.GetDashboardInfo),
+            "url" : urlLS3PPS]
         self.postWithDictionary(dictWebService)
     }
     

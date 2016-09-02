@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A238B8A2DA6599790021ECF0DA0EF471"
-               BuildableName = "Pods_Zed.framework"
-               BlueprintName = "Pods-Zed"
+               BlueprintIdentifier = "053617A05C5A952CF2888B88D119FE01"
+               BuildableName = "ActionSheetPicker_3_0.framework"
+               BlueprintName = "ActionSheetPicker-3.0"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -45,9 +45,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A238B8A2DA6599790021ECF0DA0EF471"
-            BuildableName = "Pods_Zed.framework"
-            BlueprintName = "Pods-Zed"
+            BlueprintIdentifier = "053617A05C5A952CF2888B88D119FE01"
+            BuildableName = "ActionSheetPicker_3_0.framework"
+            BlueprintName = "ActionSheetPicker-3.0"
             ReferencedContainer = "container:Pods.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

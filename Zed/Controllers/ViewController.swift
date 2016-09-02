@@ -11,14 +11,22 @@ import Foundation
 import FBSDKCoreKit
 import FBSDKLoginKit
 
-
-
-
 let userID = "7E177E8A450562B7B65F77881C817B47"
 let password = "FDFE29DF7FF33EC5078B03F468B7A04C"
 let merchantID = "581"
 let timezone = "GMT+800"
 let channel = "app"
+
+func generateTransactionIDWithTimestamp(timeStamp: String) -> String {
+    let trimmedTimeStamp = String(timeStamp.characters.filter { String($0).rangeOfCharacterFromSet(NSCharacterSet(charactersInString: "0123456789.")) != nil })
+    return "FUNAPP_\(trimmedTimeStamp)"
+}
+
+func generateTimeStamp() -> String {
+    let dateFormatter = NSDateFormatter()
+    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+    return dateFormatter.stringFromDate(NSDate())
+}
 
 //MARK: - View Controller
 class ViewController: UIViewController , UIScrollViewDelegate{
@@ -355,18 +363,21 @@ class MenuViewController : UIViewController, UITableViewDataSource, UITableViewD
 }
 
 //MARK: - Registration Form View Controller
-class RegsitrationFormViewController : UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
+import ActionSheetPicker_3_0
+
+class RegsitrationFormViewController : UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, WebServiceDelegate {
     
     //MARK: Properties
+    let webService = WebService()
     var user: UserModelRepresentation?
     
     @IBOutlet weak var tableView: UITableView!
-    
     
     var tableContents: NSMutableArray = NSMutableArray()
     
     //MARK: View life cycle
     override func viewDidLoad() {
+        self.webService.delegate = self
         
         self.tableView.scrollEnabled = false
         self.tableView.backgroundColor = UIColor.clearColor()
@@ -426,7 +437,6 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
         gender.setObject("gender", forKey: "type")
         gender.setObject("image_name", forKey: "button_icon")
         
-        
         let address = NSMutableDictionary()
         address.setObject("Address:", forKey: "label")
         address.setObject("", forKey: "value")
@@ -449,8 +459,6 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
         self.tableContents.addObject(address)
         self.tableContents.addObject(email)
         self.tableContents.addObject(pin)
-        
-    
     }
     
     //MARK: Delegate
@@ -472,8 +480,9 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
             
             cell.contentView.backgroundColor = UIColor.clearColor()
             cell.labelContent.text = dictionary["label"] as? String
-//            cell.textContent.placeholder = dictionary["label"] as? String
+            //\cell.textContent.placeholder = dictionary["label"] as? String
             cell.textContent.text = dictionary["value"] as? String
+            cell.textContent.delegate = self
             cell.labelContent.backgroundColor = UIColor.clearColor()
             cell.textContent.delegate = self
             cell.textContent.tag = indexPath.row
@@ -494,24 +503,87 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
         cell.labelQuestion.text = dictionary["label"] as? String
         cell.labelContent.text = dictionary["value"] as? String
         
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "didTap:")
+        cell.button.addTarget(self, action: "didTap:", forControlEvents: .TouchUpInside)
+        cell.viewContentHolder.tag = indexPath.row
+        cell.button.tag = indexPath.row
+        cell.viewContentHolder.addGestureRecognizer(tapGestureRecognizer)
+        
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         
         return cell
     }
     
+    func didTap(sender: AnyObject) -> Void {
+        //print("tap")
+        
+        var tag = 0
+        
+        if sender.isKindOfClass(UIButton.classForCoder()) {
+            //button
+            tag = sender.tag
+        } else {
+            //gesture
+            let gesture = sender as! UITapGestureRecognizer
+            let gestureView = gesture.view!
+            
+            tag = gestureView.tag
+        }
+        
+        let dictionary = self.tableContents[tag] as! NSMutableDictionary
+        let type = dictionary["type"] as! String
+        
+        switch type {
+        case "date":
+            //birthday
+            ActionSheetDatePicker.showPickerWithTitle("", datePickerMode: .Date, selectedDate: NSDate(), doneBlock: { (picker, date, view) -> Void in
+                //print(date)
+                
+                let dateFormatter = NSDateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd"
+                let strDate = dateFormatter.stringFromDate(date as! NSDate)
+                
+                dictionary.setObject(strDate, forKey: "value")
+                self.tableContents.replaceObjectAtIndex(tag, withObject: dictionary)
+                self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forItem: tag, inSection: 0)], withRowAnimation: .Fade)
+                
+                }, cancelBlock: { (picker) -> Void in
+                    print("cancel")
+                }, origin: self.view)
+            
+            break
+            
+        case "gender":
+            //gender
+            let genders = ["male","female"]
+            
+            ActionSheetStringPicker.showPickerWithTitle("", rows: genders, initialSelection: 0, doneBlock: { (picker, index, value) -> Void in
+                //print(index)
+                // print(value)
+                
+                dictionary.setObject(value, forKey: "value")
+                self.tableContents.replaceObjectAtIndex(tag, withObject: dictionary)
+                self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forItem: tag, inSection: 0)], withRowAnimation: .Fade)
+                
+                }, cancelBlock: { (picker) -> Void in
+                    print("cancel")
+                }, origin: self.view)
+            
+            break
+            
+        default:
+            break
+        }
+    }
+    
     // MARK: UITableViewDelegate
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        
-        
         return 45
-        
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
 
-        
     }
     
     //MARK: TextField Delegate
@@ -531,7 +603,6 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
     func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
         
         return true
-        
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -539,30 +610,102 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
         textField.resignFirstResponder()
         
         return true
-        
     }
-    
     
     //MARK: Button Actions
 
     @IBAction func saveButtonClicked(sender: UIButton) {
         
+        //validate form here
         for content in self.tableContents {
-            
             let dictionary = content as! NSMutableDictionary
             
-            print("Label: \(dictionary["label"] as! String) \(dictionary["value"] as! String)")
-            
+            //print("Label: \(dictionary["label"] as! String) \(dictionary["value"] as! String)")
+            if (dictionary["value"] as! String).characters.count == 0 {
+                print("Error >>>> Incomplete form")
+                return
+            }
         }
         
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyboard.instantiateViewControllerWithIdentifier("main") 
-        self.presentViewController(vc, animated: true, completion: nil)
+        let dictParams = NSMutableDictionary()
+        dictParams["transactionId"] = generateTransactionIDWithTimestamp(generateTimeStamp())
+        dictParams["mobileNumber"] = self.user!.mobileNumber
+        dictParams["cardPin"] = self.tableContents[6]["value"] as! String
+        dictParams["facebookId"] = self.user!.facebookID
+        dictParams["lastName"] = self.tableContents[1]["value"] as! String
+        dictParams["firstName"] = self.tableContents[0]["value"] as! String
+        dictParams["secondName"] = " "
+        dictParams["birthday"] = self.tableContents[2]["value"] as! String
+        dictParams["gender"] = self.tableContents[3]["value"] as! String
+        dictParams["address"] = self.tableContents[4]["value"] as! String
+        dictParams["email"] = self.tableContents[5]["value"] as! String
+        
+        self.webService.connectAndValidateVirtualCardWithInfo(dictParams)
     }
     
     @IBAction func resendButtonClicked(sender: UIButton) {
+        sender.enabled = false
         
+        print("resending...")
         
+        //resend pin to the mobile number provided earlier
+        let dictParams = NSMutableDictionary()
+        dictParams["transactionId"] = generateTransactionIDWithTimestamp(generateTimeStamp())
+        dictParams["mobileNumber"] = self.user!.mobileNumber
+        
+        self.webService.connectAndRegisterVirtualCardWithInfo(dictParams)
+    }
+    
+    //MARK: WebService Delegate
+    func webServiceDidFinishLoadingWithResponseDictionary(parsedDictionary: NSDictionary) {
+        print(parsedDictionary)
+        let request = parsedDictionary["request"] as! String
+        
+        switch(request) {
+        case WebServiceFor.ValidateVirtualCard.rawValue:
+            let status = parsedDictionary["STATUS"] as! String
+            let description = parsedDictionary["DESCRIPTION"] as! String
+            
+            if status == "0" {
+                //proceed to dashboard
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let vc = storyboard.instantiateViewControllerWithIdentifier("main")
+                self.presentViewController(vc, animated: true, completion: nil)
+                
+                return
+            }
+            
+            print("error >>> \(description)")
+            
+            break
+            
+        case WebServiceFor.RegisterVirtualCard.rawValue:
+            let status = parsedDictionary["STATUS"] as! String
+            let description = parsedDictionary["DESCRIPTION"] as! String
+            
+            if status == "0" {
+                let pinCode = parsedDictionary["PIN"] as! String
+                self.user!.cardPin = pinCode
+                print(pinCode)
+                print("resent!")
+                
+                return
+            }
+            
+            print("error >>> \(description)")
+            break
+            
+        default:
+            break
+        }
+    }
+    
+    func webServiceDidTimeout() {
+        print("timeout")
+    }
+    
+    func webServiceDidFailWithError(error: NSError) {
+        print(error)
     }
 }
 
@@ -614,6 +757,7 @@ class RegistrationCardViewController : UIViewController {
 class RegistrationMobileNumberViewController : UIViewController, WebServiceDelegate {
     
     //MARK: Properties
+    let user = UserModelRepresentation()
     let webService = WebService()
     
     @IBOutlet weak var textNumber: UITextField!
@@ -625,8 +769,6 @@ class RegistrationMobileNumberViewController : UIViewController, WebServiceDeleg
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        
-        
     }
     
     //MARK: IBAction Delegate
@@ -642,27 +784,65 @@ class RegistrationMobileNumberViewController : UIViewController, WebServiceDeleg
         }
         
         sender.enabled = false
+        self.user.mobileNumber = number
         self.webService.connectAndCheckMsisdnWithMsisdn(number)
     }
     
     //MARK: WebService Delegate
     func webServiceDidFinishLoadingWithResponseDictionary(parsedDictionary: NSDictionary) {
         print(parsedDictionary)
+        let request = parsedDictionary["request"] as! String
         
-        let isRegistered = parsedDictionary["IsRegistered"] as! String
-        
-        if isRegistered == "YES" {
-            let cardNumber = parsedDictionary["CardNumber"] as! String
-            let facebookID = parsedDictionary["FacebookId"] as! String
-            print("cardnumber: \(cardNumber)\nfacebookid: \(facebookID)")
+        switch(request) {
+        case WebServiceFor.CheckMsisdn.rawValue:
+            let isRegistered = parsedDictionary["IsRegistered"] as! String
             
-            //proceed to dashboard
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let vc = storyboard.instantiateViewControllerWithIdentifier("main")
-            self.presentViewController(vc, animated: true, completion: nil)
-        } else {
+            if isRegistered == "YES" {
+                //let cardNumber = parsedDictionary["CardNumber"] as! String
+                let facebookID = parsedDictionary["FacebookId"] as? String
+                //print("cardnumber: \(cardNumber)\nfacebookid: \(facebookID)")
+                
+                if facebookID?.characters.count == 0 || facebookID == nil {
+                    //proceed with registration
+                    self.performSegueWithIdentifier("goToConnectToFacebook", sender: nil)
+                    return
+                }
+                
+                //proceed to dashboard
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let vc = storyboard.instantiateViewControllerWithIdentifier("main")
+                self.presentViewController(vc, animated: true, completion: nil)
+            } else {
+                //send pin to the indicated mobile number
+                let dictParams = NSMutableDictionary()
+                dictParams["transactionId"] = generateTransactionIDWithTimestamp(generateTimeStamp())
+                dictParams["mobileNumber"] = self.textNumber.text!
+                
+                self.webService.connectAndRegisterVirtualCardWithInfo(dictParams)
+            }
+            
+            break
+            
+        case WebServiceFor.RegisterVirtualCard.rawValue:
             //proceed with registration
-            self.performSegueWithIdentifier("goToConnectToFacebook", sender: nil)
+            let status = parsedDictionary["STATUS"] as! String
+            let description = parsedDictionary["DESCRIPTION"] as! String
+            
+            if status == "0" {
+                let pinCode = parsedDictionary["PIN"] as! String
+                self.user.cardPin = pinCode
+                print(pinCode)
+                
+                self.performSegueWithIdentifier("goToConnectToFacebook", sender: nil)
+                return
+            }
+            
+            print("error >>> \(description)")
+            
+            break
+            
+        default:
+            break
         }
     }
     
@@ -676,7 +856,7 @@ class RegistrationMobileNumberViewController : UIViewController, WebServiceDeleg
     
     //MARK: NavigationController Delegate
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
+        segue.destinationViewController.setValue(self.user, forKey: "user")
     }
 }
 
@@ -737,15 +917,10 @@ class RegistrationCardNumberViewController : UIViewController, WebServiceDelegat
             }
             
             //proceed with registration
-            let dateFormatter = NSDateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
-            let timeStamp = dateFormatter.stringFromDate(NSDate())
-            
-            let trimmedTimeStamp = String(timeStamp.characters.filter { String($0).rangeOfCharacterFromSet(NSCharacterSet(charactersInString: "0123456789.")) != nil })
-            let transactionId = "FUNAPP_\(trimmedTimeStamp)"
+            let timeStamp = generateTimeStamp()
             
             let dictParams = NSMutableDictionary()
-            dictParams["transactionId"] = transactionId
+            dictParams["transactionId"] = generateTransactionIDWithTimestamp(timeStamp)
             dictParams["userId"] = userID
             dictParams["password"] = password
             dictParams["merchantId"] = merchantID
@@ -803,46 +978,30 @@ class RegistrationFacebookViewController : UIViewController, FBSDKLoginButtonDel
     //MARK: Properties
     var user: UserModelRepresentation?
     
-    
     @IBOutlet var facebookButton: FBSDKLoginButton!
-    
 
     //MARK: View life cycle
     override func viewDidLoad() {
-        
-//      
         self.facebookButton.delegate = self
         self.facebookButton.readPermissions = ["public_profile", "email", "user_friends"]
-        
-        
     }
-    
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        
-        
     }
     
-    
     //MARK: Button Actions
-    
     @IBAction func fbButtonClicked(sender: FBSDKLoginButton) {
-        
-        
         
     }
     
     @IBAction func buttonClicked(sender: UIButton) {
-        
         self.performSegueWithIdentifier("goToForm", sender: nil)
     }
     
-    
     //MARK: Facebook Delegate
-    // FBSDKLoginButton Delegate
+    //FBSDKLoginButton Delegate
     func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
-        
 //        print(result.dictionaryWithValuesForKeys(["first_name", "last_name", "email"]))
         
         if (FBSDKAccessToken.currentAccessToken() != nil) {
@@ -860,8 +1019,8 @@ class RegistrationFacebookViewController : UIViewController, FBSDKLoginButtonDel
 //                let dictionaryPicture = dictionaryResult["picture"] as! NSDictionary
 //                let dictionaryData = dictionaryPicture["data"] as! NSDictionary
                 
-                self.user = nil
-                self.user = UserModelRepresentation()
+                //self.user = nil
+                //self.user = UserModelRepresentation()
               
                 self.user?.firstName = dictionaryResult["first_name"] as! String
                 self.user?.email = dictionaryResult["email"] as! String
@@ -879,16 +1038,10 @@ class RegistrationFacebookViewController : UIViewController, FBSDKLoginButtonDel
     
     func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) {
         
-        
     }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-        
         let controller = segue.destinationViewController as! RegsitrationFormViewController
         controller.user = self.user
-        
-        
     }
-    
-    
 }

@@ -10,5 +10,6 @@ target 'Zed' do
   pod 'FBSDKCoreKit'
   pod 'FBSDKShareKit'
   pod 'FBSDKLoginKit'
+  pod 'ActionSheetPicker-3.0'
 
 end

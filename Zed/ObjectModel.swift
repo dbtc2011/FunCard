@@ -44,6 +44,9 @@ class UserModelRepresentation: NSObject {
     var points: String = ""
     var pasaPoints: String = ""
     
+    var cardNumber: String = ""
+    var cardPin: String = ""
+    var mobileNumber: String = ""
 }
 
 //MARK: - Transaction Model
