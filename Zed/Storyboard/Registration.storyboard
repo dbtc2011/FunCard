@@ -628,6 +628,7 @@
                         </variation>
                     </view>
                     <connections>
+                        <outlet property="btnResend" destination="kZD-re-hLd" id="VUt-Lx-9nv"/>
                         <outlet property="tableView" destination="4cO-j0-g1o" id="his-X3-ky4"/>
                     </connections>
                 </viewController>
@@ -1382,7 +1383,7 @@
                                                     </mask>
                                                 </variation>
                                             </view>
-                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="1234123456785678" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BNl-IT-P5z">
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="6788880000001347" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BNl-IT-P5z">
                                                 <rect key="frame" x="-25" y="-30" width="97" height="30"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>

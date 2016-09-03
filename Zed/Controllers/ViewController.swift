@@ -372,6 +372,7 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
     var user: UserModelRepresentation?
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet var btnResend: UIButton!
     
     var tableContents: NSMutableArray = NSMutableArray()
     
@@ -458,7 +459,13 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
         self.tableContents.addObject(gender)
         self.tableContents.addObject(address)
         self.tableContents.addObject(email)
-        self.tableContents.addObject(pin)
+        
+        if self.user!.cardPin.characters.count > 0 {
+            self.tableContents.addObject(pin)
+        } else {
+            //hide resend pin button
+            self.btnResend.hidden = true
+        }
     }
     
     //MARK: Delegate
@@ -612,21 +619,24 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
         return true
     }
     
-    //MARK: Button Actions
-
-    @IBAction func saveButtonClicked(sender: UIButton) {
+    //MARK: API Calls
+    
+    private func callRegisterFBInfoAPI() -> Void {
+        let dictParams = NSMutableDictionary()
+        dictParams["facebookId"] = self.user!.facebookID
+        dictParams["firstName"] = self.tableContents[0]["value"] as! String
+        dictParams["lastName"] = self.tableContents[1]["value"] as! String
+        dictParams["middleName"] = " "
+        dictParams["birthday"] = self.tableContents[2]["value"] as! String
+        dictParams["address"] = self.tableContents[4]["value"] as! String
+        dictParams["email"] = self.tableContents[5]["value"] as! String
+        dictParams["msisdn"] = self.user!.mobileNumber
         
-        //validate form here
-        for content in self.tableContents {
-            let dictionary = content as! NSMutableDictionary
-            
-            //print("Label: \(dictionary["label"] as! String) \(dictionary["value"] as! String)")
-            if (dictionary["value"] as! String).characters.count == 0 {
-                print("Error >>>> Incomplete form")
-                return
-            }
-        }
-        
+        //print(dictParams)
+        self.webService.connectAndRegisterFbInfoWithInfo(dictParams)
+    }
+    
+    private func callRegisterWithoutCardAPI() -> Void {
         let dictParams = NSMutableDictionary()
         dictParams["transactionId"] = generateTransactionIDWithTimestamp(generateTimeStamp())
         dictParams["mobileNumber"] = self.user!.mobileNumber
@@ -643,17 +653,94 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
         self.webService.connectAndValidateVirtualCardWithInfo(dictParams)
     }
     
-    @IBAction func resendButtonClicked(sender: UIButton) {
-        sender.enabled = false
+    private func callRegisterWithCardAPI() -> Void {
+        let timeStamp = generateTimeStamp()
         
-        print("resending...")
+        let dictParams = NSMutableDictionary()
+        dictParams["transactionId"] = generateTransactionIDWithTimestamp(timeStamp)
+        dictParams["userId"] = userID
+        dictParams["password"] = password
+        dictParams["merchantId"] = merchantID
+        dictParams["cardNumber"] = self.user!.cardNumber
+        dictParams["msisdn"] = self.user!.mobileNumber
+        dictParams["cardPin"] = self.user!.cardPin
+        dictParams["channel"] = channel
+        dictParams["requestTimezone"] = timezone
+        dictParams["requestTimestamp"] = timeStamp
         
+        self.webService.connectAndValidateCardPinWithInfo(dictParams)
+    }
+    
+    private func callResendPinWithoutCardAPI() -> Void {
         //resend pin to the mobile number provided earlier
         let dictParams = NSMutableDictionary()
         dictParams["transactionId"] = generateTransactionIDWithTimestamp(generateTimeStamp())
         dictParams["mobileNumber"] = self.user!.mobileNumber
         
         self.webService.connectAndRegisterVirtualCardWithInfo(dictParams)
+    }
+    
+    private func callResendPinWithCardAPI() -> Void {
+        //resend pin to the mobile number provided earlier
+        let timeStamp = generateTimeStamp()
+        
+        let dictParams = NSMutableDictionary()
+        dictParams["transactionId"] = generateTransactionIDWithTimestamp(timeStamp)
+        dictParams["userId"] = userID
+        dictParams["password"] = password
+        dictParams["merchantId"] = merchantID
+        dictParams["cardNumber"] = self.user!.cardNumber
+        dictParams["msisdn"] = self.user!.mobileNumber
+        dictParams["channel"] = channel
+        dictParams["requestTimezone"] = timezone
+        dictParams["requestTimestamp"] = timeStamp
+        
+        //print(dictParams)
+        self.webService.connectAndRegisterWithInfo(dictParams)
+    }
+    
+    //MARK: Button Actions
+
+    @IBAction func saveButtonClicked(sender: UIButton) {
+        //validate form here
+        for content in self.tableContents {
+            let dictionary = content as! NSMutableDictionary
+            
+            //print("Label: \(dictionary["label"] as! String) \(dictionary["value"] as! String)")
+            if (dictionary["value"] as! String).characters.count == 0 {
+                print("Error >>>> Incomplete form")
+                return
+            }
+        }
+        
+        //identify if with/without pin
+        if self.user!.cardPin.characters.count == 0 {
+            self.callRegisterFBInfoAPI()
+            return
+        }
+        
+        //identify with or without card
+        if self.user!.cardNumber.characters.count == 0 {
+            //without card
+            self.callRegisterWithoutCardAPI()
+        } else {
+            //with card
+            self.callRegisterWithCardAPI()
+        }
+    }
+    
+    @IBAction func resendButtonClicked(sender: UIButton) {
+        sender.enabled = false
+        
+        print("resending...")
+        //identify with or without card
+        if self.user!.cardNumber.characters.count == 0 {
+            //without card
+            self.callResendPinWithoutCardAPI()
+        } else {
+            //with card
+            self.callResendPinWithCardAPI()
+        }
     }
     
     //MARK: WebService Delegate
@@ -693,6 +780,52 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
             }
             
             print("error >>> \(description)")
+            break
+            
+        case  WebServiceFor.Register.rawValue:
+            let status = parsedDictionary["Status"] as! String
+            let errorMessage = parsedDictionary["StatusDescription"] as! String
+            
+            if status == "0" {
+                let pinCode = parsedDictionary["PIN"] as! String
+                self.user!.cardPin = pinCode
+                print(pinCode)
+                print("resent!")
+                
+                return
+            }
+            
+            print("error >>> \(errorMessage)")
+            break
+            
+        case WebServiceFor.ValidateCardPin.rawValue:
+            let status = parsedDictionary["Status"] as! String
+            let errorMessage = parsedDictionary["StatusDescription"] as! String
+            
+            if status == "0" {
+                //proceed with card registration
+                self.callRegisterFBInfoAPI()
+                
+                return
+            }
+            
+            print("error >>> \(errorMessage)")
+            break
+            
+        case WebServiceFor.RegisterFbInfo.rawValue:
+            let status = parsedDictionary["Status"] as! String
+            let errorMessage = parsedDictionary["StatusDescription"] as! String
+            
+            if status == "0" {
+                //proceed to dashboard
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let vc = storyboard.instantiateViewControllerWithIdentifier("main")
+                self.presentViewController(vc, animated: true, completion: nil)
+                
+                return
+            }
+            
+            print("error >>> \(errorMessage)")
             break
             
         default:
@@ -824,11 +957,11 @@ class RegistrationMobileNumberViewController : UIViewController, WebServiceDeleg
             break
             
         case WebServiceFor.RegisterVirtualCard.rawValue:
-            //proceed with registration
             let status = parsedDictionary["STATUS"] as! String
             let description = parsedDictionary["DESCRIPTION"] as! String
             
             if status == "0" {
+                //proceed with registration
                 let pinCode = parsedDictionary["PIN"] as! String
                 self.user.cardPin = pinCode
                 print(pinCode)
@@ -864,6 +997,7 @@ class RegistrationMobileNumberViewController : UIViewController, WebServiceDeleg
 class RegistrationCardNumberViewController : UIViewController, WebServiceDelegate {
     
     //MARK: Properties
+    let user = UserModelRepresentation()
     let webService = WebService()
     
     @IBOutlet weak var txtCardNumber: UITextField!
@@ -890,6 +1024,9 @@ class RegistrationCardNumberViewController : UIViewController, WebServiceDelegat
         }
         
         sender.enabled = false
+        
+        self.user.cardNumber = self.txtCardNumber.text!
+        self.user.mobileNumber = mobileNumber
         self.webService.connectAndCheckMsisdnWithMsisdn(mobileNumber)
     }
     
@@ -904,9 +1041,15 @@ class RegistrationCardNumberViewController : UIViewController, WebServiceDelegat
             let isRegistered = parsedDictionary["IsRegistered"] as! String
             
             if isRegistered == "YES" {
-                let cardNumber = parsedDictionary["CardNumber"] as! String
-                let facebookID = parsedDictionary["FacebookId"] as! String
-                print("cardnumber: \(cardNumber)\nfacebookid: \(facebookID)")
+                //let cardNumber = parsedDictionary["CardNumber"] as! String
+                let facebookID = parsedDictionary["FacebookId"] as? String
+                //print("cardnumber: \(cardNumber)\nfacebookid: \(facebookID)")
+                
+                if facebookID?.characters.count == 0 || facebookID == nil {
+                    //proceed with registration
+                    self.performSegueWithIdentifier("goToConnectToFacebook", sender: nil)
+                    return
+                }
                 
                 //proceed to dashboard
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -930,6 +1073,7 @@ class RegistrationCardNumberViewController : UIViewController, WebServiceDelegat
             dictParams["requestTimezone"] = timezone
             dictParams["requestTimestamp"] = timeStamp
         
+            //print(dictParams)
             self.webService.connectAndRegisterWithInfo(dictParams)
             
             break
@@ -947,8 +1091,10 @@ class RegistrationCardNumberViewController : UIViewController, WebServiceDelegat
             
             let cardPin = parsedDictionary["CardPin"] as! String
             print("cardpin: \(cardPin)")
+            self.user.cardPin = cardPin
             
             //proceed
+            self.performSegueWithIdentifier("goToConnectToFacebook", sender: nil)
             
             break
             
@@ -968,7 +1114,7 @@ class RegistrationCardNumberViewController : UIViewController, WebServiceDelegat
     
     //MARK: NavigationController Delegate
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
+        segue.destinationViewController.setValue(self.user, forKey: "user")
     }
 }
 

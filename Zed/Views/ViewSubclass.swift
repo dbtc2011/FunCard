@@ -194,9 +194,6 @@ class CardInfoView: UIView {
         self.labelTransactionDate.text = "---"
         self.labelTransactionDate.textAlignment = NSTextAlignment.Right
         self.addSubview(self.labelTransactionDate)
-        
-        
-        
     }
     
     
