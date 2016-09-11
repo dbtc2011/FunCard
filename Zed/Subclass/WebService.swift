@@ -228,115 +228,115 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
     }
     
     private func messageForCheckFBInfo() -> String {
-        let message = String(format: "<exec:checkFbInfo><exec:CheckFbInfoRequest><FacebookId>%@</FacebookId></exec:CheckFbInfoRequest></exec:checkFbInfo>", self.dictParams["facebookId"] as! String)
+        let message = String(format: "<exec:checkFbInfo><exec:CheckFbInfoRequest><exec:FacebookId>%@</exec:FacebookId></exec:CheckFbInfoRequest></exec:checkFbInfo>", self.dictParams["facebookId"] as! String)
         
         return message
     }
     
     private func messageForCheckMsisdn() -> String {
-        let message = String(format: "<exec:checkMsisdn><exec:CheckMsisdnRequest><Msisdn>%@</Msisdn></exec:CheckMsisdnRequest></exec:checkMsisdn>", self.dictParams["msisdn"] as! String)
+        let message = String(format: "<exec:checkMsisdn><exec:CheckMsisdnRequest><exec:Msisdn>%@</exec:Msisdn></exec:CheckMsisdnRequest></exec:checkMsisdn>", self.dictParams["msisdn"] as! String)
         
         return message
     }
     
     private func messageForEarn() -> String {
-        let message = String(format: "<exec:earn><exec:EarnRequest><TransactionId>%@</TransactionId><UserId>%@</UserId><Password>%@</Password><MerchantId>%@</MerchantId><CardNumber>%@</CardNumber><Amount>%@</Amount><Currency>%@</Currency><Branch>%@</Branch><PaymentChannel>%@</PaymentChannel><ModeOfPayment>%@</ModeOfPayment><RequestTimezone>%@</RequestTimezone><RequestTimestamp>%@</RequestTimestamp></exec:EarnRequest></exec:earn>", self.dictParams["transactionId"] as! String, self.dictParams["userId"] as! String, self.dictParams["password"] as! String, self.dictParams["merchantId"] as! String, self.dictParams["cardNumber"] as! String, self.dictParams["amount"] as! String, self.dictParams["currency"] as! String, self.dictParams["branch"] as! String, self.dictParams["paymentChannel"] as! String, self.dictParams["modeOfPayment"] as! String, self.dictParams["requestTimezone"] as! String, self.dictParams["requestTimestamp"] as! String)
+        let message = String(format: "<exec:earn><exec:EarnRequest><exec:Amount>%@</exec:Amount><exec:Branch>%@</exec:Branch><exec:CardNumber>%@</exec:CardNumber><exec:Currency>%@</exec:Currency><exec:MerchantId>%@</exec:MerchantId><exec:ModeOfPayment>%@</exec:ModeOfPayment><exec:Password>%@</exec:Password><exec:PaymentChannel>%@</exec:PaymentChannel><exec:RequestTimestamp>%@</exec:RequestTimestamp><exec:RequestTimezone>%@</exec:RequestTimezone><exec:TransactionId>%@</exec:TransactionId><exec:UserId>%@</exec:UserId></exec:EarnRequest></exec:earn>", self.dictParams["amount"] as! String, self.dictParams["branch"] as! String, self.dictParams["cardNumber"] as! String, self.dictParams["currency"] as! String, self.dictParams["merchantId"] as! String, self.dictParams["modeOfPayment"] as! String, self.dictParams["password"] as! String, self.dictParams["paymentChannel"] as! String, self.dictParams["requestTimestamp"] as! String, self.dictParams["requestTimezone"] as! String, self.dictParams["transactionId"] as! String, self.dictParams["userId"] as! String)
         
         return message
     }
     
     private func messageForEarnMsisdn() -> String {
-        let message = String(format: "<exec:earnMsisdn><exec:EarnMsisdnRequest><TransactionId>%@</TransactionId><UserId>%@</UserId><Password>%@</Password><MerchantId>%@</MerchantId><MobileNumber>%@</MobileNumber><Amount>%@</Amount><Currency>%@</Currency><Branch>%@</Branch><PaymentChannel>%@</PaymentChannel><ModeOfPayment>%@</ModeOfPayment><RequestTimezone>%@</RequestTimezone><RequestTimestamp>%@</RequestTimestamp></exec:EarnMsisdnRequest></exec:earnMsisdn>", self.dictParams["transactionId"] as! String, self.dictParams["userId"] as! String, self.dictParams["password"] as! String, self.dictParams["merchantId"] as! String, self.dictParams["mobileNumber"] as! String, self.dictParams["amount"] as! String, self.dictParams["currency"] as! String, self.dictParams["branch"] as! String, self.dictParams["paymentChannel"] as! String, self.dictParams["modeOfPayment"] as! String, self.dictParams["requestTimezone"] as! String, self.dictParams["requestTimestamp"] as! String)
+        let message = String(format: "<exec:earnMsisdn><exec:EarnMsisdnRequest><Amount>%@</Amount><Branch>%@</Branch><Currency>%@</Currency><MerchantId>%@</MerchantId><MobileNumber>%@</MobileNumber><ModeOfPayment>%@</ModeOfPayment><Password>%@</Password><PaymentChannel>%@</PaymentChannel><RequestTimestamp>%@</RequestTimestamp><RequestTimezone>%@</RequestTimezone><TransactionId>%@</TransactionId><UserId>%@</UserId></exec:EarnMsisdnRequest></exec:earnMsisdn>", self.dictParams["amount"] as! String, self.dictParams["branch"] as! String, self.dictParams["currency"] as! String, self.dictParams["merchantId"] as! String, self.dictParams["mobileNumber"] as! String, self.dictParams["modeOfPayment"] as! String, self.dictParams["password"] as! String, self.dictParams["paymentChannel"] as! String, self.dictParams["requestTimestamp"] as! String, self.dictParams["requestTimezone"] as! String, self.dictParams["transactionId"] as! String, self.dictParams["userId"] as! String)
         
         return message
     }
     
     private func messageForEarnReversal() -> String {
-        let message = String(format: "<exec:earnReversal><exec:EarnReversalRequest><TransactionId>%@</TransactionId><UserId>%@</UserId><Password>%@</Password><MerchantId>%@</MerchantId><ModeOfPayment>%@</ModeOfPayment><RequestTimezone>%@</RequestTimezone><RequestTimestamp>%@</RequestTimestamp></exec:EarnReversalRequest>/exec:earnReversal>", self.dictParams["transactionId"] as! String, self.dictParams["userId"] as! String, self.dictParams["password"] as! String, self.dictParams["merchantId"] as! String, self.dictParams["modeOfPayment"] as! String, self.dictParams["requestTimezone"] as! String, self.dictParams["requestTimestamp"] as! String)
+        let message = String(format: "<exec:earnReversal><exec:EarnReversalRequest><exec:MerchantId>%@</exec:MerchantId><ModeOfPayment>%@</ModeOfPayment><Password>%@</Password><RequestTimestamp>%@</RequestTimestamp><RequestTimezone>%@</RequestTimezone><TransactionId>%@</TransactionId><UserId>%@</UserId></exec:EarnReversalRequest>/exec:earnReversal>", self.dictParams["merchantId"] as! String, self.dictParams["modeOfPayment"] as! String, self.dictParams["password"] as! String,  self.dictParams["requestTimestamp"] as! String, self.dictParams["requestTimezone"] as! String, self.dictParams["transactionId"] as! String, self.dictParams["userId"] as! String)
         
         return message
     }
     
     private func messageForInquire() -> String {
-        let message = String(format: "<exec:inquire><exec:InquireRequest><TransactionId>%@</TransactionId><UserId>%@</UserId><Password>%@</Password><MerchantId>%@</MerchantId><CardNumber>%@</CardNumber><RequestTimezone>%@</RequestTimezone><RequestTimestamp>%@</RequestTimestamp></exec:InquireRequest></exec:inquire>", self.dictParams["transactionId"] as! String, self.dictParams["userId"] as! String, self.dictParams["password"] as! String, self.dictParams["merchantId"] as! String, self.dictParams["cardNumber"] as! String, self.dictParams["requestTimezone"] as! String, self.dictParams["requestTimestamp"] as! String)
+        let message = String(format: "<exec:inquire><exec:InquireRequest><CardNumber>%@</CardNumber><MerchantId>%@</MerchantId><Password>%@</Password><RequestTimestamp>%@</RequestTimestamp><RequestTimezone>%@</RequestTimezone><TransactionId>%@</TransactionId><UserId>%@</UserId></exec:InquireRequest></exec:inquire>", self.dictParams["cardNumber"] as! String, self.dictParams["merchantId"] as! String, self.dictParams["password"] as! String,  self.dictParams["requestTimestamp"] as! String, self.dictParams["requestTimezone"] as! String, self.dictParams["transactionId"] as! String, self.dictParams["userId"] as! String)
         
         return message
     }
     
     private func messageForInquireMsisdn() -> String {
-        let message = String(format: "<exec:inquireMsisdn><exec:InquireMsisdnRequest><TransactionId>%@</TransactionId><UserId>%@</UserId><Password>%@</Password><MerchantId>%@</MerchantId><MobileNumber>%@</MobileNumber><RequestTimezone>%@</RequestTimezone><RequestTimestamp>%@</RequestTimestamp></exec:InquireMsisdnRequest></exec:inquireMsisdn>", self.dictParams["transactionId"] as! String, self.dictParams["userId"] as! String, self.dictParams["password"] as! String, self.dictParams["merchantId"] as! String, self.dictParams["mobileNumber"] as! String, self.dictParams["requestTimezone"] as! String, self.dictParams["requestTimestamp"] as! String)
+        let message = String(format: "<exec:inquireMsisdn><exec:InquireMsisdnRequest><MerchantId>%@</MerchantId><MobileNumber>%@</MobileNumber><Password>%@</Password><RequestTimestamp>%@</RequestTimestamp><RequestTimezone>%@</RequestTimezone><TransactionId>%@</TransactionId><UserId>%@</UserId></exec:InquireMsisdnRequest></exec:inquireMsisdn>", self.dictParams["merchantId"] as! String, self.dictParams["mobileNumber"] as! String, self.dictParams["password"] as! String,  self.dictParams["requestTimestamp"] as! String, self.dictParams["requestTimezone"] as! String, self.dictParams["transactionId"] as! String, self.dictParams["userId"] as! String)
         
         return message
     }
     
     private func messageForMarkAsSold() -> String {
-        let message = String(format: "<exec:markAsSold><exec:MarkAsReadRequest><TransactionId>%@</TransactionId><CardNumber>%@</CardNumber><MerchantAlias>%@</MerchantAlias><RequestTimezone>%@</RequestTimezone><RequestTimestamp>%@</RequestTimestamp></exec:MarkAsReadRequest></exec:markAsSold>", self.dictParams["transactionId"] as! String, self.dictParams["cardNumber"] as! String, self.dictParams["merchantAlias"] as! String, self.dictParams["requestTimezone"] as! String, self.dictParams["requestTimestamp"] as! String)
+        let message = String(format: "<exec:markAsSold><exec:MarkAsReadRequest><CardNumber>%@</CardNumber><MerchantAlias>%@</MerchantAlias><RequestTimestamp>%@</RequestTimestamp><RequestTimezone>%@</RequestTimezone><TransactionId>%@</TransactionId></exec:MarkAsReadRequest></exec:markAsSold>", self.dictParams["cardNumber"] as! String, self.dictParams["merchantAlias"] as! String, self.dictParams["requestTimestamp"] as! String, self.dictParams["requestTimezone"] as! String, self.dictParams["transactionId"] as! String)
         
         return message
     }
     
     private func messageForPasaPoints() -> String {
-        let message = String(format: "<exec:pasaPoints><exec:PasaPointsRequest><TransactionId>%@</TransactionId><SenderCardNumber>%@</SenderCardNumber><ReceiverCardNumber>%@</ReceiverCardNumber><Amount>%@</Amount><Currency>%@</Currency><PaymentChannel>%@</PaymentChannel><RequestTimezone>%@</RequestTimezone><RequestTimestamp>%@</RequestTimestamp></exec:PasaPointsRequest></exec:pasaPoints>", self.dictParams["transactionId"] as! String, self.dictParams["senderCardNumber"] as! String, self.dictParams["receiverCardNumber"] as! String, self.dictParams["amount"] as! String, self.dictParams["currency"] as! String, self.dictParams["paymentChannel"] as! String, self.dictParams["requestTimezone"] as! String, self.dictParams["requestTimestamp"] as! String)
+        let message = String(format: "<exec:pasaPoints><exec:PasaPointsRequest><Amount>%@</Amount><Currency>%@</Currency><PaymentChannel>%@</PaymentChannel><ReceiverCardNumber>%@</ReceiverCardNumber><RequestTimestamp>%@</RequestTimestamp><RequestTimezone>%@</RequestTimezone><SenderCardNumber>%@</SenderCardNumber><TransactionId>%@</TransactionId></exec:PasaPointsRequest></exec:pasaPoints>", self.dictParams["amount"] as! String, self.dictParams["currency"] as! String, self.dictParams["paymentChannel"] as! String, self.dictParams["receiverCardNumber"] as! String, self.dictParams["requestTimestamp"] as! String, self.dictParams["requestTimezone"] as! String, self.dictParams["senderCardNumber"] as! String, self.dictParams["transactionId"] as! String)
         
         return message
     }
     
     private func messageForPasaPointsMsisdn() -> String {
-        let message = String(format: "<exec:pasaPointsMsisdn><exec:PasaPointsMsisdnRequest><TransactionId>%@</TransactionId><SenderMsisdn>%@</SenderMsisdn><SenderPin>%@</SenderPin><ReceiverMsisdn>%@</ReceiverMsisdn><Amount>%@</Amount><Currency>%@</Currency><PaymentChannel>%@</PaymentChannel><RequestTimezone>%@</RequestTimezone><RequestTimestamp>%@</RequestTimestamp></exec:PasaPointsMsisdnRequest></exec:pasaPointsMsisdn>", self.dictParams["transactionId"] as! String, self.dictParams["senderMsisdn"] as! String, dictParams["senderPin"] as! String, self.dictParams["receiverMsisdn"] as! String, self.dictParams["amount"] as! String, self.dictParams["currency"] as! String, self.dictParams["paymentChannel"] as! String, self.dictParams["requestTimezone"] as! String, self.dictParams["requestTimestamp"] as! String)
+        let message = String(format: "<exec:pasaPointsMsisdn><exec:PasaPointsMsisdnRequest><Amount>%@</Amount><Currency>%@</Currency><PaymentChannel>%@</PaymentChannel><ReceiverMsisdn>%@</ReceiverMsisdn><RequestTimestamp>%@</RequestTimestamp><RequestTimezone>%@</RequestTimezone><SenderMsisdn>%@</SenderMsisdn><SenderPin>%@</SenderPin><TransactionId>%@</TransactionId></exec:PasaPointsMsisdnRequest></exec:pasaPointsMsisdn>", self.dictParams["amount"] as! String, self.dictParams["currency"] as! String, self.dictParams["paymentChannel"] as! String, self.dictParams["receiverMsisdn"] as! String, self.dictParams["requestTimestamp"] as! String, self.dictParams["requestTimezone"] as! String, self.dictParams["senderMsisdn"] as! String, self.dictParams["senderPin"] as! String, self.dictParams["transactionId"] as! String)
         
         return message
     }
     
     private func messageForRedeem() -> String {
-        let message = String(format: "<exec:redeem><exec:RedeemRequest><TransactionId>%@</TransactionId><UserId>%@</UserId><Password>%@</Password><MerchantId>%@</MerchantId><CardNumber>%@</CardNumber><Amount>%@</Amount><Currency>%@</Currency><Branch>%@</Branch><PaymentChannel>%@</PaymentChannel><ModeOfPayment>%@</ModeOfPayment><RequestTimezone>%@</RequestTimezone><RequestTimestamp>%@</RequestTimestamp></exec:RedeemRequest></exec:redeem>", self.dictParams["transactionId"] as! String, self.dictParams["userId"] as! String, self.dictParams["password"] as! String, self.dictParams["merchantId"] as! String, self.dictParams["cardNumber"] as! String, self.dictParams["amount"] as! String, self.dictParams["currency"] as! String, self.dictParams["branch"] as! String, self.dictParams["paymentChannel"] as! String, self.dictParams["modeOfPayment"] as! String, self.dictParams["requestTimezone"] as! String, self.dictParams["requestTimestamp"] as! String)
+        let message = String(format: "<exec:redeem><exec:RedeemRequest><Amount>%@</Amount><Branch>%@</Branch><CardNumber>%@</CardNumber><Currency>%@</Currency><MerchantId>%@</MerchantId><ModeOfPayment>%@</ModeOfPayment><Password>%@</Password><PaymentChannel>%@</PaymentChannel><RequestTimestamp>%@</RequestTimestamp><RequestTimezone>%@</RequestTimezone><TransactionId>%@</TransactionId><UserId>%@</UserId></exec:RedeemRequest></exec:redeem>", self.dictParams["amount"] as! String, self.dictParams["branch"] as! String, self.dictParams["cardNumber"] as! String, self.dictParams["currency"] as! String, self.dictParams["merchantId"] as! String, self.dictParams["modeOfPayment"] as! String, self.dictParams["password"] as! String, self.dictParams["paymentChannel"] as! String, self.dictParams["requestTimestamp"] as! String, self.dictParams["requestTimezone"] as! String, self.dictParams["transactionId"] as! String, self.dictParams["userId"] as! String)
         
         return message
     }
     
     private func messageForRedeemMsisdn() -> String {
-        let message = String(format: "<exec:redeemMsisdn><exec:RedeemMsisdnRequest><TransactionId>%@</TransactionId><UserId>%@</UserId><Password>%@</Password><MerchantId>%@</MerchantId><MobileNumber>%@</MobileNumber><Amount>%@</Amount><PIN>%@</PIN><Currency>%@</Currency><Branch>%@</Branch><PaymentChannel>%@</PaymentChannel><ModeOfPayment>%@</ModeOfPayment><RequestTimezone>%@</RequestTimezone><RequestTimestamp>%@</RequestTimestamp></exec:RedeemMsisdnRequest></exec:redeemMsisdn>", self.dictParams["transactionId"] as! String, self.dictParams["userId"] as! String, self.dictParams["password"] as! String, self.dictParams["merchantId"] as! String, self.dictParams["mobileNumber"] as! String, self.dictParams["amount"] as! String, self.dictParams["pin"] as! String, self.dictParams["currency"] as! String, self.dictParams["branch"] as! String, self.dictParams["paymentChannel"] as! String, self.dictParams["modeOfPayment"] as! String, self.dictParams["requestTimezone"] as! String, self.dictParams["requestTimestamp"] as! String)
+        let message = String(format: "<exec:redeemMsisdn><exec:RedeemMsisdnRequest><Amount>%@</Amount><Branch>%@</Branch><Currency>%@</Currency><MerchantId>%@</MerchantId><MobileNumber>%@</MobileNumber><ModeOfPayment>%@</ModeOfPayment><Password>%@</Password><PaymentChannel>%@</PaymentChannel><PIN>%@</PIN><RequestTimestamp>%@</RequestTimestamp><RequestTimezone>%@</RequestTimezone><TransactionId>%@</TransactionId><UserId>%@</UserId></exec:RedeemMsisdnRequest></exec:redeemMsisdn>", self.dictParams["amount"] as! String, self.dictParams["branch"] as! String, self.dictParams["currency"] as! String, self.dictParams["merchantId"] as! String, self.dictParams["mobileNumber"] as! String, self.dictParams["modeOfPayment"] as! String, self.dictParams["password"] as! String, self.dictParams["paymentChannel"] as! String, self.dictParams["pin"] as! String, self.dictParams["requestTimestamp"] as! String, self.dictParams["requestTimezone"] as! String, self.dictParams["transactionId"] as! String, self.dictParams["userId"] as! String)
         
         return message
     }
     
     private func messageForRedeemReversal() -> String {
-        let message = String(format: "<exec:redeemReversal><exec:RedeemReversalRequest><TransactionId>%@</TransactionId><UserId>%@</UserId><Password>%@</Password><MerchantId>%@</MerchantId><ModeOfPayment>%@</ModeOfPayment><RequestTimezone>%@</RequestTimezone><RequestTimestamp>%@</RequestTimestamp></exec:RedeemReversalRequest></exec:redeemReversal>", self.dictParams["transactionId"] as! String, self.dictParams["userId"] as! String, self.dictParams["password"] as! String, self.dictParams["merchantId"] as! String, self.dictParams["modeOfPayment"] as! String, self.dictParams["requestTimezone"] as! String, self.dictParams["requestTimestamp"] as! String)
+        let message = String(format: "<exec:redeemReversal><exec:RedeemReversalRequest><MerchantId>%@</MerchantId><ModeOfPayment>%@</ModeOfPayment><Password>%@</Password><RequestTimestamp>%@</RequestTimestamp><RequestTimezone>%@</RequestTimezone><TransactionId>%@</TransactionId><UserId>%@</UserId></exec:RedeemReversalRequest></exec:redeemReversal>", self.dictParams["merchantId"] as! String, self.dictParams["modeOfPayment"] as! String, self.dictParams["password"] as! String, self.dictParams["requestTimestamp"] as! String, self.dictParams["requestTimezone"] as! String, self.dictParams["transactionId"] as! String, self.dictParams["userId"] as! String)
         
         return message
     }
     
     private func messageForRedeemStamp() -> String {
-        let message = String(format: "<exec:redeemStamp><exec:RedeemStampsRequest><TransactionId>%@</TransactionId><UserId>%@</UserId><Password>%@</Password><MerchantId>%@</MerchantId><CardNumber>%@</CardNumber><Amount>%@</Amount><Currency>%@</Currency><Branch>%@</Branch><PaymentChannel>%@</PaymentChannel><ModeOfPayment>%@</ModeOfPayment><RequestTimezone>%@</RequestTimezone><RequestTimestamp>%@</RequestTimestamp></exec:RedeemStampsRequest></exec:redeemStamp>", self.dictParams["transactionId"] as! String, self.dictParams["userId"] as! String, self.dictParams["password"] as! String, self.dictParams["merchantId"] as! String, self.dictParams["cardNumber"] as! String, self.dictParams["amount"] as! String, self.dictParams["currency"] as! String, self.dictParams["branch"] as! String, self.dictParams["paymentChannel"] as! String, self.dictParams["modeOfPayment"] as! String, self.dictParams["requestTimezone"] as! String, self.dictParams["requestTimestamp"] as! String)
+        let message = String(format: "<exec:redeemStamp><exec:RedeemStampsRequest><Amount>%@</Amount><Branch>%@</Branch><CardNumber>%@</CardNumber><Currency>%@</Currency><MerchantId>%@</MerchantId><ModeOfPayment>%@</ModeOfPayment><Password>%@</Password><PaymentChannel>%@</PaymentChannel><RequestTimestamp>%@</RequestTimestamp><RequestTimezone>%@</RequestTimezone><TransactionId>%@</TransactionId><UserId>%@</UserId></exec:RedeemStampsRequest></exec:redeemStamp>", self.dictParams["amount"] as! String, self.dictParams["branch"] as! String, self.dictParams["cardNumber"] as! String, self.dictParams["currency"] as! String, self.dictParams["merchantId"] as! String, self.dictParams["modeOfPayment"] as! String, self.dictParams["password"] as! String, self.dictParams["paymentChannel"] as! String, self.dictParams["requestTimestamp"] as! String, self.dictParams["requestTimezone"] as! String, self.dictParams["transactionId"] as! String, self.dictParams["userId"] as! String)
         
         return message
     }
     
     private func messageForRegister() -> String {
-        let message = String(format: "<exec:register><exec:RegisterRequest><TransactionId>%@</TransactionId><UserId>%@</UserId><Password>%@</Password><MerchantId>%@</MerchantId><CardNumber>%@</CardNumber><Msisdn>%@</Msisdn><Channel>%@</Channel><RequestTimezone>%@</RequestTimezone><RequestTimestamp>%@</RequestTimestamp></exec:RegisterRequest></exec:register>", self.dictParams["transactionId"] as! String, self.dictParams["userId"] as! String, self.dictParams["password"] as! String, self.dictParams["merchantId"] as! String, self.dictParams["cardNumber"] as! String, self.dictParams["msisdn"] as! String, self.dictParams["channel"] as! String, self.dictParams["requestTimezone"] as! String, self.dictParams["requestTimestamp"] as! String)
+        let message = String(format: "<exec:register><exec:RegisterRequest><CardNumber>%@</CardNumber><Channel>%@</Channel><MerchantId>%@</MerchantId><Msisdn>%@</Msisdn><Password>%@</Password><RequestTimestamp>%@</RequestTimestamp><RequestTimezone>%@</RequestTimezone><TransactionId>%@</TransactionId><UserId>%@</UserId></exec:RegisterRequest></exec:register>", self.dictParams["cardNumber"] as! String, self.dictParams["channel"] as! String, self.dictParams["merchantId"] as! String, self.dictParams["msisdn"] as! String, self.dictParams["password"] as! String, self.dictParams["requestTimestamp"] as! String, self.dictParams["requestTimezone"] as! String, self.dictParams["transactionId"] as! String, self.dictParams["userId"] as! String)
         
         return message
     }
     
     private func messageForRegisterFbInfo() -> String {
-        let message = String(format: "<exec:registerFbInfo><exec:fbRequest><FacebookId>%@</FacebookId><FirstName>%@</FirstName><LastName>%@</LastName><MiddleName>%@</MiddleName><Birthday>%@</Birthday><Address>%@</Address><Email>%@</Email><Msisdn>%@</Msisdn></exec:fbRequest></exec:registerFbInfo>", self.dictParams["facebookId"] as! String, self.dictParams["firstName"] as! String, self.dictParams["lastName"] as! String, self.dictParams["middleName"] as! String, self.dictParams["birthday"] as! String, self.dictParams["address"] as! String, self.dictParams["email"] as! String, self.dictParams["msisdn"] as! String)
+        let message = String(format: "<exec:registerFbInfo><exec:fbRequest><Address>%@</Address><Birthday>%@</Birthday><Email>%@</Email><FacebookId>%@</FacebookId><FirstName>%@</FirstName><LastName>%@</LastName><MiddleName>%@</MiddleName><Msisdn>%@</Msisdn></exec:fbRequest></exec:registerFbInfo>", self.dictParams["address"] as! String, self.dictParams["birthday"] as! String, self.dictParams["email"] as! String, self.dictParams["facebookId"] as! String, self.dictParams["firstName"] as! String, self.dictParams["lastName"] as! String, self.dictParams["middleName"] as! String, self.dictParams["msisdn"] as! String)
         
         return message
     }
     
     private func messageForResendPin() -> String {
-        let message = String(format: "<exec:resendPin><exec:ResendPinRequest><TransactionId>%@</TransactionId><MobileNumber>%@</MobileNumber></exec:ResendPinRequest></exec:resendPin>", self.dictParams["transactionId"] as! String, self.dictParams["mobileNumber"] as! String)
+        let message = String(format: "<exec:resendPin><exec:ResendPinRequest><MobileNumber>%@</MobileNumber><TransactionId>%@</TransactionId></exec:ResendPinRequest></exec:resendPin>", self.dictParams["mobileNumber"] as! String, self.dictParams["transactionId"] as! String)
         
         return message
     }
     
     private func messageForUpdateFbInfo() -> String {
-        let message = String(format: "<exec:updateFbInfo><exec:fbUpdateRequest><TRANSACTIONID>%@</TRANSACTIONID><MSISDN>%@</MSISDN><FIRSTNAME>%@</FIRSTNAME><MIDDLENAME>%@</MIDDLENAME><LASTNAME>%@</LASTNAME><GENDER>%@</GENDER><BIRTHDATE>%@</BIRTHDATE><EMAIL>%@</EMAIL><ADDRESS>%@</ADDRESS></exec:fbUpdateRequest></exec:updateFbInfo>", self.dictParams["transactionId"] as! String, self.dictParams["msisdn"] as! String, self.dictParams["firstName"] as! String,  self.dictParams["middleName"] as! String, self.dictParams["lastName"] as! String, self.dictParams["gender"] as! String, self.dictParams["birthday"] as! String, self.dictParams["email"] as! String, self.dictParams["address"] as! String)
+        let message = String(format: "<exec:updateFbInfo><exec:fbUpdateRequest><ADDRESS>%@</ADDRESS><BIRTHDATE>%@</BIRTHDATE><EMAIL>%@</EMAIL><FIRSTNAME>%@</FIRSTNAME><GENDER>%@</GENDER><LASTNAME>%@</LASTNAME><MIDDLENAME>%@</MIDDLENAME><MSISDN>%@</MSISDN><TRANSACTIONID>%@</TRANSACTIONID></exec:fbUpdateRequest></exec:updateFbInfo>", self.dictParams["address"] as! String, self.dictParams["birthday"] as! String, self.dictParams["email"] as! String,  self.dictParams["firstName"] as! String, self.dictParams["gender"] as! String, self.dictParams["lastName"] as! String, self.dictParams["middleName"] as! String, self.dictParams["msisdn"] as! String, self.dictParams["transactionId"] as! String)
         
         return message
     }
     
     private func messageForValidateCardPin() -> String {
-        let message = String(format: "<exec:validateCardPin><exec:ValidateCardPinRequest><TransactionId>%@</TransactionId><UserId>%@</UserId><Password>%@</Password><MerchantId>%@</MerchantId><CardNumber>%@</CardNumber><Msisdn>%@</Msisdn><CardPin>%@</CardPin><Channel>%@</Channel><RequestTimezone>%@</RequestTimezone><RequestTimestamp>%@</RequestTimestamp></exec:ValidateCardPinRequest></exec:validateCardPin>", self.dictParams["transactionId"] as! String, self.dictParams["userId"] as! String, self.dictParams["password"] as! String,  self.dictParams["merchantId"] as! String, self.dictParams["cardNumber"] as! String, self.dictParams["msisdn"] as! String, self.dictParams["cardPin"] as! String, self.dictParams["channel"] as! String, self.dictParams["requestTimezone"] as! String, self.dictParams["requestTimestamp"] as! String)
+        let message = String(format: "<exec:validateCardPin><exec:ValidateCardPinRequest><CardNumber>%@</CardNumber><CardPin>%@</CardPin><Channel>%@</Channel><MerchantId>%@</MerchantId><Msisdn>%@</Msisdn><Password>%@</Password><RequestTimestamp>%@</RequestTimestamp><RequestTimezone>%@</RequestTimezone><TransactionId>%@</TransactionId><UserId>%@</UserId></exec:ValidateCardPinRequest></exec:validateCardPin>", self.dictParams["cardNumber"] as! String, self.dictParams["cardPin"] as! String, self.dictParams["channel"] as! String, self.dictParams["merchantId"] as! String, self.dictParams["msisdn"] as! String, self.dictParams["password"] as! String, self.dictParams["requestTimestamp"] as! String, self.dictParams["requestTimezone"] as! String, self.dictParams["transactionId"] as! String, self.dictParams["userId"] as! String)
         
         return message
     }
@@ -771,6 +771,11 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
     //MARK: - XMLParser Delegate
     
     func xmlParserDidFinish(parsedDictionary: NSDictionary) {
+        if let strFault = parsedDictionary["faultstring"] as? String {
+            print("error >>> \(strFault) \nrequest: \(parsedDictionary["request"]!)")
+            return
+        }
+        
         self.delegate?.webServiceDidFinishLoadingWithResponseDictionary(parsedDictionary)
         
         self._mutableData = nil
