@@ -342,19 +342,19 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
     }
     
     private func messageForRegVirtualCard() -> String {
-        let message = String(format: "<tlci:TLCILSAPI3PP_REGVIRTUALCARD><tlci:TLCILSAPI3PPRVCRequest><TRANSACTIONID>%@</TRANSACTIONID><MOBILENUMBER>%@</MOBILENUMBER></tlci:TLCILSAPI3PPRVCRequest></tlci:TLCILSAPI3PP_REGVIRTUALCARD>", self.dictParams["transactionId"] as! String, self.dictParams["mobileNumber"] as! String)
+        let message = String(format: "<tlci:TLCILSAPI3PP_REGVIRTUALCARD><tlci:TLCILSAPI3PPRVCRequest><tlci:MOBILENUMBER>%@</tlci:MOBILENUMBER><tlci:TRANSACTIONID>%@</tlci:TRANSACTIONID></tlci:TLCILSAPI3PPRVCRequest></tlci:TLCILSAPI3PP_REGVIRTUALCARD>", self.dictParams["mobileNumber"] as! String, self.dictParams["transactionId"] as! String)
         
         return message
     }
     
     private func messageForVldtVirtualCard() -> String {
-        let message = String(format: "<tlci:TLCILSAPI3PP_VLDTVIRTUALCARD><tlci:TLCILSAPI3PPVVCRequest><TRANSACTIONID>%@</TRANSACTIONID><MOBILENUMBER>%@</MOBILENUMBER><PIN>%@</PIN><CUSTOMER><FACEBOOKID>%@</FACEBOOKID><LASTNAME>%@</LASTNAME><FIRSTNAME>%@</FIRSTNAME><SECONDNAME>%@</SECONDNAME><BIRTHDAY>%@</BIRTHDAY><GENDER>%@</GENDER><ADDRESS>%@</ADDRESS><EMAIL>%@</EMAIL></CUSTOMER></tlci:TLCILSAPI3PPVVCRequest></tlci:TLCILSAPI3PP_VLDTVIRTUALCARD>", self.dictParams["transactionId"] as! String, self.dictParams["mobileNumber"] as! String, self.dictParams["cardPin"] as! String,  self.dictParams["facebookId"] as! String, self.dictParams["lastName"] as! String, self.dictParams["firstName"] as! String, self.dictParams["secondName"] as! String, self.dictParams["birthday"] as! String, self.dictParams["gender"] as! String, self.dictParams["address"] as! String, self.dictParams["email"] as! String)
+        let message = String(format: "<tlci:TLCILSAPI3PP_VLDTVIRTUALCARD><tlci:TLCILSAPI3PPVVCRequest><tlci:CUSTOMER><loy:ADDRESS>%@</loy:ADDRESS><loy:BIRTHDAY>%@</loy:BIRTHDAY><loy:EMAIL>%@</loy:EMAIL><loy:FACEBOOKID>%@</loy:FACEBOOKID><loy:FIRSTNAME>%@</loy:FIRSTNAME><loy:GENDER>%@</loy:GENDER><loy:LASTNAME>%@</loy:LASTNAME><loy:SECONDNAME>%@</loy:SECONDNAME></tlci:CUSTOMER><tlci:MOBILENUMBER>%@</tlci:MOBILENUMBER><tlci:PIN>%@</tlci:PIN><tlci:TRANSACTIONID>%@</tlci:TRANSACTIONID></tlci:TLCILSAPI3PPVVCRequest></tlci:TLCILSAPI3PP_VLDTVIRTUALCARD>", self.dictParams["address"] as! String, self.dictParams["birthday"] as! String, self.dictParams["email"] as! String,  self.dictParams["facebookId"] as! String, self.dictParams["firstName"] as! String, self.dictParams["gender"] as! String, self.dictParams["lastName"] as! String, self.dictParams["secondName"] as! String, self.dictParams["mobileNumber"] as! String, self.dictParams["cardPin"] as! String, self.dictParams["transactionId"] as! String)
         
         return message
     }
     
     private func messageForGetDashboardInfo() -> String {
-        let message = String(format: "<tlci:TLCILSAPI3PP_MOBILENUMBER><tlci:TLCILSAPI3PPMNRequest><TRANSACTIONID>%@</TRANSACTIONID><MOBILENUMBER>%@</MOBILENUMBER></tlci:TLCILSAPI3PPMNRequest></tlci:TLCILSAPI3PP_MOBILENUMBER>", self.dictParams["transactionId"] as! String, self.dictParams["mobileNumber"] as! String)
+        let message = String(format: "<tlci:TLCILSAPI3PP_MOBILENUMBER><tlci:TLCILSAPI3PPMNRequest><tlci:MOBILENUMBER>%@</tlci:MOBILENUMBER><tlci:TRANSACTIONID>%@</tlci:TRANSACTIONID></tlci:TLCILSAPI3PPMNRequest></tlci:TLCILSAPI3PP_MOBILENUMBER>", self.dictParams["mobileNumber"] as! String, self.dictParams["transactionId"] as! String)
         
         return message
     }
