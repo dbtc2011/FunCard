@@ -212,7 +212,8 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
             
         case .ValidateVirtualCard:
             soapMessage = soapMessage.stringByReplacingOccurrencesOfString(":exec", withString: ":tlci")
-            soapMessage = soapMessage.stringByReplacingOccurrencesOfString(strSoapActionLSS, withString: strSoapActionLS3PPS)
+            let strToReplace = "\(strSoapActionLS3PPS)\" xmlns:loy=\"http://www.loyalty3PP.com.ph/"
+            soapMessage = soapMessage.stringByReplacingOccurrencesOfString(strSoapActionLSS, withString: strToReplace)
             soapMessage = soapMessage.stringByAppendingString(self.messageForVldtVirtualCard())
             break
             
