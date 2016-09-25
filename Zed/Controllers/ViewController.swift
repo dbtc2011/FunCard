@@ -29,12 +29,15 @@ func generateTimeStamp() -> String {
 }
 
 //MARK: - View Controller
-class ViewController: UIViewController , UIScrollViewDelegate{
+class ViewController: UIViewController , UIScrollViewDelegate, WebServiceDelegate {
     
     //MARK: Properties
     var counter = 0
     let cardInfo: CardInfoView = CardInfoView()
     let header: PointHeaderView = PointHeaderView()
+    
+    var user: UserModelRepresentation?
+    let webService = WebService()
 
     @IBOutlet weak var pageIndicator: UIPageControl!
     @IBOutlet weak var scrollView: UIScrollView!
@@ -93,17 +96,14 @@ class ViewController: UIViewController , UIScrollViewDelegate{
         self.view.addSubview(self.cardInfo)
         
         
-        
+        self.webService.delegate = self
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        
-        
         self.view.bringSubviewToFront(self.cardInfo)
         self.view.bringSubviewToFront(self.header)
-    
     }
 
     override func didReceiveMemoryWarning() {
@@ -111,7 +111,7 @@ class ViewController: UIViewController , UIScrollViewDelegate{
         // Dispose of any resources that can be recreated.
     }
     
-    //MARK: Method
+    //MARK: Methods
     func goToSurvey() {
         
         let storyboard = UIStoryboard(name: "Survey", bundle: nil)
@@ -134,8 +134,21 @@ class ViewController: UIViewController , UIScrollViewDelegate{
         let storyboard = UIStoryboard(name: "PasaPoints", bundle: nil)
         let vc = storyboard.instantiateViewControllerWithIdentifier("pasaPoints")
         self.presentViewController(vc, animated: true, completion: nil)
+    }
+    
+    func getDashboardInfo() {
+        let transactionID = generateTransactionIDWithTimestamp(generateTimeStamp())
         
+        var mobileNumber = ""
+        if self.user != nil {
+            mobileNumber = self.user!.mobileNumber
+        } else {
+            //generate user from core data
+        }
         
+        let dictInfo = ["transactionId": transactionID,
+                        "mobileNumber": mobileNumber]
+        self.webService.connectAndGetDashboardInfo(dictInfo)
     }
     
     //MARK: Delegate
@@ -170,6 +183,18 @@ class ViewController: UIViewController , UIScrollViewDelegate{
         
     }
     
+    //MARK: WebService Delegate
+    func webServiceDidFinishLoadingWithResponseDictionary(parsedDictionary: NSDictionary) {
+        print(parsedDictionary)
+    }
+    
+    func webServiceDidTimeout() {
+        print("timeout")
+    }
+    
+    func webServiceDidFailWithError(error: NSError) {
+        print(error)
+    }
    
 
 }
@@ -461,7 +486,13 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
         self.tableContents.addObject(email)
         
         if self.user!.cardPin.characters.count > 0 {
-            self.tableContents.addObject(pin)
+            
+            if self.user!.cardNumber.characters.count == 0 {
+                self.tableContents.addObject(pin)
+            } else {
+                //hide resend pin button
+                self.btnResend.hidden = true
+            }
         } else {
             //hide resend pin button
             self.btnResend.hidden = true
@@ -756,7 +787,8 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
             if status == "0" {
                 //proceed to dashboard
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let vc = storyboard.instantiateViewControllerWithIdentifier("main")
+                let vc = storyboard.instantiateViewControllerWithIdentifier("main") as! ViewController
+                vc.user = self.user!
                 self.presentViewController(vc, animated: true, completion: nil)
                 
                 return
@@ -847,11 +879,9 @@ class RegistrationCardViewController : UIViewController {
     
     //MARK: Properties
     
-    
     //MARK: View life cycle
     override func viewDidLoad() {
         
-       
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -882,8 +912,6 @@ class RegistrationCardViewController : UIViewController {
         
         
     }
-   
-    
 }
 
 //MARK: - Registration Mobile Number View Controller
@@ -1072,7 +1100,7 @@ class RegistrationCardNumberViewController : UIViewController, WebServiceDelegat
             dictParams["channel"] = channel
             dictParams["requestTimezone"] = timezone
             dictParams["requestTimestamp"] = timeStamp
-        
+            
             //print(dictParams)
             self.webService.connectAndRegisterWithInfo(dictParams)
             
@@ -1094,14 +1122,108 @@ class RegistrationCardNumberViewController : UIViewController, WebServiceDelegat
             self.user.cardPin = cardPin
             
             //proceed
-            self.performSegueWithIdentifier("goToConnectToFacebook", sender: nil)
+            self.performSegueWithIdentifier("goToPinVerification", sender: nil)
             
             break
             
         default:
             break
         }
+        
+    }
+    
+    func webServiceDidTimeout() {
+        print("timeout")
+    }
+    
+    func webServiceDidFailWithError(error: NSError) {
+        print(error)
+    }
+    
+    //MARK: NavigationController Delegate
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        segue.destinationViewController.setValue(self.user, forKey: "user")
+    }
+}
 
+//MARK: - Pin Verification View Controller
+class PinVerificationViewController : UIViewController, WebServiceDelegate {
+    
+    //MARK: Properties
+    let webService = WebService()
+    var user: UserModelRepresentation?
+    
+    @IBOutlet weak var txtPinCode: UITextField!
+    
+    //MARK: View life cycle
+    override func viewDidLoad() {
+        self.webService.delegate = self
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+    
+    //MARK: IBAction Delegate
+    @IBAction func didPressOkay(sender: UIButton) {
+        if self.txtPinCode.text!.characters.count == 0 {
+            print("invalid input")
+            //alert
+            
+            return
+        }
+        
+        sender.enabled = false
+        
+        if self.user!.cardPin != self.txtPinCode.text! {
+            print("incorrect pin")
+            //alert
+            
+            sender.enabled = true
+            
+            return
+        }
+        
+        //proceed
+        self.performSegueWithIdentifier("goToConnectToFacebook", sender: self)
+    }
+    
+    @IBAction func didPressResend(sender: UIButton) {
+        sender.enabled = false
+        
+        //resend pin to the mobile number provided earlier
+        let dictParams = NSMutableDictionary()
+        dictParams["transactionId"] = generateTransactionIDWithTimestamp(generateTimeStamp())
+        dictParams["mobileNumber"] = self.user!.mobileNumber
+        
+        self.webService.connectAndRegisterVirtualCardWithInfo(dictParams)
+    }
+    
+    //MARK: WebService Delegate
+    func webServiceDidFinishLoadingWithResponseDictionary(parsedDictionary: NSDictionary) {
+        print(parsedDictionary)
+        let request = parsedDictionary["request"] as! String
+        
+        switch(request) {
+        case WebServiceFor.RegisterVirtualCard.rawValue:
+            let status = parsedDictionary["STATUS"] as! String
+            let description = parsedDictionary["DESCRIPTION"] as! String
+            
+            if status == "0" {
+                let pinCode = parsedDictionary["PIN"] as! String
+                self.user!.cardPin = pinCode
+                print(pinCode)
+                print("resent!")
+                
+                return
+            }
+            
+            print("error >>> \(description)")
+            break
+            
+        default:
+            break
+        }
     }
     
     func webServiceDidTimeout() {
