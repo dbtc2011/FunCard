@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="QgT-bI-5Tu">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="QgT-bI-5Tu">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
@@ -1028,35 +1028,70 @@
                                             <action selector="fbButtonClicked:" destination="Ocv-Wi-Mnj" eventType="touchUpInside" id="v0v-xa-k2V"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hae-uG-jgd">
+                                        <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                        <color key="backgroundColor" red="0.83570620890000002" green="0.69721422700000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="35" id="fbM-Ym-MQA"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <state key="normal" title="Register without Facebook">
+                                            <color key="titleColor" red="0.099349961289999997" green="0.481453138" blue="0.87932233920000002" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="fbM-Ym-MQA"/>
+                                            </mask>
+                                        </variation>
+                                        <variation key="heightClass=regular-widthClass=compact">
+                                            <mask key="constraints">
+                                                <include reference="fbM-Ym-MQA"/>
+                                            </mask>
+                                        </variation>
+                                        <connections>
+                                            <action selector="buttonClicked:" destination="Ocv-Wi-Mnj" eventType="touchUpInside" id="DTl-oU-sDf"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="VRg-Yq-csS" firstAttribute="leading" secondItem="y6F-W9-vhv" secondAttribute="leading" id="6lW-fK-wjX"/>
-                                    <constraint firstAttribute="height" constant="145" id="Q3S-cY-eR1"/>
+                                    <constraint firstAttribute="bottom" secondItem="hae-uG-jgd" secondAttribute="bottom" id="Djd-yR-w0E"/>
+                                    <constraint firstItem="hae-uG-jgd" firstAttribute="leading" secondItem="GOc-uB-cO9" secondAttribute="leading" id="NnP-3d-WFX"/>
+                                    <constraint firstAttribute="height" constant="145" id="Q3S-cY-eR1">
+                                        <variation key="heightClass=regular-widthClass=compact" constant="170"/>
+                                    </constraint>
                                     <constraint firstItem="VRg-Yq-csS" firstAttribute="top" secondItem="y6F-W9-vhv" secondAttribute="top" id="QeG-23-KLk"/>
                                     <constraint firstAttribute="trailing" secondItem="puR-Yq-DMV" secondAttribute="trailing" id="f1O-d1-Tkq"/>
                                     <constraint firstAttribute="trailing" secondItem="VRg-Yq-csS" secondAttribute="trailing" id="mMc-bX-Sq0"/>
                                     <constraint firstItem="puR-Yq-DMV" firstAttribute="leading" secondItem="y6F-W9-vhv" secondAttribute="leading" id="mfO-9N-eXg"/>
                                     <constraint firstItem="puR-Yq-DMV" firstAttribute="top" secondItem="VRg-Yq-csS" secondAttribute="bottom" constant="25" id="pr8-XW-mdt"/>
                                     <constraint firstItem="GOc-uB-cO9" firstAttribute="centerX" secondItem="y6F-W9-vhv" secondAttribute="centerX" id="qNc-F5-Uv8"/>
-                                    <constraint firstAttribute="bottom" secondItem="GOc-uB-cO9" secondAttribute="bottom" id="tEB-dG-zW0"/>
+                                    <constraint firstAttribute="bottom" secondItem="GOc-uB-cO9" secondAttribute="bottom" id="tEB-dG-zW0">
+                                        <variation key="heightClass=regular-widthClass=compact" constant="40"/>
+                                    </constraint>
+                                    <constraint firstItem="hae-uG-jgd" firstAttribute="width" secondItem="GOc-uB-cO9" secondAttribute="width" id="tPm-b9-a7C"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="subviews">
                                         <exclude reference="VRg-Yq-csS"/>
                                         <exclude reference="puR-Yq-DMV"/>
                                         <exclude reference="GOc-uB-cO9"/>
+                                        <exclude reference="hae-uG-jgd"/>
                                     </mask>
                                     <mask key="constraints">
                                         <exclude reference="Q3S-cY-eR1"/>
-                                        <exclude reference="qNc-F5-Uv8"/>
-                                        <exclude reference="tEB-dG-zW0"/>
                                         <exclude reference="6lW-fK-wjX"/>
                                         <exclude reference="QeG-23-KLk"/>
                                         <exclude reference="mMc-bX-Sq0"/>
                                         <exclude reference="f1O-d1-Tkq"/>
                                         <exclude reference="mfO-9N-eXg"/>
                                         <exclude reference="pr8-XW-mdt"/>
+                                        <exclude reference="qNc-F5-Uv8"/>
+                                        <exclude reference="tEB-dG-zW0"/>
+                                        <exclude reference="Djd-yR-w0E"/>
+                                        <exclude reference="NnP-3d-WFX"/>
+                                        <exclude reference="tPm-b9-a7C"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
@@ -1064,17 +1099,21 @@
                                         <include reference="VRg-Yq-csS"/>
                                         <include reference="puR-Yq-DMV"/>
                                         <include reference="GOc-uB-cO9"/>
+                                        <include reference="hae-uG-jgd"/>
                                     </mask>
                                     <mask key="constraints">
                                         <include reference="Q3S-cY-eR1"/>
-                                        <include reference="qNc-F5-Uv8"/>
-                                        <include reference="tEB-dG-zW0"/>
                                         <include reference="6lW-fK-wjX"/>
                                         <include reference="QeG-23-KLk"/>
                                         <include reference="mMc-bX-Sq0"/>
                                         <include reference="f1O-d1-Tkq"/>
                                         <include reference="mfO-9N-eXg"/>
                                         <include reference="pr8-XW-mdt"/>
+                                        <include reference="qNc-F5-Uv8"/>
+                                        <include reference="tEB-dG-zW0"/>
+                                        <include reference="Djd-yR-w0E"/>
+                                        <include reference="NnP-3d-WFX"/>
+                                        <include reference="tPm-b9-a7C"/>
                                     </mask>
                                 </variation>
                             </view>
