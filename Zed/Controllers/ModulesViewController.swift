@@ -9,8 +9,15 @@
 import Foundation
 import UIKit
 
+let keyResult = "Result"
+let keyOptions = "ANSWERSET"
+let keyOption = "ANSWER"
+let keyOptionID = "AID"
+let keyQuestion = "QUESTION"
+let QuestionID = "QID"
+
 //MARK: - Survey View Controller
-class SurveyViewController : UIViewController, UITableViewDataSource, UITableViewDelegate {
+class SurveyViewController : UIViewController, UITableViewDataSource, UITableViewDelegate, WebServiceDelegate {
     
     //MARK: Properties
     @IBOutlet weak var labelNumber: UILabel!
@@ -22,17 +29,27 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
     
     @IBOutlet weak var buttonNext: NSLayoutConstraint!
     
+    let webService = WebService()
     
-    var tempOption: NSMutableArray = NSMutableArray()
+    var user: UserModelRepresentation?
+    var surveyContent = NSMutableArray()
+    var currentIndex : Int = 0
     
     //MARK: View life cycle
     override func viewDidLoad() {
         
-        tempOption.addObject("Yes")
-        tempOption.addObject("No")
         self.tableView.separatorColor = UIColor.clearColor()
+        self.surveyContent.removeAllObjects()
     }
     
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.getSurveyInfo()
+        
+        
+    }
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -42,7 +59,30 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
     
     
     //MARK: Method
+    func reloadSurveyUI() {
+        
+        dispatch_async(dispatch_get_main_queue()) { () -> Void in
+            
+            let content = self.surveyContent[self.currentIndex] as! NSDictionary
+            self.labelNumber.text = "\(self.currentIndex + 1)"
+            self.labelQuestion.text = content[keyQuestion] as? String
+            self.tableView.reloadData()
+            
+        }
+        
+        
+        
+    }
     
+    
+    //MARK: API Call
+    func getSurveyInfo() {
+        
+        self.webService.delegate = self
+        self.webService.name = "surveyInfo"
+        self.webService.connectAndGetSurveyInfo(self.user!.facebookID)
+        
+    }
     
     //MARK: Button Actions
     @IBAction func submitClicked(sender: UIButton) {
@@ -71,20 +111,23 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
     //MARK: Delegate Table View
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return self.tempOption.count;
+        let content = self.surveyContent[self.currentIndex] as! NSDictionary
+        let options = content[keyOptions] as! NSArray
+        return options.count
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
     
-
-        
         guard let cell = tableView.dequeueReusableCellWithIdentifier("cellOptions") as? OptionTableViewCell else {
             
             let newCell : OptionTableViewCell = OptionTableViewCell.init(style: UITableViewCellStyle.Default, reuseIdentifier: "cellContentIdentifier")
             newCell.selectionStyle = UITableViewCellSelectionStyle.None
             return newCell
         }
-        cell.labelOption.text = self.tempOption[indexPath.row] as? String
+        
+        let content = self.surveyContent[self.currentIndex] as! NSDictionary
+        let options = content[keyOptions] as! NSArray
+        let option = options[indexPath.row] as! NSDictionary
+        cell.labelOption.text = option[keyOption] as? String
         cell.imageCircle.layer.cornerRadius = 8
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         
@@ -109,9 +152,46 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
         
-        let label = UILabel(frame: CGRectMake(0, 0, UIScreen.mainScreen().bounds.size.width - 120, 1000))
-        return label.getLabelHeight(self.tempOption[indexPath.row] as! String, font: UIFont.systemFontOfSize(17), maxSize: CGSizeMake(label.frame.size.width, label.frame.size.height)) + 10
+        let content = self.surveyContent[self.currentIndex] as! NSDictionary
+        let options = content[keyOptions] as! NSArray
+        let option = options[indexPath.row] as! NSDictionary
         
+        let label = UILabel(frame: CGRectMake(0, 0, UIScreen.mainScreen().bounds.size.width - 120, 1000))
+        return label.getLabelHeight((option[keyOption] as? String)!, font: UIFont.systemFontOfSize(17), maxSize: CGSizeMake(label.frame.size.width, label.frame.size.height)) + 10
+        
+    }
+    
+    //MARK: WebService Delegate
+    func webServiceDidFinishLoadingWithResponseDictionary(parsedDictionary: NSDictionary) {
+        print("WEBSERVICE FINISH")
+        if self.webService.name == "surveyInfo" {
+            
+            let result = parsedDictionary[keyResult] as! NSArray
+            
+            for content in result {
+                
+                let dictionaryContent = content as! NSDictionary
+                self.surveyContent.addObject(dictionaryContent)
+                
+            }
+            self.tableView.delegate = self
+            self.tableView.dataSource = self
+            self.reloadSurveyUI()
+            
+            
+        }else {
+            
+        }
+        
+        
+    }
+    
+    func webServiceDidTimeout() {
+        print("timeout")
+    }
+    
+    func webServiceDidFailWithError(error: NSError) {
+        print(error)
     }
 
 

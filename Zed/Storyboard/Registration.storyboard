@@ -1081,17 +1081,17 @@
                                     </mask>
                                     <mask key="constraints">
                                         <exclude reference="Q3S-cY-eR1"/>
+                                        <exclude reference="qNc-F5-Uv8"/>
+                                        <exclude reference="tEB-dG-zW0"/>
+                                        <exclude reference="Djd-yR-w0E"/>
+                                        <exclude reference="NnP-3d-WFX"/>
+                                        <exclude reference="tPm-b9-a7C"/>
                                         <exclude reference="6lW-fK-wjX"/>
                                         <exclude reference="QeG-23-KLk"/>
                                         <exclude reference="mMc-bX-Sq0"/>
                                         <exclude reference="f1O-d1-Tkq"/>
                                         <exclude reference="mfO-9N-eXg"/>
                                         <exclude reference="pr8-XW-mdt"/>
-                                        <exclude reference="qNc-F5-Uv8"/>
-                                        <exclude reference="tEB-dG-zW0"/>
-                                        <exclude reference="Djd-yR-w0E"/>
-                                        <exclude reference="NnP-3d-WFX"/>
-                                        <exclude reference="tPm-b9-a7C"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
@@ -1103,17 +1103,17 @@
                                     </mask>
                                     <mask key="constraints">
                                         <include reference="Q3S-cY-eR1"/>
+                                        <include reference="qNc-F5-Uv8"/>
+                                        <include reference="tEB-dG-zW0"/>
+                                        <include reference="Djd-yR-w0E"/>
+                                        <include reference="NnP-3d-WFX"/>
+                                        <include reference="tPm-b9-a7C"/>
                                         <include reference="6lW-fK-wjX"/>
                                         <include reference="QeG-23-KLk"/>
                                         <include reference="mMc-bX-Sq0"/>
                                         <include reference="f1O-d1-Tkq"/>
                                         <include reference="mfO-9N-eXg"/>
                                         <include reference="pr8-XW-mdt"/>
-                                        <include reference="qNc-F5-Uv8"/>
-                                        <include reference="tEB-dG-zW0"/>
-                                        <include reference="Djd-yR-w0E"/>
-                                        <include reference="NnP-3d-WFX"/>
-                                        <include reference="tPm-b9-a7C"/>
                                     </mask>
                                 </variation>
                             </view>

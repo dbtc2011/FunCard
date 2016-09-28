@@ -72,7 +72,7 @@ class ViewController: UIViewController , UIScrollViewDelegate, WebServiceDelegat
             button.frame = CGRectMake(xLocation, 15, buttonHeight, buttonHeight)
             button.setImage(UIImage(named: imageName), forState: UIControlState.Normal)
             //uncomment
-            //button.addTarget(self, action: #selector(ViewController.buttonsClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            button.addTarget(self, action: #selector(ViewController.buttonsClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             self.scrollView.addSubview(button)
             
             xLocation = xLocation + self.view.frame.size.width
@@ -115,7 +115,8 @@ class ViewController: UIViewController , UIScrollViewDelegate, WebServiceDelegat
     func goToSurvey() {
         
         let storyboard = UIStoryboard(name: "Survey", bundle: nil)
-        let vc = storyboard.instantiateViewControllerWithIdentifier("surveyController")
+        let vc = storyboard.instantiateViewControllerWithIdentifier("surveyController") as! SurveyViewController
+        vc.user = self.user!
         self.presentViewController(vc, animated: true, completion: nil)
         
     }
@@ -969,9 +970,14 @@ class RegistrationMobileNumberViewController : UIViewController, WebServiceDeleg
                     return
                 }
                 
+                let cardNumber = parsedDictionary["CardNumber"] as? String
+                self.user.facebookID = facebookID!
+                self.user.cardNumber = cardNumber!
                 //proceed to dashboard
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let vc = storyboard.instantiateViewControllerWithIdentifier("main")
+                let vc = storyboard.instantiateViewControllerWithIdentifier("main") as! ViewController
+                vc.user = self.user
+                
                 self.presentViewController(vc, animated: true, completion: nil)
             } else {
                 //send pin to the indicated mobile number
