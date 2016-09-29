@@ -14,7 +14,9 @@ let keyOptions = "ANSWERSET"
 let keyOption = "ANSWER"
 let keyOptionID = "AID"
 let keyQuestion = "QUESTION"
-let QuestionID = "QID"
+let keyQuestionID = "QID"
+
+
 
 //MARK: - Survey View Controller
 class SurveyViewController : UIViewController, UITableViewDataSource, UITableViewDelegate, WebServiceDelegate {
@@ -34,10 +36,12 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
     var user: UserModelRepresentation?
     var surveyContent = NSMutableArray()
     var currentIndex : Int = 0
+    var selectedAnswer : Int = -1
     
     //MARK: View life cycle
     override func viewDidLoad() {
         
+        self.webService.delegate = self
         self.tableView.separatorColor = UIColor.clearColor()
         self.surveyContent.removeAllObjects()
     }
@@ -78,19 +82,40 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
     //MARK: API Call
     func getSurveyInfo() {
         
-        self.webService.delegate = self
         self.webService.name = "surveyInfo"
         self.webService.connectAndGetSurveyInfo(self.user!.facebookID)
+        
+    }
+    
+    func submitAnswer() {
+        
+        if self.selectedAnswer == -1 {
+            return
+        }
+        
+        let content = self.surveyContent[self.currentIndex] as! NSDictionary
+        
+        let params = NSMutableDictionary()
+        let options = content[keyOptions] as! NSArray
+        let option = options[self.selectedAnswer] as! NSDictionary
+        
+        params.setObject(self.user!.facebookID, forKey: "fbid")
+        params.setObject(content[keyQuestionID] as! String, forKey: "qid")
+        params.setObject(option[keyOptionID] as! String, forKey: "aid")
+        params.setObject("", forKey: "sParam")
+        params.setObject(content[keyQuestionID] as! String, forKey: "qid")
+        
+        self.webService.name = "surveySubmit"
+        self.webService.connectAndSendSurvey(params)
+        
         
     }
     
     //MARK: Button Actions
     @IBAction func submitClicked(sender: UIButton) {
         
-        self.dismissViewControllerAnimated(true) {
-            
-            
-        }
+        
+        
     }
     
     @IBAction func backClicked(sender: UIButton) {
@@ -143,7 +168,8 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-        
+        self.selectedAnswer = indexPath.row
+        self.submitAnswer()
     }
     
     
@@ -180,6 +206,18 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
             
             
         }else {
+            
+            self.currentIndex = self.currentIndex + 1
+            self.selectedAnswer = -1
+            if self.currentIndex == self.surveyContent.count {
+                
+                self.dismissViewControllerAnimated(true, completion: {
+                    return
+                })
+                return
+                
+            }
+            self.reloadSurveyUI()
             
         }
         

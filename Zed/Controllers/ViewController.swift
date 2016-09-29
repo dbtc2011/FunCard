@@ -104,6 +104,7 @@ class ViewController: UIViewController , UIScrollViewDelegate, WebServiceDelegat
         
         self.view.bringSubviewToFront(self.cardInfo)
         self.view.bringSubviewToFront(self.header)
+        self.getDashboardInfo()
     }
 
     override func didReceiveMemoryWarning() {

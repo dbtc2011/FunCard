@@ -13,7 +13,7 @@ let urlLS3PPS = "http://180.87.143.45/ph.funloyalty.api/LoyaltySystem3PPServiceS
 let timeOut = 60.0
 
 enum WebServiceFor: String {
-    case CheckFbInfo = "checkFbInfo", CheckMsisdn = "checkMsisdn", Earn = "earn", EarnMsisdn = "earnMsisdn", EarnReversal = "earnReversal", Inquire = "inquire",  InquireMsisdn = "inquireMsisdn", MarkAsSold = "markAsSold", PasaPoints = "pasaPoints", PasaPointsMsisdn = "pasaPointsMsisdn", Redeem = "redeem", RedeemMsisdn = "redeemMsisdn", RedeemReversal = "redeemReversal", RedeemStamp = "redeemStamp", Register = "register", RegisterFbInfo = "registerFbInfo", ResendPin = "resendPin", UpdateFbInfo = "updateFbInfo", ValidateCardPin = "validateCardPin", RegisterVirtualCard = "TLCILSAPI3PP_REGVIRTUALCARD", ValidateVirtualCard = "TLCILSAPI3PP_VLDTVIRTUALCARD", GetDashboardInfo = "TLCILSAPI3PP_MOBILENUMBER", GetSurvey = "getSuervey"
+    case CheckFbInfo = "checkFbInfo", CheckMsisdn = "checkMsisdn", Earn = "earn", EarnMsisdn = "earnMsisdn", EarnReversal = "earnReversal", Inquire = "inquire",  InquireMsisdn = "inquireMsisdn", MarkAsSold = "markAsSold", PasaPoints = "pasaPoints", PasaPointsMsisdn = "pasaPointsMsisdn", Redeem = "redeem", RedeemMsisdn = "redeemMsisdn", RedeemReversal = "redeemReversal", RedeemStamp = "redeemStamp", Register = "register", RegisterFbInfo = "registerFbInfo", ResendPin = "resendPin", UpdateFbInfo = "updateFbInfo", ValidateCardPin = "validateCardPin", RegisterVirtualCard = "TLCILSAPI3PP_REGVIRTUALCARD", ValidateVirtualCard = "TLCILSAPI3PP_VLDTVIRTUALCARD", GetDashboardInfo = "TLCILSAPI3PP_MOBILENUMBER", RestMethod = "restMethod"
 }
 
 protocol WebServiceDelegate {
@@ -269,7 +269,7 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
             soapMessage = soapMessage.stringByAppendingString(self.messageForGetDashboardInfo())
             break
             
-        case .GetSurvey:
+        case .RestMethod:
             break
         }
         
@@ -410,7 +410,6 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
     }
     //MARK: Rest Parser
     private func contentForSurvey() {
-        
         
         let dataString = NSString(data: self.mutableData, encoding: NSUTF8StringEncoding)
         print(dataString)
@@ -796,9 +795,26 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
         dictWebService["fbid"] = fbid
         dictWebService["function"] = "get"
         self.dictParams["url"] = "http://180.87.143.52/funapp/Survey.aspx"
-        self.request = WebServiceFor.GetSurvey
+        self.request = WebServiceFor.RestMethod
         
         self.restPostWithParameter(dictWebService)
+    }
+    
+    func connectAndSendSurvey(content: NSDictionary) {
+        
+        self.dictParams = NSMutableDictionary()
+        let dictWebService = NSMutableDictionary()
+        dictWebService["fbid"] = content["fbid"] as! String
+        dictWebService["qid"] = content["qid"] as! String
+        dictWebService["aid"] = content["aid"] as! String
+        dictWebService["sParam"] = content["sParam"] as! String
+        dictWebService["function"] = "set"
+        self.dictParams["url"] = "http://180.87.143.52/funapp/Survey.aspx"
+        self.request = WebServiceFor.RestMethod
+        
+        self.restPostWithParameter(dictWebService)
+        
+        
     }
     
     //MARK: - NSURLConnection Delegate
@@ -813,9 +829,7 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
     func connectionDidFinishLoading(connection: NSURLConnection!) {
         self.stopLossTimer()
         
-        if self.request == WebServiceFor.GetSurvey {
-            
-            self.contentForSurvey()
+        if self.request == WebServiceFor.RestMethod {
             return
         }
         //parse here
