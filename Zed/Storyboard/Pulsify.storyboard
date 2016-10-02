@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="pGZ-de-0V5">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="pGZ-de-0V5">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
@@ -1358,9 +1358,9 @@
                                 <exclude reference="zSF-eT-awH"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="HLk-KQ-cxp"/>
-                                <exclude reference="bS3-2J-zyr"/>
-                                <exclude reference="pBB-Gk-0K2"/>
+                                <exclude reference="BRg-7x-DjJ"/>
+                                <exclude reference="xRa-Fv-P8C"/>
+                                <exclude reference="yXk-XY-P0p"/>
                                 <exclude reference="6Up-m4-eod"/>
                                 <exclude reference="PIA-Wy-ZfC"/>
                                 <exclude reference="EdX-BQ-wi5"/>
@@ -1369,12 +1369,12 @@
                                 <exclude reference="4fm-Wr-ti2"/>
                                 <exclude reference="Ptt-go-F2a"/>
                                 <exclude reference="qQi-Oq-a9Z"/>
+                                <exclude reference="HLk-KQ-cxp"/>
+                                <exclude reference="bS3-2J-zyr"/>
+                                <exclude reference="pBB-Gk-0K2"/>
                                 <exclude reference="1lf-yd-nxZ"/>
                                 <exclude reference="YqS-94-8zp"/>
                                 <exclude reference="vOr-tm-ftw"/>
-                                <exclude reference="xRa-Fv-P8C"/>
-                                <exclude reference="yXk-XY-P0p"/>
-                                <exclude reference="BRg-7x-DjJ"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
@@ -1387,9 +1387,9 @@
                                 <include reference="zSF-eT-awH"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="HLk-KQ-cxp"/>
-                                <include reference="bS3-2J-zyr"/>
-                                <include reference="pBB-Gk-0K2"/>
+                                <include reference="BRg-7x-DjJ"/>
+                                <include reference="xRa-Fv-P8C"/>
+                                <include reference="yXk-XY-P0p"/>
                                 <include reference="6Up-m4-eod"/>
                                 <include reference="PIA-Wy-ZfC"/>
                                 <include reference="EdX-BQ-wi5"/>
@@ -1398,12 +1398,12 @@
                                 <include reference="4fm-Wr-ti2"/>
                                 <include reference="Ptt-go-F2a"/>
                                 <include reference="qQi-Oq-a9Z"/>
+                                <include reference="HLk-KQ-cxp"/>
+                                <include reference="bS3-2J-zyr"/>
+                                <include reference="pBB-Gk-0K2"/>
                                 <include reference="1lf-yd-nxZ"/>
                                 <include reference="YqS-94-8zp"/>
                                 <include reference="vOr-tm-ftw"/>
-                                <include reference="xRa-Fv-P8C"/>
-                                <include reference="yXk-XY-P0p"/>
-                                <include reference="BRg-7x-DjJ"/>
                             </mask>
                         </variation>
                     </view>

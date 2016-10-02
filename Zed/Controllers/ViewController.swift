@@ -72,11 +72,7 @@ class ViewController: UIViewController , UIScrollViewDelegate, WebServiceDelegat
             button.frame = CGRectMake(xLocation, 15, buttonHeight, buttonHeight)
             button.setImage(UIImage(named: imageName), forState: UIControlState.Normal)
             //uncomment
-<<<<<<< HEAD
-            //button.addTarget(self, action: #selector( (_:)), forControlEvents: UIControlEvents.TouchUpInside)
-=======
-            button.addTarget(self, action: #selector(ViewController.buttonsClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
->>>>>>> 4ec39e69b6a20f2dd589cb7bc8afbe0fca205ef2
+            //button.addTarget(self, action: #selector(ViewController.buttonsClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             self.scrollView.addSubview(button)
             
             xLocation = xLocation + self.view.frame.size.width
