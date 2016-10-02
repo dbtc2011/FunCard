@@ -22,8 +22,8 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
     
     @IBOutlet weak var buttonNext: NSLayoutConstraint!
     
-    
     var tempOption: NSMutableArray = NSMutableArray()
+    //var arrayQuestions =
     
     //MARK: View life cycle
     override func viewDidLoad() {
@@ -31,17 +31,55 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
         tempOption.addObject("Yes")
         tempOption.addObject("No")
         self.tableView.separatorColor = UIColor.clearColor()
+        
+        //self.fetchSurveyQuestions("1234") //set fbid here
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        
-        
-        
     }
     
     
     //MARK: Method
+    
+    private func fetchSurveyQuestions(fbId: String) {
+        let url:NSURL = NSURL(string: "http://180.87.143.52/funapp/Survey.aspx")!
+        let session = NSURLSession.sharedSession()
+        
+        let request = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = "POST"
+        request.cachePolicy = NSURLRequestCachePolicy.ReloadIgnoringCacheData
+        
+        let postString = "fbid=\(fbId)&function=get"
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        
+        let task = session.dataTaskWithRequest(request) {
+            (
+            let data, let response, let error) in
+            
+            guard let _:NSData = data, let _:NSURLResponse = response  where error == nil else {
+                print("error")
+                return
+            }
+            
+            do {
+                let objJSON = try NSJSONSerialization.JSONObjectWithData(data!, options: [])
+                
+                print(objJSON)
+                if objJSON.isKindOfClass(NSDictionary.classForCoder()) {
+                    
+                } else {
+                    print("format/server error")
+                }
+                
+            } catch let error as NSError {
+                print("json error: \(error.localizedDescription)")
+            }
+            
+        }
+        
+        task.resume()
+    }
     
     
     //MARK: Button Actions
@@ -474,13 +512,13 @@ class PasaPointsViewController : UIViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-     
+        
     }
     
     //MARK: Button Actions
     @IBAction func backClicked(sender: UIButton) {
         
-        self.dismissViewControllerAnimated(true) { 
+        self.dismissViewControllerAnimated(true) {
             
             
         }
@@ -491,6 +529,115 @@ class PasaPointsViewController : UIViewController {
         
         
     }
+}
+
+//MARK: - Branches View Controller
+import ActionSheetPicker_3_0
+
+class BranchesViewController : UIViewController {
     
+    //MARK: Properties
     
+    @IBOutlet var lblMerchantName: UILabel!
+    @IBOutlet var lblCityName: UILabel!
+    @IBOutlet var viewMap: UIView!
+    
+    var arrayBranches = [BranchModelRepresentation]()
+    var arrayCities = [String]()
+    
+    //MARK: View Life Cycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.presetValues()
+        self.fetchBranches()
+    }
+    
+    //MARK: - Memory Management
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+    
+    //MARK: - Methods
+    
+    private func presetValues() {
+        //for now
+        self.lblMerchantName.text = "KFC"
+        self.lblCityName.text = ""
+        
+        //setup map
+    }
+    
+    private func fetchBranches() {
+        let url:NSURL = NSURL(string: "http://180.87.143.52/funapp/GetBranches.aspx")!
+        let session = NSURLSession.sharedSession()
+        
+        let request = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = "GET"
+        request.cachePolicy = NSURLRequestCachePolicy.ReloadIgnoringCacheData
+        
+        let task = session.dataTaskWithRequest(request) {
+            (
+            let data, let response, let error) in
+            
+            guard let _:NSData = data, let _:NSURLResponse = response  where error == nil else {
+                print("error")
+                return
+            }
+            
+            do {
+                let objJSON = try NSJSONSerialization.JSONObjectWithData(data!, options: [])
+                
+                if objJSON.isKindOfClass(NSArray.classForCoder()) {
+                    self.parseResponse(objJSON as! [[String:AnyObject]])
+                } else {
+                    print("format/server error")
+                }
+                
+            } catch let error as NSError {
+                print("json error: \(error.localizedDescription)")
+            }
+            
+        }
+        
+        task.resume()
+    }
+    
+    private func parseResponse(arrayJSON: NSArray) {
+        print("fetching branches..")
+        arrayJSON.enumerateObjectsUsingBlock { (obj, index, stop) -> Void in
+            if obj.isKindOfClass(NSDictionary.classForCoder()) {
+                let dictObj = obj as! NSDictionary
+                let branch = BranchModelRepresentation()
+                branch.convertDictionaryToBranchModelInfo(dictObj)
+                
+                self.arrayBranches.append(branch)
+                
+                let city = branch.city
+                if !self.arrayCities.contains(city) {
+                    self.arrayCities.append(city)
+                }
+            } else {
+                print("format/server error")
+            }
+        }
+        
+        self.lblCityName.text = self.arrayCities.first
+    }
+    
+    //MARK: IBAction Delegate
+    @IBAction func didPressBranches(sender: AnyObject) {
+        if self.arrayCities.count > 0 {
+            ActionSheetStringPicker.showPickerWithTitle("", rows: self.arrayCities, initialSelection: 0, doneBlock: { (picker, index, value) -> Void in
+                
+                self.lblCityName.text = value as? String
+                //update map
+                
+                }, cancelBlock: { (picker) -> Void in
+                    print("cancel")
+                }, origin: self.view)
+        }
+    }
 }

@@ -20,6 +20,7 @@
 		509701141D4897E700E866AD /* PasaPoints.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 509701131D4897E700E866AD /* PasaPoints.storyboard */; };
 		50E116D61D49DFA90012F6DB /* Registration.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50E116D51D49DFA90012F6DB /* Registration.storyboard */; };
 		50EAD4291D409D160086704F /* Pulsify.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50EAD4281D409D160086704F /* Pulsify.storyboard */; };
+		672931C81DA0C206000DA771 /* Branches.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 672931C71DA0C206000DA771 /* Branches.storyboard */; };
 		676171F41D6EC12E00389472 /* WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 676171F21D6EC12E00389472 /* WebService.swift */; };
 		676171F51D6EC12E00389472 /* XMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 676171F31D6EC12E00389472 /* XMLParser.swift */; };
 		6763D36F1D7694E40033DEA6 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6763D36E1D7694E40033DEA6 /* FBSDKCoreKit.framework */; };
@@ -46,6 +47,7 @@
 		509701131D4897E700E866AD /* PasaPoints.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PasaPoints.storyboard; sourceTree = "<group>"; };
 		50E116D51D49DFA90012F6DB /* Registration.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Registration.storyboard; path = Storyboard/Registration.storyboard; sourceTree = "<group>"; };
 		50EAD4281D409D160086704F /* Pulsify.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Pulsify.storyboard; path = Storyboard/Pulsify.storyboard; sourceTree = "<group>"; };
+		672931C71DA0C206000DA771 /* Branches.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Branches.storyboard; sourceTree = "<group>"; };
 		676171F21D6EC12E00389472 /* WebService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WebService.swift; path = Subclass/WebService.swift; sourceTree = "<group>"; };
 		676171F31D6EC12E00389472 /* XMLParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XMLParser.swift; path = Subclass/XMLParser.swift; sourceTree = "<group>"; };
 		6763D36E1D7694E40033DEA6 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "Pods/../build/Debug-iphoneos/FBSDKCoreKit/FBSDKCoreKit.framework"; sourceTree = "<group>"; };
@@ -141,6 +143,7 @@
 				50EAD4281D409D160086704F /* Pulsify.storyboard */,
 				509701131D4897E700E866AD /* PasaPoints.storyboard */,
 				50E116D51D49DFA90012F6DB /* Registration.storyboard */,
+				672931C71DA0C206000DA771 /* Branches.storyboard */,
 			);
 			name = Storyboard;
 			sourceTree = "<group>";
@@ -224,6 +227,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				672931C81DA0C206000DA771 /* Branches.storyboard in Resources */,
 				3585538D1CD880F300C1DD55 /* LaunchScreen.storyboard in Resources */,
 				3585538A1CD880F300C1DD55 /* Assets.xcassets in Resources */,
 				5025E4871D34DBA600699AFB /* Survey.storyboard in Resources */,

@@ -72,7 +72,7 @@ class ViewController: UIViewController , UIScrollViewDelegate, WebServiceDelegat
             button.frame = CGRectMake(xLocation, 15, buttonHeight, buttonHeight)
             button.setImage(UIImage(named: imageName), forState: UIControlState.Normal)
             //uncomment
-            //button.addTarget(self, action: #selector(ViewController.buttonsClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            //button.addTarget(self, action: #selector( (_:)), forControlEvents: UIControlEvents.TouchUpInside)
             self.scrollView.addSubview(button)
             
             xLocation = xLocation + self.view.frame.size.width
@@ -128,6 +128,14 @@ class ViewController: UIViewController , UIScrollViewDelegate, WebServiceDelegat
         
     }
     
+    func goToBranches() {
+        
+        let storyboard = UIStoryboard(name: "Branches", bundle: nil)
+        let vc = storyboard.instantiateInitialViewController()!
+        self.presentViewController(vc, animated: true, completion: nil)
+        
+    }
+    
     func goToPasaPoints() {
         //PasaPoints
         
@@ -164,7 +172,7 @@ class ViewController: UIViewController , UIScrollViewDelegate, WebServiceDelegat
     func buttonsClicked(sender: UIButton) {
         
         if sender.tag == 1 {
-            
+            self.goToPulsify()
         }else if sender.tag == 2 {
             
         }else if sender.tag == 3 {
@@ -174,11 +182,11 @@ class ViewController: UIViewController , UIScrollViewDelegate, WebServiceDelegat
         }else if sender.tag == 5 {
             
         }else if sender.tag == 6 {
-            
-        }else if sender.tag == 7 {
-            self.goToPulsify()
-        }else if sender.tag == 8 {
             self.goToSurvey()
+        }else if sender.tag == 7 {
+            self.goToPasaPoints()
+        }else if sender.tag == 8 {
+            self.goToBranches()
         }
         
     }
