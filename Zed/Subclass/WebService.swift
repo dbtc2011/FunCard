@@ -13,7 +13,7 @@ let urlLS3PPS = "http://180.87.143.45/ph.funloyalty.api/LoyaltySystem3PPServiceS
 let timeOut = 60.0
 
 enum WebServiceFor: String {
-    case CheckFbInfo = "checkFbInfo", CheckMsisdn = "checkMsisdn", Earn = "earn", EarnMsisdn = "earnMsisdn", EarnReversal = "earnReversal", Inquire = "inquire",  InquireMsisdn = "inquireMsisdn", MarkAsSold = "markAsSold", PasaPoints = "pasaPoints", PasaPointsMsisdn = "pasaPointsMsisdn", Redeem = "redeem", RedeemMsisdn = "redeemMsisdn", RedeemReversal = "redeemReversal", RedeemStamp = "redeemStamp", Register = "register", RegisterFbInfo = "registerFbInfo", ResendPin = "resendPin", UpdateFbInfo = "updateFbInfo", ValidateCardPin = "validateCardPin", RegisterVirtualCard = "TLCILSAPI3PP_REGVIRTUALCARD", ValidateVirtualCard = "TLCILSAPI3PP_VLDTVIRTUALCARD", GetDashboardInfo = "TLCILSAPI3PP_MOBILENUMBER"
+    case CheckFbInfo = "checkFbInfo", CheckMsisdn = "checkMsisdn", Earn = "earn", EarnMsisdn = "earnMsisdn", EarnReversal = "earnReversal", Inquire = "inquire",  InquireMsisdn = "inquireMsisdn", MarkAsSold = "markAsSold", PasaPoints = "pasaPoints", PasaPointsMsisdn = "pasaPointsMsisdn", Redeem = "redeem", RedeemMsisdn = "redeemMsisdn", RedeemReversal = "redeemReversal", RedeemStamp = "redeemStamp", Register = "register", RegisterFbInfo = "registerFbInfo", ResendPin = "resendPin", UpdateFbInfo = "updateFbInfo", ValidateCardPin = "validateCardPin", RegisterVirtualCard = "TLCILSAPI3PP_REGVIRTUALCARD", ValidateVirtualCard = "TLCILSAPI3PP_VLDTVIRTUALCARD", GetDashboardInfo = "TLCILSAPI3PP_MOBILENUMBER", RestMethod = "restMethod"
 }
 
 protocol WebServiceDelegate {
@@ -98,6 +98,52 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
         
         self.stopLossTimer()
         self.startLossTimer()
+    }
+    
+    private func restPostWithParameter(dictValues : NSDictionary) {
+        
+        let url = self.dictParams["url"] as! String
+        var postString = ""
+        
+        for (index, key) in dictValues.allKeys.enumerate() {
+            
+            postString = postString.stringByAppendingFormat("\(key as! String)=\(dictValues[key as! String] as! String)")
+            
+            if index != dictValues.allKeys.count - 1 {
+                postString = postString.stringByAppendingFormat("&")
+            }
+            
+        }
+        
+        let request = NSMutableURLRequest(URL: NSURL(string: url)!)
+        request.HTTPMethod = "POST"
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        
+        var json: NSDictionary!
+        
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) { data, response, error in
+            guard error == nil && data != nil else {                                                          // check for fundamental networking error
+                print("error=\(error)")
+                return
+            }
+            
+            if let httpStatus = response as? NSHTTPURLResponse where httpStatus.statusCode != 200 {
+                
+                print("Status code not 200! API call failed")
+                
+            }
+            
+            do {
+                json = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions()) as? NSDictionary
+            } catch {
+                json = ["return": "error"]
+            }
+            
+            print(json)
+            self.delegate?.webServiceDidFinishLoadingWithResponseDictionary(json)
+            
+        }
+        task.resume()
     }
     
     private func startLossTimer() {
@@ -221,6 +267,9 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
             soapMessage = soapMessage.stringByReplacingOccurrencesOfString(":exec", withString: ":tlci")
             soapMessage = soapMessage.stringByReplacingOccurrencesOfString(strSoapActionLSS, withString: strSoapActionLS3PPS)
             soapMessage = soapMessage.stringByAppendingString(self.messageForGetDashboardInfo())
+            break
+            
+        case .RestMethod:
             break
         }
         
@@ -359,7 +408,21 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
         
         return message
     }
-    
+    //MARK: Rest Parser
+    private func contentForSurvey() {
+        
+        let dataString = NSString(data: self.mutableData, encoding: NSUTF8StringEncoding)
+        print(dataString)
+        let json : NSDictionary!
+        do {
+            json = try NSJSONSerialization.JSONObjectWithData(self.mutableData, options: NSJSONReadingOptions()) as? NSDictionary
+        } catch {
+            json = ["return": "error"]
+        }
+        print("Response be: \n")
+        print(json)
+        
+    }
     //MARK: Public
     
     func connectAndCheckFBInfoWithId(id: String) {
@@ -726,6 +789,34 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
         self.postWithDictionary(dictWebService)
     }
     
+    func connectAndGetSurveyInfo(fbid: String) {
+        self.dictParams = NSMutableDictionary()
+        let dictWebService = NSMutableDictionary()
+        dictWebService["fbid"] = fbid
+        dictWebService["function"] = "get"
+        self.dictParams["url"] = "http://180.87.143.52/funapp/Survey.aspx"
+        self.request = WebServiceFor.RestMethod
+        
+        self.restPostWithParameter(dictWebService)
+    }
+    
+    func connectAndSendSurvey(content: NSDictionary) {
+        
+        self.dictParams = NSMutableDictionary()
+        let dictWebService = NSMutableDictionary()
+        dictWebService["fbid"] = content["fbid"] as! String
+        dictWebService["qid"] = content["qid"] as! String
+        dictWebService["aid"] = content["aid"] as! String
+        dictWebService["sParam"] = content["sParam"] as! String
+        dictWebService["function"] = "set"
+        self.dictParams["url"] = "http://180.87.143.52/funapp/Survey.aspx"
+        self.request = WebServiceFor.RestMethod
+        
+        self.restPostWithParameter(dictWebService)
+        
+        
+    }
+    
     //MARK: - NSURLConnection Delegate
     
     func connection(connection: NSURLConnection!, didReceiveData data: NSData!) {
@@ -738,6 +829,9 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
     func connectionDidFinishLoading(connection: NSURLConnection!) {
         self.stopLossTimer()
         
+        if self.request == WebServiceFor.RestMethod {
+            return
+        }
         //parse here
         self.xmlParser.data = self.mutableData
         self.xmlParser.request = self.request!
