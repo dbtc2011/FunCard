@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>ActionSheetPicker-3.0.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Bolts.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -37,7 +42,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>0EB19C1377A747F81110D44E2D5FCF78</key>
+		<key>2E303C3CE7513908EE880D9CA833AFAE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -47,17 +52,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>3C5685456B3ED2A700DBD8CC7DE83D96</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>6EDC37F3FA92533C6AC3562458AA91F1</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>852D2F123FA572E9B6D52B3B6EA16836</key>
 		<dict>
 			<key>primary</key>
 			<true/>

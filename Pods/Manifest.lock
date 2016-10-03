@@ -6,17 +6,17 @@ PODS:
   - Bolts/AppLinks (1.8.4):
     - Bolts/Tasks
   - Bolts/Tasks (1.8.4)
-  - FBSDKCoreKit (4.15.0):
+  - FBSDKCoreKit (4.16.0):
     - Bolts (~> 1.7)
-  - FBSDKLoginKit (4.15.0):
+  - FBSDKLoginKit (4.16.0):
     - FBSDKCoreKit
-  - FBSDKShareKit (4.15.0):
+  - FBSDKShareKit (4.16.0):
     - FBSDKCoreKit
-  - GoogleMaps (2.0.1):
-    - GoogleMaps/Maps (= 2.0.1)
-  - GoogleMaps/Base (2.0.1)
-  - GoogleMaps/Maps (2.0.1):
-    - GoogleMaps/Base (= 2.0.1)
+  - GoogleMaps (2.1.0):
+    - GoogleMaps/Maps (= 2.1.0)
+  - GoogleMaps/Base (2.1.0)
+  - GoogleMaps/Maps (2.1.0):
+    - GoogleMaps/Base (= 2.1.0)
 
 DEPENDENCIES:
   - ActionSheetPicker-3.0
@@ -28,10 +28,10 @@ DEPENDENCIES:
 SPEC CHECKSUMS:
   ActionSheetPicker-3.0: d11a4c12c6aaf704b8a3f56d179198c99f3e41e6
   Bolts: 8a7995239dbe724f9cba2248b766d48b7ebdd322
-  FBSDKCoreKit: 6680cbd33a4243d80700f182d0af36b3fa7f3118
-  FBSDKLoginKit: 96d9b70b5784490f02ab86119e542a1f182017a8
-  FBSDKShareKit: 06ef20cb2f16828ca4b20055333313dd445de362
-  GoogleMaps: f09da64fc987c1aa29394567c3cab5a3df83c402
+  FBSDKCoreKit: 7a6baaed4a2b2a244ba253346713bdbc74df135b
+  FBSDKLoginKit: 9a514a55a7d05190f64d4ef09502737588b5b561
+  FBSDKShareKit: e81505de17fc0624cbaa87b83cccc9f2a786e6cb
+  GoogleMaps: 06589b9a38097bce0cd6e90f0fd9b5e4b4a9344c
 
 PODFILE CHECKSUM: 0b526a7b11971fc68a2e9bdb7d9d3257f5efafab
 
