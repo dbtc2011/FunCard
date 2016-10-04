@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import GoogleMaps
 
 let keyResult = "Result"
 let keyOptions = "ANSWERSET"
@@ -657,9 +658,10 @@ class BranchesViewController : UIViewController {
     
     //MARK: Properties
     
+    @IBOutlet weak var mapView: GMSMapView!
     @IBOutlet var lblMerchantName: UILabel!
     @IBOutlet var lblCityName: UILabel!
-    @IBOutlet var viewMap: UIView!
+    
     
     var arrayBranches = [BranchModelRepresentation]()
     var arrayCities = [String]()
@@ -677,6 +679,7 @@ class BranchesViewController : UIViewController {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        self.setupGoogleMaps()
     }
     
     //MARK: - Methods
@@ -687,6 +690,23 @@ class BranchesViewController : UIViewController {
         self.lblCityName.text = ""
         
         //setup map
+    }
+    
+    private func setupGoogleMaps() {
+        // Create a GMSCameraPosition that tells the map to display the
+        // coordinate -33.86,151.20 at zoom level 6.
+        //120.97978
+        //14.600593
+        let camera = GMSCameraPosition.cameraWithLatitude(7.050053, longitude: 125.587933, zoom: 15.0)
+        self.mapView.camera = camera
+        mapView.myLocationEnabled = true
+        
+        // Creates a marker in the center of the map.
+        let marker = GMSMarker()
+        marker.position = CLLocationCoordinate2D(latitude: 7.050053, longitude: 125.587933)
+        marker.title = "Sydney"
+        marker.snippet = "Australia"
+        marker.map = self.mapView
     }
     
     private func fetchBranches() {
@@ -751,8 +771,26 @@ class BranchesViewController : UIViewController {
         if self.arrayCities.count > 0 {
             ActionSheetStringPicker.showPickerWithTitle("", rows: self.arrayCities, initialSelection: 0, doneBlock: { (picker, index, value) -> Void in
                 
-                self.lblCityName.text = value as? String
-                //update map
+                dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                    
+                    self.lblCityName.text = value as? String
+                    //update map
+                    
+                    let stringCity = value as! String
+                    let predicate = NSPredicate(format: "self.city == '\(stringCity)'")
+                    let arrayFiltered = (self.arrayBranches as NSArray).filteredArrayUsingPredicate(predicate) as NSArray
+                    
+                    let content = arrayFiltered[0] as! BranchModelRepresentation
+                    
+                    print(content.address)
+                    print(content.city)
+                    print(content.branchName)
+                    let target = CLLocationCoordinate2D(latitude: Double(content.longitude)!, longitude: Double(content.latitude)!)
+                    self.mapView.camera = GMSCameraPosition.cameraWithTarget(target, zoom: 15)
+                    
+                }
+
+                
                 
                 }, cancelBlock: { (picker) -> Void in
                     print("cancel")

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="wEr-wQ-TiS">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="wEr-wQ-TiS">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <scenes>
         <!--Branches View Controller-->
@@ -33,10 +33,6 @@
                                     </mask>
                                 </variation>
                             </imageView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o4T-pd-Eab">
-                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wd1-0o-9tp">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                 <subviews>
@@ -321,6 +317,10 @@
                                     </mask>
                                 </variation>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o4T-pd-Eab" customClass="GMSMapView">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -339,8 +339,8 @@
                         <variation key="default">
                             <mask key="subviews">
                                 <exclude reference="5L1-oz-dz4"/>
-                                <exclude reference="o4T-pd-Eab"/>
                                 <exclude reference="Wd1-0o-9tp"/>
+                                <exclude reference="o4T-pd-Eab"/>
                             </mask>
                             <mask key="constraints">
                                 <exclude reference="Ok1-bb-4rk"/>
@@ -359,8 +359,8 @@
                         <variation key="heightClass=regular-widthClass=compact">
                             <mask key="subviews">
                                 <include reference="5L1-oz-dz4"/>
-                                <include reference="o4T-pd-Eab"/>
                                 <include reference="Wd1-0o-9tp"/>
+                                <include reference="o4T-pd-Eab"/>
                             </mask>
                             <mask key="constraints">
                                 <include reference="Ok1-bb-4rk"/>
@@ -380,7 +380,7 @@
                     <connections>
                         <outlet property="lblCityName" destination="DHO-o7-Ayo" id="5Kc-kB-EpI"/>
                         <outlet property="lblMerchantName" destination="vps-T3-vxs" id="qUM-Ao-HvH"/>
-                        <outlet property="viewMap" destination="o4T-pd-Eab" id="bta-wt-6i5"/>
+                        <outlet property="mapView" destination="o4T-pd-Eab" id="zft-5n-3g4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KKn-ub-npn" userLabel="First Responder" sceneMemberID="firstResponder"/>
