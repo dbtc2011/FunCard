@@ -867,7 +867,7 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
         dictWebService["storeid"] = content["storeid"] as! String
         dictWebService["question"] = content["question"] as! String
         dictWebService["answer"] = content["answer"] as! String
-        self.dictParams["url"] = "http://180.87.143.52/funapp/Survey.aspx"
+        self.dictParams["url"] = "http://180.87.143.52/funapp/Pulsify.aspx"
         self.request = WebServiceFor.RestMethod
         
         self.restPostWithParameter(dictWebService)

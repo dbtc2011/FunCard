@@ -125,7 +125,8 @@ class ViewController: UIViewController , UIScrollViewDelegate, WebServiceDelegat
     func goToPulsify() {
         
         let storyboard = UIStoryboard(name: "Pulsify", bundle: nil)
-        let vc = storyboard.instantiateViewControllerWithIdentifier("pulsify")
+        let vc = storyboard.instantiateViewControllerWithIdentifier("pulsify") as! PulsifyViewController
+        vc.user = self.user!
         self.presentViewController(vc, animated: true, completion: nil)
         
     }

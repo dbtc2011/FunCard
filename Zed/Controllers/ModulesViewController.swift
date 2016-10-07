@@ -319,7 +319,7 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
     var contents: NSMutableArray = NSMutableArray()
     
     let webService = WebService()
-    
+    var user: UserModelRepresentation?
     var customPicker: CustomPickerView?
     
     var arrayBranches = [BranchModelRepresentation]()
@@ -421,7 +421,7 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
         
     }
     
-    func updateContent() {
+    private func updateContent() {
         
         self.counter = self.counter + 1
         
@@ -546,6 +546,20 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
     
     }
     
+    private func completeData() -> Bool {
+        
+        if self.labelBranch.text! == "" || self.labelCity.text! == "" {
+            
+            self.view.userInteractionEnabled = true
+            print("No City or Branch selected")
+            return false
+            
+        }
+        
+        return true
+        
+    }
+    
     //MARK: API Call
     private func getBranches() {
         
@@ -554,8 +568,42 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
 
     }
     
+    private func sendPulsify(answer: String) {
+        
+        
+        
+        self.view.userInteractionEnabled = false
+        let predicate = NSPredicate(format: "self.city == '\(self.labelCity!.text!)' && self.branchName == '\(self.labelBranch!.text!)'")
+        let arrayFiltered = (self.arrayBranches as NSArray).filteredArrayUsingPredicate(predicate) as NSArray
+        
+        let content = arrayFiltered[0] as! BranchModelRepresentation
+        
+        let dictWebService = NSMutableDictionary()
+        dictWebService["fbid"] = self.user!.facebookID
+        dictWebService["storeid"] = content.branchId
+        dictWebService["question"] = self.labelOption1.text
+        dictWebService["answer"] = answer
+        
+        self.webService.name = "sendPulsify"
+        self.webService.connectAndSendPulsifyInfo(dictWebService)
+//        self.request = WebServiceFor.RestMethod
+//        
+//        self.restPostWithParameter(dictWebService)
+        
+        
+        
+        
+        
+    }
+    
     //MARK: Button Actions
     @IBAction func option1Clicked(sender: UIButton) {
+        
+        if !self.completeData() {
+            
+            return
+            
+        }
         
         for views in self.viewOption1.subviews {
             
@@ -567,15 +615,17 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
         
         self.answers.setObject("\(sender.tag)", forKey: "option1")
         
-        if self.readyToNext() {
-            
-            self.updateContent()
-            
-        }
+        self.sendPulsify("\(sender.tag)")
         
     }
     
     @IBAction func option2Clicked(sender: UIButton) {
+        
+        if !self.completeData() {
+            
+            return
+            
+        }
         
         for views in self.viewOption2.subviews {
             
@@ -587,15 +637,18 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
         
         self.answers.setObject("\(sender.tag)", forKey: "option2")
         
-        if self.readyToNext() {
-            
-            self.updateContent()
-            
-        }
+        self.sendPulsify("\(sender.tag)")
+    
         
     }
     
     @IBAction func option3Clicked(sender: UIButton) {
+        
+        if !self.completeData() {
+            
+            return
+            
+        }
         
         for views in self.viewOption3.subviews {
             
@@ -607,15 +660,17 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
         
         self.answers.setObject("\(sender.tag)", forKey: "option3")
         
-        if self.readyToNext() {
-            
-            self.updateContent()
-            
-        }
+        self.sendPulsify("\(sender.tag)")
     }
     
     
     @IBAction func option4Clicked(sender: UIButton) {
+        
+        if !self.completeData() {
+            
+            return
+            
+        }
         
         for views in self.viewOption4.subviews {
             
@@ -627,11 +682,7 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
         
         self.answers.setObject("\(sender.tag)", forKey: "option4")
         
-        if self.readyToNext() {
-            
-            self.updateContent()
-            
-        }
+        self.sendPulsify("\(sender.tag)")
         
     }
     
@@ -670,6 +721,20 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
     
     //MARK: WebService Delegate
     func webServiceDidFinishLoadingWithResponseDictionary(parsedDictionary: NSDictionary) {
+        
+        self.view.userInteractionEnabled = true
+        print(parsedDictionary)
+        
+        if self.readyToNext() {
+            
+            dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                
+                self.updateContent()
+                
+            }
+            
+            
+        }
         
     }
     
