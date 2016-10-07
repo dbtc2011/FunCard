@@ -376,7 +376,7 @@ class DropDownFormTableViewCell : UITableViewCell {
 //MARK: - Custom Picker View
 protocol CustomPickerViewDelegate {
     
-    func pickerDidSelect(value: String, index: Int)
+    func pickerDidSelect(picker: CustomPickerView, value: String, index: Int)
     
 }
 class CustomPickerView : UIView, UIPickerViewDataSource, UIPickerViewDelegate {
@@ -385,6 +385,9 @@ class CustomPickerView : UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     var contents: NSMutableArray = NSMutableArray()
     var picker: UIPickerView = UIPickerView()
     var delegate: CustomPickerViewDelegate?
+    var pickerIdentifier = ""
+    
+    var selectedIndex : Int = 0
     
     
     //MARK: Setup
@@ -417,7 +420,7 @@ class CustomPickerView : UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         let buttonCancel = UIButton(type: UIButtonType.Custom)
         buttonCancel.frame = CGRectMake(0, 250, self.frame.size.width/2, 50)
         //uncomment
-        //buttonCancel.addTarget(self, action: #selector(CustomPickerView.cancelButtonClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonCancel.addTarget(self, action: #selector(CustomPickerView.cancelButtonClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         buttonCancel.titleLabel?.textColor = UIColor.blackColor()
         buttonCancel.backgroundColor = UIColor.blueColor()
         buttonCancel.setTitle("Cancel", forState: UIControlState.Normal)
@@ -429,7 +432,7 @@ class CustomPickerView : UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         buttonOkay.backgroundColor = UIColor.blueColor()
         buttonOkay.titleLabel?.textColor = UIColor.blackColor()
         //uncomment
-        //buttonOkay.addTarget(self, action: #selector(CustomPickerView.okayButtonClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonOkay.addTarget(self, action: #selector(CustomPickerView.okayButtonClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         buttonOkay.setTitle("Okay", forState: UIControlState.Normal)
         viewHolder.addSubview(buttonOkay)
         
@@ -457,6 +460,9 @@ class CustomPickerView : UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         
         
+        self.selectedIndex = row
+        
+        
     }
     
     //MARK: Button Actions
@@ -467,6 +473,9 @@ class CustomPickerView : UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     }
     
     func okayButtonClicked(sender: UIButton) {
+        
+        
+        self.delegate?.pickerDidSelect(self, value: (self.contents[self.selectedIndex] as? String)!, index: self.selectedIndex)
         
         self.removeFromSuperview()
         

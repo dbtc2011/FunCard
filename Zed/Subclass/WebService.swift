@@ -18,6 +18,7 @@ enum WebServiceFor: String {
 
 protocol WebServiceDelegate {
     func webServiceDidFinishLoadingWithResponseDictionary(parsedDictionary: NSDictionary) -> Void
+    func webServiceDidFinishLoadingWithResponseArray(parsedArray: NSArray) -> Void
     func webServiceDidFailWithError(error: NSError) -> Void
     func webServiceDidTimeout() -> Void
 }
@@ -143,6 +144,47 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
             self.delegate?.webServiceDidFinishLoadingWithResponseDictionary(json)
             
         }
+        task.resume()
+    }
+    
+    private func restGetMethod() {
+        
+        let stringURL = self.dictParams["url"] as! String
+        
+        let url:NSURL = NSURL(string: stringURL)!
+        let session = NSURLSession.sharedSession()
+        
+        let request = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = "GET"
+        request.cachePolicy = NSURLRequestCachePolicy.ReloadIgnoringCacheData
+        
+        let task = session.dataTaskWithRequest(request) {
+            (
+            let data, let response, let error) in
+            
+            guard let _:NSData = data, let _:NSURLResponse = response  where error == nil else {
+                print("error")
+                return
+            }
+            
+            do {
+                let objJSON = try NSJSONSerialization.JSONObjectWithData(data!, options: [])
+                
+                if objJSON.isKindOfClass(NSArray.classForCoder()) {
+                    
+                    let arrayData = objJSON as! NSArray
+                    self.delegate?.webServiceDidFinishLoadingWithResponseArray(arrayData)
+                    
+                } else {
+                    print("format/server error")
+                }
+                
+            } catch let error as NSError {
+                print("json error: \(error.localizedDescription)")
+            }
+            
+        }
+        
         task.resume()
     }
     
@@ -814,6 +856,31 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
         
         self.restPostWithParameter(dictWebService)
         
+        
+    }
+    
+    func connectAndSendPulsifyInfo(content: NSDictionary) {
+        
+        self.dictParams = NSMutableDictionary()
+        let dictWebService = NSMutableDictionary()
+        dictWebService["fbid"] = content["fbid"] as! String
+        dictWebService["storeid"] = content["storeid"] as! String
+        dictWebService["question"] = content["question"] as! String
+        dictWebService["answer"] = content["answer"] as! String
+        self.dictParams["url"] = "http://180.87.143.52/funapp/Survey.aspx"
+        self.request = WebServiceFor.RestMethod
+        
+        self.restPostWithParameter(dictWebService)
+        
+    }
+    
+    func connectAndGetBranches() {
+        
+        self.dictParams = NSMutableDictionary()
+        self.dictParams["url"] = "http://180.87.143.52/funapp/GetBranches.aspx"
+        
+        self.request = WebServiceFor.RestMethod
+        self.restGetMethod()
         
     }
     

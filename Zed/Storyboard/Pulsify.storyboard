@@ -73,7 +73,7 @@
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Angeles" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dC7-DB-Csq">
                                         <rect key="frame" x="-42" y="-21" width="42" height="21"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="backgroundColor" red="0.99874435409999995" green="1" blue="0.4730232915" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -225,7 +225,7 @@
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ANGELES 2" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oRa-yW-qLP">
                                         <rect key="frame" x="-42" y="-21" width="42" height="21"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="backgroundColor" red="0.99874435409999995" green="1" blue="0.4730232915" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -1408,6 +1408,8 @@
                         </variation>
                     </view>
                     <connections>
+                        <outlet property="labelBranch" destination="oRa-yW-qLP" id="c5N-8Y-FKa"/>
+                        <outlet property="labelCity" destination="dC7-DB-Csq" id="nJN-gu-ZdW"/>
                         <outlet property="labelNumber" destination="rXd-Oh-eah" id="X1Y-v9-0D0"/>
                         <outlet property="labelOption1" destination="oLB-3q-4UA" id="w2f-yr-WXm"/>
                         <outlet property="labelOption2" destination="NiV-sX-voh" id="qWH-Uc-hF2"/>

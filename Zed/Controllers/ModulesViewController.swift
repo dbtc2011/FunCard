@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import GoogleMaps
+import ActionSheetPicker_3_0
 
 let keyResult = "Result"
 let keyOptions = "ANSWERSET"
@@ -264,6 +265,11 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
         
     }
     
+    func webServiceDidFinishLoadingWithResponseArray(parsedArray: NSArray) {
+        
+        
+    }
+    
     func webServiceDidTimeout() {
         print("timeout")
     }
@@ -271,13 +277,14 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
     func webServiceDidFailWithError(error: NSError) {
         print(error)
     }
+    
 
 
     
 }
 
 //MARK: - Pulsify View Controller
-class PulsifyViewController : UIViewController {
+class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPickerViewDelegate {
     
     
     //MARK: Properties
@@ -301,26 +308,38 @@ class PulsifyViewController : UIViewController {
     
     @IBOutlet weak var viewOption4: UIView!
     
+    @IBOutlet weak var labelCity: UILabel!
+    
+    @IBOutlet weak var labelBranch: UILabel!
+    
+    
     var counter : Int = 0
     
     var answers: NSMutableDictionary = NSMutableDictionary()
     var contents: NSMutableArray = NSMutableArray()
-    var cities: NSMutableArray = NSMutableArray()
-    var branches: NSMutableArray = NSMutableArray()
+    
+    let webService = WebService()
     
     var customPicker: CustomPickerView?
     
+    var arrayBranches = [BranchModelRepresentation]()
+    var arrayCities = [String]()
+    var arrayBranch = NSMutableArray()
+    
     //MARK: View life cycle
     override func viewDidLoad() {
+        self.webService.delegate = self
         self.presetValues()
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
+        
         self.resetButtons()
         self.resetValues()
         self.setButtonColors()
+        self.getBranches()
         
     }
     
@@ -362,6 +381,9 @@ class PulsifyViewController : UIViewController {
     //MARK: Functions
     func presetValues() {
         
+        self.labelCity.text = ""
+        self.labelBranch.text = ""
+        
         let dictionary1 = NSMutableDictionary()
         dictionary1.setObject("Please rate the overall quality of the restaurant.", forKey: "question")
         dictionary1.setObject("FOOD", forKey: "row1")
@@ -370,18 +392,18 @@ class PulsifyViewController : UIViewController {
         dictionary1.setObject("COURTESY", forKey: "row4")
         
         let dictionary2 = NSMutableDictionary()
-        dictionary2.setObject("Please rate the overall quality of the manager.", forKey: "question")
-        dictionary2.setObject("MANNERS", forKey: "row1")
-        dictionary2.setObject("ASSERTIVENESS", forKey: "row2")
-        dictionary2.setObject("SERVICES", forKey: "row3")
-        dictionary2.setObject("COURTESY", forKey: "row4")
+        dictionary2.setObject("Please rate the services of this restaurant.", forKey: "question")
+        dictionary2.setObject("ORDER", forKey: "row1")
+        dictionary2.setObject("APPROACHABLE", forKey: "row2")
+        dictionary2.setObject("", forKey: "row3")
+        dictionary2.setObject("", forKey: "row4")
         
         let dictionary3 = NSMutableDictionary()
-        dictionary3.setObject("Please rate the overall quality of the crew.", forKey: "question")
-        dictionary3.setObject("MANNERS", forKey: "row1")
-        dictionary3.setObject("ASSERTIVENESS", forKey: "row2")
-        dictionary3.setObject("SERVICES", forKey: "row3")
-        dictionary3.setObject("COURTESY", forKey: "row4")
+        dictionary3.setObject("Please rate the crews responds toward customers.", forKey: "question")
+        dictionary3.setObject("READY TO GO", forKey: "row1")
+        dictionary3.setObject("APPROACHABLE", forKey: "row2")
+        dictionary3.setObject("", forKey: "row3")
+        dictionary3.setObject("", forKey: "row4")
         
         self.contents.addObject(dictionary1)
         self.contents.addObject(dictionary2)
@@ -396,29 +418,9 @@ class PulsifyViewController : UIViewController {
         
         self.labelNumber.text = "\(self.counter + 1)"
         
-        self.cities.addObject("ANGELES")
-        self.cities.addObject("BACOLOD")
-        self.cities.addObject("BAGUIO")
-        self.cities.addObject("ANGELES")
-        self.cities.addObject("CEBU")
-        self.cities.addObject("DAVAO")
-        self.cities.addObject("MAKATI")
-        self.cities.addObject("MANILA")
-        self.cities.addObject("NAVOTAS")
-        self.cities.addObject("PARANAQUE")
-        self.cities.addObject("STA ROSA")
-        self.cities.addObject("TAGAYTAY")
-        self.cities.addObject("QUEZON CITY")
-        self.cities.addObject("VALENZUELA")
-        
-        self.branches.addObject("1")
-        self.branches.addObject("2")
-        self.branches.addObject("3")
-        self.branches.addObject("4")
-        self.branches.addObject("5")
-        self.branches.addObject("6")
         
     }
+    
     func updateContent() {
         
         self.counter = self.counter + 1
@@ -431,6 +433,27 @@ class PulsifyViewController : UIViewController {
         }
         
         let dictionary = self.contents[self.counter] as! NSMutableDictionary
+        
+        self.viewOption1.hidden = false
+        self.viewOption2.hidden = false
+        self.viewOption3.hidden = false
+        self.viewOption4.hidden = false
+        
+        if dictionary["row1"] as? String == "" {
+            self.viewOption1.hidden = true
+        }
+        
+        if dictionary["row2"] as? String == "" {
+            self.viewOption2.hidden = true
+        }
+        
+        if dictionary["row3"] as? String == "" {
+            self.viewOption3.hidden = true
+        }
+        
+        if dictionary["row4"] as? String == "" {
+            self.viewOption4.hidden = true
+        }
         
         self.labelOption1.text = dictionary["row1"] as? String
         self.labelOption2.text = dictionary["row2"] as? String
@@ -489,16 +512,46 @@ class PulsifyViewController : UIViewController {
     
     func readyToNext() -> Bool {
         
-        if self.answers["option1"] as? String == "" ||
-            self.answers["option2"] as? String == "" ||
-            self.answers["option3"] as? String == "" ||
-            self.answers["option4"] as? String == ""{
+        if (self.answers["option1"] as? String == "" && self.labelOption1.text != "") ||
+            (self.answers["option2"] as? String == "" && self.labelOption2.text != "") ||
+            (self.answers["option3"] as? String == "" && self.labelOption3.text != "") ||
+            (self.answers["option4"] as? String == "" && self.labelOption4.text != ""){
             
                 return false
                 
         }
         
         return true
+    }
+    
+    private func parseResponse(arrayJSON: NSArray) {
+        print("fetching branches..")
+        arrayJSON.enumerateObjectsUsingBlock { (obj, index, stop) -> Void in
+            if obj.isKindOfClass(NSDictionary.classForCoder()) {
+                let dictObj = obj as! NSDictionary
+                let branch = BranchModelRepresentation()
+                branch.convertDictionaryToBranchModelInfo(dictObj)
+                
+                self.arrayBranches.append(branch)
+                
+                let city = branch.city
+                if !self.arrayCities.contains(city) {
+                    self.arrayCities.append(city)
+                }
+            } else {
+                print("format/server error")
+            }
+        }
+        
+    
+    }
+    
+    //MARK: API Call
+    private func getBranches() {
+        
+        self.webService.name = "getBranch"
+        self.webService.connectAndGetBranches()
+
     }
     
     //MARK: Button Actions
@@ -587,7 +640,9 @@ class PulsifyViewController : UIViewController {
         self.customPicker = nil
         self.customPicker = CustomPickerView()
         self.customPicker?.frame = CGRectMake(0, 0, UIScreen.mainScreen().bounds.size.width, UIScreen.mainScreen().bounds.size.height)
-        self.customPicker?.setupPicker("City", content: self.cities)
+        self.customPicker?.pickerIdentifier = "city"
+        self.customPicker?.delegate = self
+        self.customPicker?.setupPicker("City", content: self.arrayCities as! NSMutableArray)
         self.view.addSubview(self.customPicker!)
         
         
@@ -598,9 +653,10 @@ class PulsifyViewController : UIViewController {
         self.customPicker = nil
         self.customPicker = CustomPickerView()
         self.customPicker?.frame = CGRectMake(0, 0, UIScreen.mainScreen().bounds.size.width, UIScreen.mainScreen().bounds.size.height)
-        self.customPicker?.setupPicker("Branch", content: self.branches)
+        self.customPicker?.delegate = self
+        self.customPicker?.setupPicker("Branch", content: self.arrayBranch)
         self.view.addSubview(self.customPicker!)
-        
+//
     }
     
     @IBAction func backButtonClicked(sender: UIButton) {
@@ -610,6 +666,54 @@ class PulsifyViewController : UIViewController {
             
         }
         
+    }
+    
+    //MARK: WebService Delegate
+    func webServiceDidFinishLoadingWithResponseDictionary(parsedDictionary: NSDictionary) {
+        
+    }
+    
+    func webServiceDidFinishLoadingWithResponseArray(parsedArray: NSArray) {
+        
+        self.parseResponse(parsedArray)
+        
+    }
+    
+    func webServiceDidTimeout() {
+        print("timeout")
+    }
+    
+    func webServiceDidFailWithError(error: NSError) {
+        print(error)
+    }
+    
+    //MARK: Custom Picker View Delegate
+    func pickerDidSelect(picker: CustomPickerView, value: String, index: Int) {
+        
+        if picker.pickerIdentifier == "city" {
+            
+            self.labelBranch.text = ""
+            self.labelCity.text = value
+            
+            let predicate = NSPredicate(format: "self.city == '\(value)'")
+            let arrayFiltered = (self.arrayBranches as NSArray).filteredArrayUsingPredicate(predicate) as NSArray
+            
+            self.arrayBranch.removeAllObjects()
+            
+            for content in arrayFiltered {
+                
+                let branchModel = content as! BranchModelRepresentation
+                self.arrayBranch.addObject(branchModel.branchName)
+                
+            }
+            
+        }else {
+            
+            self.labelBranch.text = value
+            
+        }
+    
+    
     }
     
 }
@@ -652,7 +756,7 @@ class PasaPointsViewController : UIViewController {
 }
 
 //MARK: - Branches View Controller
-import ActionSheetPicker_3_0
+
 
 class BranchesViewController : UIViewController {
     
@@ -733,6 +837,7 @@ class BranchesViewController : UIViewController {
                     self.parseResponse(objJSON as! [[String:AnyObject]])
                 } else {
                     print("format/server error")
+                    
                 }
                 
             } catch let error as NSError {

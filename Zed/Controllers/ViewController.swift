@@ -198,6 +198,11 @@ class ViewController: UIViewController , UIScrollViewDelegate, WebServiceDelegat
         print(parsedDictionary)
     }
     
+    func webServiceDidFinishLoadingWithResponseArray(parsedArray: NSArray) {
+        
+        
+    }
+    
     func webServiceDidTimeout() {
         print("timeout")
     }
@@ -875,6 +880,11 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
         }
     }
     
+    func webServiceDidFinishLoadingWithResponseArray(parsedArray: NSArray) {
+        
+        
+    }
+    
     func webServiceDidTimeout() {
         print("timeout")
     }
@@ -1022,6 +1032,11 @@ class RegistrationMobileNumberViewController : UIViewController, WebServiceDeleg
         }
     }
     
+    func webServiceDidFinishLoadingWithResponseArray(parsedArray: NSArray) {
+        
+        
+    }
+    
     func webServiceDidTimeout() {
         print("timeout")
     }
@@ -1147,6 +1162,11 @@ class RegistrationCardNumberViewController : UIViewController, WebServiceDelegat
         
     }
     
+    func webServiceDidFinishLoadingWithResponseArray(parsedArray: NSArray) {
+        
+        
+    }
+    
     func webServiceDidTimeout() {
         print("timeout")
     }
@@ -1239,6 +1259,11 @@ class PinVerificationViewController : UIViewController, WebServiceDelegate {
         default:
             break
         }
+    }
+    
+    func webServiceDidFinishLoadingWithResponseArray(parsedArray: NSArray) {
+        
+        
     }
     
     func webServiceDidTimeout() {
