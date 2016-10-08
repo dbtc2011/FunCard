@@ -16,6 +16,7 @@ let password = "FDFE29DF7FF33EC5078B03F468B7A04C"
 let merchantID = "581"
 let timezone = "GMT+800"
 let channel = "app"
+let currency = "PHP"
 
 func generateTransactionIDWithTimestamp(timeStamp: String) -> String {
     let trimmedTimeStamp = String(timeStamp.characters.filter { String($0).rangeOfCharacterFromSet(NSCharacterSet(charactersInString: "0123456789.")) != nil })
@@ -197,6 +198,8 @@ class ViewController: UIViewController , UIScrollViewDelegate, WebServiceDelegat
     //MARK: WebService Delegate
     func webServiceDidFinishLoadingWithResponseDictionary(parsedDictionary: NSDictionary) {
         print(parsedDictionary)
+        
+        //update info here
     }
     
     func webServiceDidFinishLoadingWithResponseArray(parsedArray: NSArray) {

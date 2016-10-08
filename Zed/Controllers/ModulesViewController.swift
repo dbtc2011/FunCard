@@ -693,7 +693,8 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
         self.customPicker?.frame = CGRectMake(0, 0, UIScreen.mainScreen().bounds.size.width, UIScreen.mainScreen().bounds.size.height)
         self.customPicker?.pickerIdentifier = "city"
         self.customPicker?.delegate = self
-        self.customPicker?.setupPicker("City", content: self.arrayCities as! NSMutableArray)
+        let array = NSMutableArray(array: self.arrayCities)
+        self.customPicker?.setupPicker("City", content: array)
         self.view.addSubview(self.customPicker!)
         
         
@@ -784,46 +785,119 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
 }
 
 //MARK: - Pasa Points View Controller
-class PasaPointsViewController : UIViewController {
+class PasaPointsViewController : UIViewController, WebServiceDelegate {
     
     //MARK: Properties
+    
     @IBOutlet weak var labelPoints: UILabel!
-    
     @IBOutlet weak var textCardNumber: UITextField!
-    
     @IBOutlet weak var textAmount: UITextField!
     
+    var user: UserModelRepresentation?
+    let webService = WebService()
+    
     //MARK: View life cycle
+    
     override func viewDidLoad() {
+        super.viewDidLoad()
         
+        self.webService.delegate = self
     }
     
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         
-        
+        //TODO: update points label here
     }
     
     //MARK: Button Actions
+    
     @IBAction func backClicked(sender: UIButton) {
-        
         self.dismissViewControllerAnimated(true) {
-            
-            
         }
-        
     }
     
     @IBAction func goClicked(sender: UIButton) {
         
+        //validate fields first
+        if self.validateFields() == true {
+            //proceed
+            self.callPasaPointsApi()
+            
+            return
+        }
         
+        //alert error here
+        print("invalid inputs")
+    }
+    
+    //MARK: - Methods
+    private func validateFields() -> Bool {
+        if self.textCardNumber.text != "" && self.textAmount.text != "" {
+            return true
+        }
+        
+        return false
+    }
+    
+    private func callPasaPointsApi() {
+        if self.user == nil {
+            //for now (this should retrieve data from core data)
+            self.user = UserModelRepresentation()
+            self.user!.cardNumber = "6788880000001370"
+        }
+        
+        let dictParams = NSMutableDictionary()
+        let timeStamp = generateTimeStamp()
+        
+        dictParams["transactionId"] = generateTransactionIDWithTimestamp(timeStamp)
+        dictParams["senderCardNumber"] = self.user!.cardNumber
+        dictParams["receiverCardNumber"] = self.textCardNumber.text
+        dictParams["amount"] = self.textAmount.text
+        dictParams["currency"] = currency
+        dictParams["paymentChannel"] = channel
+        dictParams["requestTimezone"] = timezone
+        dictParams["requestTimestamp"] = timeStamp
+        
+        //print(dictParams)
+        self.webService.connectAndPasaPointsWithInfo(dictParams)
+    }
+    
+    //MARK: WebService Delegate
+    
+    func webServiceDidFinishLoadingWithResponseDictionary(parsedDictionary: NSDictionary) {
+        print(parsedDictionary)
+        
+        let status = parsedDictionary["Status"] as! String
+        let description = parsedDictionary["StatusDescription"] as! String
+        
+        if status == "0" {
+            print("successful")
+            
+            return
+        }
+        
+        print("error >>> \(description)")
+    }
+    
+    func webServiceDidFinishLoadingWithResponseArray(parsedArray: NSArray) {
+        
+        
+    }
+    
+    func webServiceDidTimeout() {
+        print("timeout")
+    }
+    
+    func webServiceDidFailWithError(error: NSError) {
+        print(error)
     }
 }
 
 //MARK: - Branches View Controller
 
 
-class BranchesViewController : UIViewController {
+class BranchesViewController : UIViewController, GMSMapViewDelegate {
     
     //MARK: Properties
     
@@ -831,6 +905,11 @@ class BranchesViewController : UIViewController {
     @IBOutlet var lblMerchantName: UILabel!
     @IBOutlet var lblCityName: UILabel!
     
+    var viewInfo: UIView?
+    var lblBranchName: UILabel?
+    var lblAddress: UILabel?
+    var lblPhone: UILabel?
+    var lblHours: UILabel?
     
     var arrayBranches = [BranchModelRepresentation]()
     var arrayCities = [String]()
@@ -857,11 +936,11 @@ class BranchesViewController : UIViewController {
         //for now
         self.lblMerchantName.text = "KFC"
         self.lblCityName.text = ""
-        
-        //setup map
     }
     
     private func setupGoogleMaps() {
+        self.mapView.delegate = self
+        
         // Create a GMSCameraPosition that tells the map to display the
         // coordinate -33.86,151.20 at zoom level 6.
         //120.97978
@@ -936,6 +1015,92 @@ class BranchesViewController : UIViewController {
         self.lblCityName.text = self.arrayCities.first
     }
     
+    private func setupInfoView() {
+        self.viewInfo = UIView(frame: CGRect(x: 30, y: self.mapView.frame.origin.y+30.0, width: self.mapView.frame.width-60.0, height: 270.0))
+        self.viewInfo!.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.6)
+        self.viewInfo!.layer.borderColor = UIColor.blackColor().CGColor
+        self.viewInfo!.layer.borderWidth = 1.0
+        self.viewInfo!.layer.cornerRadius = 5.0
+        self.view.addSubview(self.viewInfo!)
+        
+        let imgViewPin = UIImageView(image: UIImage(named: "pin"))
+        imgViewPin.frame = CGRect(x: 20, y: 20, width: 30, height: 50)
+        imgViewPin.backgroundColor = UIColor.whiteColor() //delete this when image is available
+        self.viewInfo!.addSubview(imgViewPin)
+        
+        let lblBranchName = UILabel(frame: CGRect(x: imgViewPin.frame.maxX+20, y: imgViewPin.frame.minY+((imgViewPin.frame.height-30)/2), width: (self.viewInfo!.frame.width-imgViewPin.frame.width)-60, height: 30))
+        lblBranchName.textColor = UIColor.blueColor()
+        lblBranchName.text = "Nepomall Angeles".uppercaseString
+        lblBranchName.minimumScaleFactor = 0.3
+        lblBranchName.adjustsFontSizeToFitWidth = true
+        self.viewInfo!.addSubview(lblBranchName)
+        
+        let lblAddressLabel = UILabel(frame: CGRect(x: imgViewPin.frame.minX, y: imgViewPin.frame.maxY+10, width: 80, height: 60))
+        lblAddressLabel.textColor = UIColor.yellowColor()
+        lblAddressLabel.text = "Address:"
+        lblAddressLabel.textAlignment = .Right
+        self.viewInfo!.addSubview(lblAddressLabel)
+        
+        self.lblAddress = UILabel(frame: CGRect(x: lblAddressLabel.frame.minX+lblAddressLabel.frame.width+40, y: lblAddressLabel.frame.origin.y, width: self.viewInfo!.frame.width-lblAddressLabel.frame.width-110, height: lblAddressLabel.frame.height))
+        self.lblAddress!.textColor = UIColor.whiteColor()
+        self.lblAddress!.text = "G/F 108 Nepomall Plaridel St Angeles City SPP"
+        self.lblAddress!.numberOfLines = 0
+        self.lblAddress!.minimumScaleFactor = 0.3
+        self.lblAddress!.adjustsFontSizeToFitWidth = true
+        self.viewInfo!.addSubview(self.lblAddress!)
+        
+        let lblPhoneLabel = UILabel(frame: CGRect(x: imgViewPin.frame.minX, y: lblAddressLabel.frame.maxY+10, width: lblAddressLabel.frame.width, height: 20))
+        lblPhoneLabel.textColor = UIColor.yellowColor()
+        lblPhoneLabel.text = "Phone:"
+        lblPhoneLabel.textAlignment = .Right
+        self.viewInfo!.addSubview(lblPhoneLabel)
+        
+        self.lblPhone = UILabel(frame: CGRect(x: self.lblAddress!.frame.origin.x, y: lblPhoneLabel.frame.origin.y, width:  self.lblAddress!.frame.width, height: lblPhoneLabel.frame.height))
+        self.lblPhone!.textColor = UIColor.whiteColor()
+        self.lblPhone!.text = "045-8886208"
+        self.lblPhone!.minimumScaleFactor = 0.3
+        self.lblPhone!.adjustsFontSizeToFitWidth = true
+        self.viewInfo!.addSubview(self.lblPhone!)
+        
+        let lblHoursLabel = UILabel(frame: CGRect(x: imgViewPin.frame.minX, y: lblPhoneLabel.frame.maxY+10, width: lblAddressLabel.frame.width, height: 20))
+        lblHoursLabel.textColor = UIColor.yellowColor()
+        lblHoursLabel.text = "Phone:"
+        lblHoursLabel.textAlignment = .Right
+        self.viewInfo!.addSubview(lblHoursLabel)
+        
+        self.lblHours = UILabel(frame: CGRect(x: self.lblAddress!.frame.origin.x, y: lblHoursLabel.frame.origin.y, width:  self.lblAddress!.frame.width, height: lblHoursLabel.frame.height))
+        self.lblHours!.textColor = UIColor.whiteColor()
+        self.lblHours!.text = "10am - 8pm"
+        self.lblHours!.minimumScaleFactor = 0.3
+        self.lblHours!.adjustsFontSizeToFitWidth = true
+        self.viewInfo!.addSubview(self.lblHours!)
+        
+        let btnOkay = UIButton(type: .Custom)
+        btnOkay.frame = CGRect(x: (self.viewInfo!.frame.width-100)/2, y: lblHoursLabel.frame.maxY+10, width: 100, height: 40)
+        btnOkay.addTarget(self, action: #selector(ModulesViewController.didPressOkay(_:)), forControlEvents: .TouchUpInside)
+        btnOkay.backgroundColor = UIColor.blueColor()
+        btnOkay.setTitleColor(UIColor.yellowColor(), forState: .Normal)
+        btnOkay.setTitle("OK", forState: .Normal)
+        btnOkay.layer.cornerRadius = 5.0
+        self.viewInfo!.addSubview(btnOkay)
+    }
+    
+    private func displayBranchInfo(branch: BranchModelRepresentation) {
+        if self.viewInfo == nil {
+            self.setupInfoView()
+        }
+        
+        //display info here
+        self.lblBranchName!.text = branch.branchName
+        self.lblAddress!.text = branch.address
+        self.lblPhone!.text = branch.contactNumber
+        self.lblHours!.text = branch.operatingHours
+    }
+    
+    func didPressOkay(sender: UIButton) {
+        self.viewInfo!.removeFromSuperview()
+    }
+    
     //MARK: IBAction Delegate
     @IBAction func didPressBranches(sender: AnyObject) {
         if self.arrayCities.count > 0 {
@@ -966,5 +1131,12 @@ class BranchesViewController : UIViewController {
                     print("cancel")
                 }, origin: self.view)
         }
+    }
+    
+    //MARK: - GMSMapView Delegate
+    func mapView(mapView: GMSMapView, didTapMarker marker: GMSMarker) -> Bool {
+        
+        
+        return true
     }
 }

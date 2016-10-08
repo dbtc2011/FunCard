@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="AZd-WC-kta">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="AZd-WC-kta">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
@@ -18,7 +18,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="FUN APP-BG_n-plain" translatesAutoresizingMaskIntoConstraints="NO" id="cfx-hi-nwq">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg" translatesAutoresizingMaskIntoConstraints="NO" id="cfx-hi-nwq">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ity-sm-p8q">
@@ -27,7 +27,9 @@
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bar" translatesAutoresizingMaskIntoConstraints="NO" id="8R4-Bn-bqr">
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="40" id="QEw-EU-upo"/>
+                                            <constraint firstAttribute="height" constant="40" id="QEw-EU-upo">
+                                                <variation key="heightClass=regular-widthClass=compact" constant="45"/>
+                                            </constraint>
                                         </constraints>
                                         <variation key="default">
                                             <mask key="constraints">
@@ -43,10 +45,12 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3h9-QC-wH0">
                                         <rect key="frame" x="-42" y="-21" width="42" height="21"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="40" id="zhA-om-ERI"/>
+                                            <constraint firstAttribute="height" constant="40" id="zhA-om-ERI">
+                                                <variation key="heightClass=regular-widthClass=compact" constant="45"/>
+                                            </constraint>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
-                                        <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="22"/>
+                                        <color key="textColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                         <variation key="default">
                                             <mask key="constraints">
@@ -59,13 +63,13 @@
                                             </mask>
                                         </variation>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Complete the following." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lsT-PM-ID6">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Complete the following:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lsT-PM-ID6">
                                         <rect key="frame" x="-42" y="-21" width="42" height="21"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="21" id="qLH-cS-o9m"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <color key="textColor" red="0.83570620890000002" green="0.69721422700000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="textColor" red="0.95294117649999999" green="0.87058823529999996" blue="0.20784313730000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                         <variation key="default">
                                             <mask key="constraints">
@@ -86,7 +90,7 @@
                                             </constraint>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="textColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                         <variation key="default">
                                             <mask key="constraints">
@@ -102,7 +106,7 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Amount:" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rS7-VT-xGY">
                                         <rect key="frame" x="-42" y="-21" width="42" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="textColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Haa-c6-1jM">
@@ -117,7 +121,7 @@
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2lg-P3-BPe">
                                         <rect key="frame" x="-23" y="-15" width="46" height="30"/>
-                                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="backgroundColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="60" id="6u5-hs-Rvf">
                                                 <variation key="heightClass=regular-widthClass=compact" constant="100"/>
@@ -125,7 +129,7 @@
                                             <constraint firstAttribute="height" constant="30" id="zLi-pk-VFG"/>
                                         </constraints>
                                         <state key="normal" title="Go">
-                                            <color key="titleColor" red="0.83570620890000002" green="0.69721422700000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleColor" red="0.95294117649999999" green="0.87058823529999996" blue="0.20784313730000001" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <variation key="default">
                                             <mask key="constraints">
@@ -140,7 +144,7 @@
                                             </mask>
                                         </variation>
                                         <connections>
-                                            <action selector="goClicked:" destination="AZd-WC-kta" eventType="touchUpInside" id="3DE-6Z-wxO"/>
+                                            <action selector="goClicked:" destination="AZd-WC-kta" eventType="touchUpInside" id="BLN-nD-PYX"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -161,7 +165,7 @@
                                     <constraint firstItem="H2R-Lv-mt2" firstAttribute="leading" secondItem="rS7-VT-xGY" secondAttribute="trailing" constant="10" id="Neq-Wg-P4Z"/>
                                     <constraint firstItem="8R4-Bn-bqr" firstAttribute="leading" secondItem="ity-sm-p8q" secondAttribute="leading" constant="50" id="QK3-fJ-kcv"/>
                                     <constraint firstItem="lsT-PM-ID6" firstAttribute="top" secondItem="3h9-QC-wH0" secondAttribute="bottom" constant="20" id="R1m-YH-uWo">
-                                        <variation key="heightClass=regular-widthClass=compact" constant="30"/>
+                                        <variation key="heightClass=regular-widthClass=compact" constant="25"/>
                                     </constraint>
                                     <constraint firstItem="L2P-h2-KS0" firstAttribute="width" secondItem="ity-sm-p8q" secondAttribute="width" multiplier="0.34" id="Vbh-c3-Z6J"/>
                                     <constraint firstAttribute="trailing" secondItem="Haa-c6-1jM" secondAttribute="trailing" constant="10" id="aEm-1e-5cx"/>
@@ -340,11 +344,11 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hvi-ex-Wb7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="614" y="-14"/>
+            <point key="canvasLocation" x="613.5" y="-14.25"/>
         </scene>
     </scenes>
     <resources>
-        <image name="FUN APP-BG_n-plain" width="375" height="667"/>
         <image name="bar" width="349" height="55"/>
+        <image name="bg" width="375" height="667"/>
     </resources>
 </document>

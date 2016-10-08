@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "idiom" : "iphone",
+      "idiom" : "universal",
       "filename" : "FUN APP-BG-plain.png",
       "scale" : "1x"
     },
     {
-      "idiom" : "iphone",
+      "idiom" : "universal",
       "filename" : "FUN APP-BG@x2-plain.png",
       "scale" : "2x"
     },
     {
-      "idiom" : "iphone",
+      "idiom" : "universal",
       "filename" : "FUN APP-BG@x3-plain.png",
       "scale" : "3x"
     }
