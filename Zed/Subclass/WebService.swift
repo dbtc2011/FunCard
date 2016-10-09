@@ -10,10 +10,11 @@ import UIKit
 
 let urlLSS = "http://180.87.143.45/ph.funloyalty.api/LoyaltySystemServiceSoapBinding.asmx?WSDL"
 let urlLS3PPS = "http://180.87.143.45/ph.funloyalty.api/LoyaltySystem3PPServiceSoapBinding.asmx?WSDL"
+let urlLFSS = "http://180.87.143.45/ph.funloyalty.api/LoyaltyFunServiceServiceSoapBinding.asmx?WSDL"
 let timeOut = 60.0
 
 enum WebServiceFor: String {
-    case CheckFbInfo = "checkFbInfo", CheckMsisdn = "checkMsisdn", Earn = "earn", EarnMsisdn = "earnMsisdn", EarnReversal = "earnReversal", Inquire = "inquire",  InquireMsisdn = "inquireMsisdn", MarkAsSold = "markAsSold", PasaPoints = "pasaPoints", PasaPointsMsisdn = "pasaPointsMsisdn", Redeem = "redeem", RedeemMsisdn = "redeemMsisdn", RedeemReversal = "redeemReversal", RedeemStamp = "redeemStamp", Register = "register", RegisterFbInfo = "registerFbInfo", ResendPin = "resendPin", UpdateFbInfo = "updateFbInfo", ValidateCardPin = "validateCardPin", RegisterVirtualCard = "TLCILSAPI3PP_REGVIRTUALCARD", ValidateVirtualCard = "TLCILSAPI3PP_VLDTVIRTUALCARD", GetDashboardInfo = "TLCILSAPI3PP_MOBILENUMBER", RestMethod = "restMethod"
+    case CheckFbInfo = "checkFbInfo", CheckMsisdn = "checkMsisdn", Earn = "earn", EarnMsisdn = "earnMsisdn", EarnReversal = "earnReversal", Inquire = "inquire",  InquireMsisdn = "inquireMsisdn", MarkAsSold = "markAsSold", PasaPoints = "pasaPoints", PasaPointsMsisdn = "pasaPointsMsisdn", Redeem = "redeem", RedeemMsisdn = "redeemMsisdn", RedeemReversal = "redeemReversal", RedeemStamp = "redeemStamp", Register = "register", RegisterFbInfo = "registerFbInfo", ResendPin = "resendPin", UpdateFbInfo = "updateFbInfo", ValidateCardPin = "validateCardPin", RegisterVirtualCard = "TLCILSAPI3PP_REGVIRTUALCARD", ValidateVirtualCard = "TLCILSAPI3PP_VLDTVIRTUALCARD", GetDashboardInfo = "TLCILSAPI3PP_MOBILENUMBER", RestMethod = "restMethod", FunRegCol_Msisdn = "PSILOYALTYFUNREGCOL_MSISDN", ForgotPin = "TLCILSAPI3PP_FORGOTPIN", FunMember_Email = "PSILOYALTYFUNMEMBER_EMAIL"
 }
 
 protocol WebServiceDelegate {
@@ -38,6 +39,7 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
     
     private var strSoapActionLSS = "http://www.tlc.com.ph/loyalty/wsdl/execute/"
     private var strSoapActionLS3PPS = "http://www.tlci.com.ph/"
+    private var strSoapActionLFSS = "http://www.psi.com.ph/"
     
     private var strHeading = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:exec=\"http://www.tlc.com.ph/loyalty/wsdl/execute/\"><soapenv:Header/><soapenv:Body>"
     
@@ -311,6 +313,24 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
             soapMessage = soapMessage.stringByAppendingString(self.messageForGetDashboardInfo())
             break
             
+        case .FunRegCol_Msisdn:
+            soapMessage = soapMessage.stringByReplacingOccurrencesOfString(":exec", withString: ":psi")
+            soapMessage = soapMessage.stringByReplacingOccurrencesOfString(strSoapActionLSS, withString: strSoapActionLFSS)
+            soapMessage = soapMessage.stringByAppendingString(self.messageForFunRegCol())
+            break
+            
+        case .ForgotPin:
+            soapMessage = soapMessage.stringByReplacingOccurrencesOfString(":exec", withString: ":tlci")
+            soapMessage = soapMessage.stringByReplacingOccurrencesOfString(strSoapActionLSS, withString: strSoapActionLS3PPS)
+            soapMessage = soapMessage.stringByAppendingString(self.messageForForgotPin())
+            break
+            
+        case .FunMember_Email:
+            soapMessage = soapMessage.stringByReplacingOccurrencesOfString(":exec", withString: ":psi")
+            soapMessage = soapMessage.stringByReplacingOccurrencesOfString(strSoapActionLSS, withString: strSoapActionLFSS)
+            soapMessage = soapMessage.stringByAppendingString(self.messageForFunMemberEmail())
+            break
+            
         case .RestMethod:
             break
         }
@@ -450,7 +470,27 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
         
         return message
     }
+    
+    private func messageForFunRegCol() -> String {
+        let message = String(format: "<psi:PSILOYALTYFUNREGCOL_MSISDN><psi:RegisteredMsisdnColRequest><psi:MSISDN>%@</psi:MSISDN></psi:RegisteredMsisdnColRequest></psi:PSILOYALTYFUNREGCOL_MSISDN>", self.dictParams["msisdn"] as! String)
+        
+        return message
+    }
+    
+    private func messageForForgotPin() -> String {
+        let message = String(format: "<tlci:TLCILSAPI3PP_FORGOTPIN><tlci:TLCILSAPI3PPFPRequest><tlci:MOBILENUMBER>%@</tlci:MOBILENUMBER><tlci:TRANSACTIONID>%@</tlci:TRANSACTIONID></tlci:TLCILSAPI3PPFPRequest></tlci:TLCILSAPI3PP_FORGOTPIN>", self.dictParams["mobileNumber"] as! String, self.dictParams["transactionId"] as! String)
+        
+        return message
+    }
+    
+    private func messageForFunMemberEmail() -> String {
+        let message = String(format: "<psi:PSILOYALTYFUNMEMBER_EMAIL><psi:FunEmailRequest><psi:DATEOFBIRTH>%@</psi:DATEOFBIRTH><psi:EMAIL>%@</psi:EMAIL><psi:FIRSTNAME>%@</psi:FIRSTNAME><psi:GENDER>%@</psi:GENDER><psi:LASTNAME>%@</psi:LASTNAME></psi:FunEmailRequest></psi:PSILOYALTYFUNMEMBER_EMAIL>", self.dictParams["dateOfBirth"] as! String, self.dictParams["email"] as! String, self.dictParams["firstName"] as! String, self.dictParams["gender"] as! String, self.dictParams["lastName"] as! String)
+        
+        return message
+    }
+    
     //MARK: Rest Parser
+    
     private func contentForSurvey() {
         
         let dataString = NSString(data: self.mutableData, encoding: NSUTF8StringEncoding)
@@ -465,6 +505,7 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
         print(json)
         
     }
+    
     //MARK: Public
     
     func connectAndCheckFBInfoWithId(id: String) {
@@ -843,7 +884,6 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
     }
     
     func connectAndSendSurvey(content: NSDictionary) {
-        
         self.dictParams = NSMutableDictionary()
         let dictWebService = NSMutableDictionary()
         dictWebService["fbid"] = content["fbid"] as! String
@@ -851,37 +891,68 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
         dictWebService["aid"] = content["aid"] as! String
         dictWebService["sParam"] = content["sParam"] as! String
         dictWebService["function"] = "set"
+        
         self.dictParams["url"] = "http://180.87.143.52/funapp/Survey.aspx"
         self.request = WebServiceFor.RestMethod
         
         self.restPostWithParameter(dictWebService)
-        
-        
     }
     
     func connectAndSendPulsifyInfo(content: NSDictionary) {
-        
         self.dictParams = NSMutableDictionary()
         let dictWebService = NSMutableDictionary()
         dictWebService["fbid"] = content["fbid"] as! String
         dictWebService["storeid"] = content["storeid"] as! String
         dictWebService["question"] = content["question"] as! String
         dictWebService["answer"] = content["answer"] as! String
+        
         self.dictParams["url"] = "http://180.87.143.52/funapp/Pulsify.aspx"
         self.request = WebServiceFor.RestMethod
         
         self.restPostWithParameter(dictWebService)
-        
     }
     
     func connectAndGetBranches() {
-        
         self.dictParams = NSMutableDictionary()
         self.dictParams["url"] = "http://180.87.143.52/funapp/GetBranches.aspx"
         
         self.request = WebServiceFor.RestMethod
         self.restGetMethod()
+    }
+    
+    func connectAndRegColMsisdnWithMsisdn(msisdn: String) {
+        self.dictParams = NSMutableDictionary()
+        self.dictParams["msisdn"] = msisdn
         
+        let dictWebService = ["soapAction" : self.strSoapActionLFSS.stringByAppendingString(WebServiceFor.FunRegCol_Msisdn.rawValue),
+            "soapMessage" : self.getSoapMessageWithWebServiceFor(.FunRegCol_Msisdn),
+            "url" : urlLFSS]
+        self.postWithDictionary(dictWebService)
+    }
+    
+    func connectAndForgotPinWithInfo(dictInfo: NSDictionary) {
+        self.dictParams = NSMutableDictionary()
+        self.dictParams["mobileNumber"] = dictInfo["mobileNumber"] as! String
+        self.dictParams["transactionId"] = dictInfo["transactionId"] as! String
+        
+        let dictWebService = ["soapAction" : self.strSoapActionLS3PPS.stringByAppendingString(WebServiceFor.ForgotPin.rawValue),
+            "soapMessage" : self.getSoapMessageWithWebServiceFor(.ForgotPin),
+            "url" : urlLS3PPS]
+        self.postWithDictionary(dictWebService)
+    }
+    
+    func connectAndMemberEmailWithInfo(dictInfo: NSDictionary) {
+        self.dictParams = NSMutableDictionary()
+        self.dictParams["dateOfBirth"] = dictInfo["dateOfBirth"] as! String
+        self.dictParams["email"] = dictInfo["email"] as! String
+        self.dictParams["firstName"] = dictInfo["firstName"] as! String
+        self.dictParams["gender"] = dictInfo["gender"] as! String
+        self.dictParams["lastName"] = dictInfo["lastName"] as! String
+        
+        let dictWebService = ["soapAction" : self.strSoapActionLFSS.stringByAppendingString(WebServiceFor.FunMember_Email.rawValue),
+            "soapMessage" : self.getSoapMessageWithWebServiceFor(.FunMember_Email),
+            "url" : urlLFSS]
+        self.postWithDictionary(dictWebService)
     }
     
     //MARK: - NSURLConnection Delegate

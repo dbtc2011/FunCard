@@ -19,6 +19,11 @@
 		5025E48B1D34E93300699AFB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025E48A1D34E93300699AFB /* ViewController.swift */; };
 		50E116D61D49DFA90012F6DB /* Registration.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50E116D51D49DFA90012F6DB /* Registration.storyboard */; };
 		50EAD4291D409D160086704F /* Pulsify.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50EAD4281D409D160086704F /* Pulsify.storyboard */; };
+		67003D351DAA8669006C78F1 /* FunCard.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 67003D331DAA8669006C78F1 /* FunCard.xcdatamodeld */; };
+		67003D3A1DAA89F4006C78F1 /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67003D361DAA89F4006C78F1 /* User+CoreDataProperties.swift */; };
+		67003D3B1DAA89F4006C78F1 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67003D371DAA89F4006C78F1 /* User.swift */; };
+		67003D3C1DAA89F4006C78F1 /* Branches+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67003D381DAA89F4006C78F1 /* Branches+CoreDataProperties.swift */; };
+		67003D3D1DAA89F4006C78F1 /* Branches.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67003D391DAA89F4006C78F1 /* Branches.swift */; };
 		676171F41D6EC12E00389472 /* WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 676171F21D6EC12E00389472 /* WebService.swift */; };
 		676171F51D6EC12E00389472 /* XMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 676171F31D6EC12E00389472 /* XMLParser.swift */; };
 		6763D36F1D7694E40033DEA6 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6763D36E1D7694E40033DEA6 /* FBSDKCoreKit.framework */; };
@@ -46,6 +51,11 @@
 		5025E48A1D34E93300699AFB /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = Controllers/ViewController.swift; sourceTree = "<group>"; };
 		50E116D51D49DFA90012F6DB /* Registration.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Registration.storyboard; path = Storyboard/Registration.storyboard; sourceTree = "<group>"; };
 		50EAD4281D409D160086704F /* Pulsify.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Pulsify.storyboard; path = Storyboard/Pulsify.storyboard; sourceTree = "<group>"; };
+		67003D341DAA8669006C78F1 /* FunCard.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FunCard.xcdatamodel; sourceTree = "<group>"; };
+		67003D361DAA89F4006C78F1 /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "User+CoreDataProperties.swift"; path = "Core Data/User+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		67003D371DAA89F4006C78F1 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = User.swift; path = "Core Data/User.swift"; sourceTree = "<group>"; };
+		67003D381DAA89F4006C78F1 /* Branches+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Branches+CoreDataProperties.swift"; path = "Core Data/Branches+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		67003D391DAA89F4006C78F1 /* Branches.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Branches.swift; path = "Core Data/Branches.swift"; sourceTree = "<group>"; };
 		676171F21D6EC12E00389472 /* WebService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WebService.swift; path = Subclass/WebService.swift; sourceTree = "<group>"; };
 		676171F31D6EC12E00389472 /* XMLParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XMLParser.swift; path = Subclass/XMLParser.swift; sourceTree = "<group>"; };
 		6763D36E1D7694E40033DEA6 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "Pods/../build/Debug-iphoneos/FBSDKCoreKit/FBSDKCoreKit.framework"; sourceTree = "<group>"; };
@@ -105,6 +115,7 @@
 		358553811CD880F300C1DD55 /* Zed */ = {
 			isa = PBXGroup;
 			children = (
+				67003D321DAA8643006C78F1 /* Core Data */,
 				50F5FCD21D6366D500071B2F /* Subclass */,
 				358553821CD880F300C1DD55 /* AppDelegate.swift */,
 				358553941CD8811400C1DD55 /* ObjectModel.swift */,
@@ -155,6 +166,26 @@
 				676171F31D6EC12E00389472 /* XMLParser.swift */,
 			);
 			name = Subclass;
+			sourceTree = "<group>";
+		};
+		67003D321DAA8643006C78F1 /* Core Data */ = {
+			isa = PBXGroup;
+			children = (
+				67003D331DAA8669006C78F1 /* FunCard.xcdatamodeld */,
+				67003D3E1DAA8A0F006C78F1 /* ManagedObjects */,
+			);
+			name = "Core Data";
+			sourceTree = "<group>";
+		};
+		67003D3E1DAA8A0F006C78F1 /* ManagedObjects */ = {
+			isa = PBXGroup;
+			children = (
+				67003D371DAA89F4006C78F1 /* User.swift */,
+				67003D361DAA89F4006C78F1 /* User+CoreDataProperties.swift */,
+				67003D391DAA89F4006C78F1 /* Branches.swift */,
+				67003D381DAA89F4006C78F1 /* Branches+CoreDataProperties.swift */,
+			);
+			name = ManagedObjects;
 			sourceTree = "<group>";
 		};
 		83B65E1C20E92921AD016778 /* Pods */ = {
@@ -296,10 +327,15 @@
 				676171F51D6EC12E00389472 /* XMLParser.swift in Sources */,
 				676171F41D6EC12E00389472 /* WebService.swift in Sources */,
 				5025E48B1D34E93300699AFB /* ViewController.swift in Sources */,
+				67003D3D1DAA89F4006C78F1 /* Branches.swift in Sources */,
+				67003D351DAA8669006C78F1 /* FunCard.xcdatamodeld in Sources */,
+				67003D3C1DAA89F4006C78F1 /* Branches+CoreDataProperties.swift in Sources */,
 				5025E4821D34D99900699AFB /* ModulesViewController.swift in Sources */,
 				358553951CD8811400C1DD55 /* ObjectModel.swift in Sources */,
 				5025E4891D34E90B00699AFB /* ViewSubclass.swift in Sources */,
 				358553831CD880F300C1DD55 /* AppDelegate.swift in Sources */,
+				67003D3B1DAA89F4006C78F1 /* User.swift in Sources */,
+				67003D3A1DAA89F4006C78F1 /* User+CoreDataProperties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -474,6 +510,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		67003D331DAA8669006C78F1 /* FunCard.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				67003D341DAA8669006C78F1 /* FunCard.xcdatamodel */,
+			);
+			currentVersion = 67003D341DAA8669006C78F1 /* FunCard.xcdatamodel */;
+			name = FunCard.xcdatamodeld;
+			path = "Core Data/FunCard.xcdatamodeld";
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 358553771CD880F300C1DD55 /* Project object */;
 }

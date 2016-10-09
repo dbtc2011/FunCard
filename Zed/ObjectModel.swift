@@ -39,12 +39,12 @@ class UserModelRepresentation: NSObject {
     var birthday: String = ""
     var address: String = ""
     var email: String = ""
-    var status: String = ""
-    var statusDescription: String = ""
     var points: String = ""
     var pasaPoints: String = ""
     
     var cardNumber: String = ""
+    var cardNumber2: String = ""
+    var cardNumber3: String = ""
     var cardPin: String = ""
     var mobileNumber: String = ""
 }

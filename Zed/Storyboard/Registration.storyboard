@@ -936,6 +936,7 @@
                     <connections>
                         <outlet property="textNumber" destination="Wzs-oP-S9t" id="XcH-je-Un9"/>
                         <segue destination="Ocv-Wi-Mnj" kind="presentation" identifier="goToConnectToFacebook" id="ewa-Pj-hKg"/>
+                        <segue destination="yz5-pS-f0y" kind="presentation" identifier="goToPinVerification" id="7LK-UH-luW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FSy-oj-NE8" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2018,6 +2019,7 @@
         <image name="withoutcard" width="375" height="667"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="VhR-aV-RMN"/>
+        <segue reference="4ez-bp-XhT"/>
+        <segue reference="7LK-UH-luW"/>
     </inferredMetricsTieBreakers>
 </document>
