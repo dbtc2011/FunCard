@@ -1077,7 +1077,7 @@ class BranchesViewController : UIViewController, GMSMapViewDelegate {
         
         let btnOkay = UIButton(type: .Custom)
         btnOkay.frame = CGRect(x: (self.viewInfo!.frame.width-100)/2, y: lblHoursLabel.frame.maxY+10, width: 100, height: 40)
-        //btnOkay.addTarget(self, action: #selector(ModulesViewController.didPressOkay(_:)), forControlEvents: .TouchUpInside)
+        btnOkay.addTarget(self, action: #selector(ModulesViewController.didPressOkay(_:)), forControlEvents: .TouchUpInside)
         btnOkay.backgroundColor = UIColor.blueColor()
         btnOkay.setTitleColor(UIColor.yellowColor(), forState: .Normal)
         btnOkay.setTitle("OK", forState: .Normal)
