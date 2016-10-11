@@ -47,56 +47,10 @@ class ViewController: UIViewController , UIScrollViewDelegate, WebServiceDelegat
     //MARK: View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.setupUI()
         
         // Do any additional setup after loading the view, typically from a nib.
         
-        self.view.backgroundColor = UIColor.blackColor()
-        
-        
-        self.pageIndicator.enabled = false
-        self.pageIndicator.numberOfPages = 8
-        self.pageIndicator.currentPageIndicatorTintColor = UIColor.yellowColor()
-        self.pageIndicator.pageIndicatorTintColor = UIColor.blueColor()
-        
-        self.scrollView.showsHorizontalScrollIndicator = false
-        self.scrollView.showsVerticalScrollIndicator = false
-        
-        let buttonHeight = (self.view.frame.size.height * 0.45) - 45
-        
-        var xLocation = (self.view.frame.size.width/2) - (buttonHeight/2)
-        
-        for index in 1...8 {
-            
-            let imageName = "category" +  "\(index)"
-            
-            let button = UIButton(type: UIButtonType.Custom)
-            button.tag = index
-            button.frame = CGRectMake(xLocation, 15, buttonHeight, buttonHeight)
-            button.setImage(UIImage(named: imageName), forState: UIControlState.Normal)
-            //uncomment
-            button.addTarget(self, action: #selector(ViewController.buttonsClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-            self.scrollView.addSubview(button)
-            
-            xLocation = xLocation + self.view.frame.size.width
-            
-        }
-        
-        self.scrollView.scrollEnabled = true
-        self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width * 8, 0)
-        
-        self.header.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height * 0.23)
-        self.header.setupView()
-        self.view.addSubview(self.header)
-        
-        self.cardInfo.frame = CGRectMake(10, self.view.frame.size.height - ((self.view.frame.size.height * 0.43) + 165 + 20), self.view.frame.size.width - 20, 155)
-        
-        if self.view.frame.size.height == 480 {
-            self.cardInfo.frame = CGRectMake(10, self.view.frame.size.height - ((self.view.frame.size.height * 0.43) + 155 + 5), self.view.frame.size.width - 20, 135)
-        }
-        self.cardInfo.setupView()
-        self.view.addSubview(self.cardInfo)
-        
-        self.webService.delegate = self
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -113,6 +67,68 @@ class ViewController: UIViewController , UIScrollViewDelegate, WebServiceDelegat
     }
     
     //MARK: Methods
+    func setupUI() {
+        
+        self.webService.delegate = self
+        dispatch_async(dispatch_get_main_queue()) { () -> Void in
+            self.view.backgroundColor = UIColor.blackColor()
+            self.pageIndicator.enabled = false
+            self.pageIndicator.numberOfPages = 8
+            self.pageIndicator.currentPageIndicatorTintColor = UIColor.yellowColor()
+            self.pageIndicator.pageIndicatorTintColor = UIColor.blueColor()
+            
+            self.scrollView.showsHorizontalScrollIndicator = false
+            self.scrollView.showsVerticalScrollIndicator = false
+            
+            let buttonHeight = (UIScreen.mainScreen().bounds.size.height * 0.45) - 45
+            
+            var xLocation = (UIScreen.mainScreen().bounds.size.width/2) - (buttonHeight/2)
+            
+            for index in 1...8 {
+                
+                let imageName = "category" +  "\(index)"
+                
+                let button = UIButton(type: UIButtonType.Custom)
+                button.tag = index
+                button.frame = CGRectMake(xLocation, 15, buttonHeight, buttonHeight)
+                button.setImage(UIImage(named: imageName), forState: UIControlState.Normal)
+                //uncomment
+                button.addTarget(self, action: #selector(ViewController.buttonsClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+                self.scrollView.addSubview(button)
+                
+                xLocation = xLocation + self.view.frame.size.width
+                
+            }
+            
+            self.scrollView.scrollEnabled = true
+            self.scrollView.contentSize = CGSizeMake(UIScreen.mainScreen().bounds.size.width * 8, 0)
+            
+            self.header.frame = CGRectMake(0, 0, UIScreen.mainScreen().bounds.size.width, UIScreen.mainScreen().bounds.size.height * 0.23)
+            self.header.setupView()
+            self.view.addSubview(self.header)
+            
+            self.cardInfo.frame = CGRectMake(10, UIScreen.mainScreen().bounds.size.height - ((UIScreen.mainScreen().bounds.size.height * 0.43) + 165 + 20), UIScreen.mainScreen().bounds.size.width - 20, 155)
+            
+            if UIScreen.mainScreen().bounds.size.height == 480 {
+                self.cardInfo.frame = CGRectMake(10, UIScreen.mainScreen().bounds.size.height - ((UIScreen.mainScreen().bounds.size.height * 0.43) + 155 + 5), UIScreen.mainScreen().bounds.size.width - 20, 135)
+            }
+            self.cardInfo.setupView()
+            self.view.addSubview(self.cardInfo)
+            
+            for contstraints in self.view.constraints {
+                
+                if contstraints.firstItem as? NSObject == self.scrollView && contstraints.firstAttribute == NSLayoutAttribute.Height {
+                    
+                    contstraints.constant = (UIScreen.mainScreen().bounds.size.height) * 0.47
+                    
+                    
+                }
+            
+            }
+        }
+        
+    }
+    
     func goToSurvey() {
         
         let storyboard = UIStoryboard(name: "Survey", bundle: nil)

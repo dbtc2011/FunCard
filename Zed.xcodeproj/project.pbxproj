@@ -13,6 +13,8 @@
 		3585538D1CD880F300C1DD55 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3585538B1CD880F300C1DD55 /* LaunchScreen.storyboard */; };
 		358553951CD8811400C1DD55 /* ObjectModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 358553941CD8811400C1DD55 /* ObjectModel.swift */; };
 		358553991CD8A30000C1DD55 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 358553981CD8A30000C1DD55 /* QuartzCore.framework */; };
+		500748AF1DACB7F800094D4D /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500748AE1DACB7F800094D4D /* NavigationController.swift */; };
+		500748B11DACBBDF00094D4D /* Navigation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 500748B01DACBBDF00094D4D /* Navigation.storyboard */; };
 		5025E4821D34D99900699AFB /* ModulesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025E4811D34D99900699AFB /* ModulesViewController.swift */; };
 		5025E4871D34DBA600699AFB /* Survey.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5025E4861D34DBA600699AFB /* Survey.storyboard */; };
 		5025E4891D34E90B00699AFB /* ViewSubclass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025E4881D34E90B00699AFB /* ViewSubclass.swift */; };
@@ -45,6 +47,8 @@
 		3585538E1CD880F300C1DD55 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		358553941CD8811400C1DD55 /* ObjectModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjectModel.swift; sourceTree = "<group>"; };
 		358553981CD8A30000C1DD55 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		500748AE1DACB7F800094D4D /* NavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NavigationController.swift; path = Controllers/NavigationController.swift; sourceTree = "<group>"; };
+		500748B01DACBBDF00094D4D /* Navigation.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Navigation.storyboard; path = Storyboard/Navigation.storyboard; sourceTree = "<group>"; };
 		5025E4811D34D99900699AFB /* ModulesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ModulesViewController.swift; path = Controllers/ModulesViewController.swift; sourceTree = "<group>"; };
 		5025E4861D34DBA600699AFB /* Survey.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Survey.storyboard; path = Storyboard/Survey.storyboard; sourceTree = "<group>"; };
 		5025E4881D34E90B00699AFB /* ViewSubclass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewSubclass.swift; path = Views/ViewSubclass.swift; sourceTree = "<group>"; };
@@ -135,6 +139,7 @@
 			children = (
 				5025E48A1D34E93300699AFB /* ViewController.swift */,
 				5025E4811D34D99900699AFB /* ModulesViewController.swift */,
+				500748AE1DACB7F800094D4D /* NavigationController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -155,6 +160,7 @@
 				5025E4861D34DBA600699AFB /* Survey.storyboard */,
 				50EAD4281D409D160086704F /* Pulsify.storyboard */,
 				50E116D51D49DFA90012F6DB /* Registration.storyboard */,
+				500748B01DACBBDF00094D4D /* Navigation.storyboard */,
 			);
 			name = Storyboard;
 			sourceTree = "<group>";
@@ -264,6 +270,7 @@
 				50E116D61D49DFA90012F6DB /* Registration.storyboard in Resources */,
 				50EAD4291D409D160086704F /* Pulsify.storyboard in Resources */,
 				67A29CB21DA0F1E7006AEF95 /* Branches.storyboard in Resources */,
+				500748B11DACBBDF00094D4D /* Navigation.storyboard in Resources */,
 				67A29CB31DA0F1E7006AEF95 /* PasaPoints.storyboard in Resources */,
 				358553881CD880F300C1DD55 /* Main.storyboard in Resources */,
 			);
@@ -332,6 +339,7 @@
 				67003D3C1DAA89F4006C78F1 /* Branches+CoreDataProperties.swift in Sources */,
 				5025E4821D34D99900699AFB /* ModulesViewController.swift in Sources */,
 				358553951CD8811400C1DD55 /* ObjectModel.swift in Sources */,
+				500748AF1DACB7F800094D4D /* NavigationController.swift in Sources */,
 				5025E4891D34E90B00699AFB /* ViewSubclass.swift in Sources */,
 				358553831CD880F300C1DD55 /* AppDelegate.swift in Sources */,
 				67003D3B1DAA89F4006C78F1 /* User.swift in Sources */,

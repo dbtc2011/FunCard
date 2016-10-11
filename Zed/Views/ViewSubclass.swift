@@ -373,6 +373,12 @@ class DropDownFormTableViewCell : UITableViewCell {
     
 }
 
+class MenuTableViewCell : UITableViewCell {
+    
+    @IBOutlet weak var label: UILabel!
+    
+}
+
 //MARK: - Custom Picker View
 protocol CustomPickerViewDelegate {
     
