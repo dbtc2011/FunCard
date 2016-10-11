@@ -49,6 +49,7 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
         self.tableView.separatorColor = UIColor.clearColor()
         
         self.surveyContent.removeAllObjects()
+        
     }
     
     
@@ -161,7 +162,7 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
     
     @IBAction func backClicked(sender: UIButton) {
         
-        self.dismissViewControllerAnimated(true) { 
+        self.dismissViewControllerAnimated(true) {
             
             
         }
@@ -570,8 +571,6 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
     
     private func sendPulsify(answer: String) {
         
-        
-        
         self.view.userInteractionEnabled = false
         let predicate = NSPredicate(format: "self.city == '\(self.labelCity!.text!)' && self.branchName == '\(self.labelBranch!.text!)'")
         let arrayFiltered = (self.arrayBranches as NSArray).filteredArrayUsingPredicate(predicate) as NSArray
@@ -586,13 +585,6 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
         
         self.webService.name = "sendPulsify"
         self.webService.connectAndSendPulsifyInfo(dictWebService)
-//        self.request = WebServiceFor.RestMethod
-//        
-//        self.restPostWithParameter(dictWebService)
-        
-        
-        
-        
         
     }
     
@@ -631,6 +623,7 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
             
             let button = views as! UIButton
             button.backgroundColor = UIColor.blueColor()
+            
         }
         
         sender.backgroundColor = UIColor.greenColor()
@@ -733,7 +726,6 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
                 self.updateContent()
                 
             }
-            
             
         }
         
@@ -905,29 +897,39 @@ class BranchesViewController : UIViewController, GMSMapViewDelegate {
     @IBOutlet var lblMerchantName: UILabel!
     @IBOutlet var lblCityName: UILabel!
     
-    var viewInfo: UIView?
-    var lblBranchName: UILabel?
-    var lblAddress: UILabel?
-    var lblPhone: UILabel?
-    var lblHours: UILabel?
-    
     var arrayBranches = [BranchModelRepresentation]()
     var arrayCities = [String]()
+    
+    var currentBranch: BranchModelRepresentation?
+    
+    @IBOutlet weak var viewInfoHolder: UIView!
+    @IBOutlet weak var viewInfoBranch: UIView!
+    @IBOutlet weak var labelCityInfo: UILabel!
+    @IBOutlet weak var labelAddressInfo: UILabel!
+    @IBOutlet weak var labelPhoneInfo: UILabel!
+    @IBOutlet weak var labelHoursInfo: UILabel!
+    @IBOutlet weak var imgInfoBackground: UIImageView!
+    
     
     //MARK: View Life Cycle
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         
         self.presetValues()
         self.fetchBranches()
+        
+        self.viewInfoBranch.layer.cornerRadius = 5
+        self.imgInfoBackground.layer.cornerRadius = 5
+        self.viewInfoBranch.layer.backgroundColor = UIColor.blackColor().CGColor
+        
     }
     
     //MARK: - Memory Management
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        self.setupGoogleMaps()
     }
     
     //MARK: - Methods
@@ -941,19 +943,18 @@ class BranchesViewController : UIViewController, GMSMapViewDelegate {
     private func setupGoogleMaps() {
         self.mapView.delegate = self
         
-        // Create a GMSCameraPosition that tells the map to display the
-        // coordinate -33.86,151.20 at zoom level 6.
-        //120.97978
-        //14.600593
-        let camera = GMSCameraPosition.cameraWithLatitude(7.050053, longitude: 125.587933, zoom: 15.0)
+        self.currentBranch = self.arrayBranches[0]
+        self.lblCityName.text = self.currentBranch!.city
+        let camera = GMSCameraPosition.cameraWithLatitude(Double(self.currentBranch!.longitude)!, longitude: Double(self.currentBranch!.latitude)!, zoom: 15.0)
         self.mapView.camera = camera
         mapView.myLocationEnabled = true
         
+        
         // Creates a marker in the center of the map.
         let marker = GMSMarker()
-        marker.position = CLLocationCoordinate2D(latitude: 7.050053, longitude: 125.587933)
-        marker.title = "Sydney"
-        marker.snippet = "Australia"
+        marker.position = CLLocationCoordinate2D(latitude: Double(self.currentBranch!.longitude)!, longitude: Double(self.currentBranch!.latitude)!)
+        marker.title = self.currentBranch!.city
+        marker.snippet = self.currentBranch!.branchName
         marker.map = self.mapView
     }
     
@@ -1007,6 +1008,11 @@ class BranchesViewController : UIViewController, GMSMapViewDelegate {
                 if !self.arrayCities.contains(city) {
                     self.arrayCities.append(city)
                 }
+                
+                dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                    self.setupGoogleMaps()
+                }
+                
             } else {
                 print("format/server error")
             }
@@ -1015,92 +1021,38 @@ class BranchesViewController : UIViewController, GMSMapViewDelegate {
         self.lblCityName.text = self.arrayCities.first
     }
     
-    private func setupInfoView() {
-        self.viewInfo = UIView(frame: CGRect(x: 30, y: self.mapView.frame.origin.y+30.0, width: self.mapView.frame.width-60.0, height: 270.0))
-        self.viewInfo!.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.6)
-        self.viewInfo!.layer.borderColor = UIColor.blackColor().CGColor
-        self.viewInfo!.layer.borderWidth = 1.0
-        self.viewInfo!.layer.cornerRadius = 5.0
-        self.view.addSubview(self.viewInfo!)
-        
-        let imgViewPin = UIImageView(image: UIImage(named: "pin"))
-        imgViewPin.frame = CGRect(x: 20, y: 20, width: 30, height: 50)
-        imgViewPin.backgroundColor = UIColor.whiteColor() //delete this when image is available
-        self.viewInfo!.addSubview(imgViewPin)
-        
-        let lblBranchName = UILabel(frame: CGRect(x: imgViewPin.frame.maxX+20, y: imgViewPin.frame.minY+((imgViewPin.frame.height-30)/2), width: (self.viewInfo!.frame.width-imgViewPin.frame.width)-60, height: 30))
-        lblBranchName.textColor = UIColor.blueColor()
-        lblBranchName.text = "Nepomall Angeles".uppercaseString
-        lblBranchName.minimumScaleFactor = 0.3
-        lblBranchName.adjustsFontSizeToFitWidth = true
-        self.viewInfo!.addSubview(lblBranchName)
-        
-        let lblAddressLabel = UILabel(frame: CGRect(x: imgViewPin.frame.minX, y: imgViewPin.frame.maxY+10, width: 80, height: 60))
-        lblAddressLabel.textColor = UIColor.yellowColor()
-        lblAddressLabel.text = "Address:"
-        lblAddressLabel.textAlignment = .Right
-        self.viewInfo!.addSubview(lblAddressLabel)
-        
-        self.lblAddress = UILabel(frame: CGRect(x: lblAddressLabel.frame.minX+lblAddressLabel.frame.width+40, y: lblAddressLabel.frame.origin.y, width: self.viewInfo!.frame.width-lblAddressLabel.frame.width-110, height: lblAddressLabel.frame.height))
-        self.lblAddress!.textColor = UIColor.whiteColor()
-        self.lblAddress!.text = "G/F 108 Nepomall Plaridel St Angeles City SPP"
-        self.lblAddress!.numberOfLines = 0
-        self.lblAddress!.minimumScaleFactor = 0.3
-        self.lblAddress!.adjustsFontSizeToFitWidth = true
-        self.viewInfo!.addSubview(self.lblAddress!)
-        
-        let lblPhoneLabel = UILabel(frame: CGRect(x: imgViewPin.frame.minX, y: lblAddressLabel.frame.maxY+10, width: lblAddressLabel.frame.width, height: 20))
-        lblPhoneLabel.textColor = UIColor.yellowColor()
-        lblPhoneLabel.text = "Phone:"
-        lblPhoneLabel.textAlignment = .Right
-        self.viewInfo!.addSubview(lblPhoneLabel)
-        
-        self.lblPhone = UILabel(frame: CGRect(x: self.lblAddress!.frame.origin.x, y: lblPhoneLabel.frame.origin.y, width:  self.lblAddress!.frame.width, height: lblPhoneLabel.frame.height))
-        self.lblPhone!.textColor = UIColor.whiteColor()
-        self.lblPhone!.text = "045-8886208"
-        self.lblPhone!.minimumScaleFactor = 0.3
-        self.lblPhone!.adjustsFontSizeToFitWidth = true
-        self.viewInfo!.addSubview(self.lblPhone!)
-        
-        let lblHoursLabel = UILabel(frame: CGRect(x: imgViewPin.frame.minX, y: lblPhoneLabel.frame.maxY+10, width: lblAddressLabel.frame.width, height: 20))
-        lblHoursLabel.textColor = UIColor.yellowColor()
-        lblHoursLabel.text = "Phone:"
-        lblHoursLabel.textAlignment = .Right
-        self.viewInfo!.addSubview(lblHoursLabel)
-        
-        self.lblHours = UILabel(frame: CGRect(x: self.lblAddress!.frame.origin.x, y: lblHoursLabel.frame.origin.y, width:  self.lblAddress!.frame.width, height: lblHoursLabel.frame.height))
-        self.lblHours!.textColor = UIColor.whiteColor()
-        self.lblHours!.text = "10am - 8pm"
-        self.lblHours!.minimumScaleFactor = 0.3
-        self.lblHours!.adjustsFontSizeToFitWidth = true
-        self.viewInfo!.addSubview(self.lblHours!)
-        
-        let btnOkay = UIButton(type: .Custom)
-        btnOkay.frame = CGRect(x: (self.viewInfo!.frame.width-100)/2, y: lblHoursLabel.frame.maxY+10, width: 100, height: 40)
-        btnOkay.addTarget(self, action: #selector(ModulesViewController.didPressOkay(_:)), forControlEvents: .TouchUpInside)
-        btnOkay.backgroundColor = UIColor.blueColor()
-        btnOkay.setTitleColor(UIColor.yellowColor(), forState: .Normal)
-        btnOkay.setTitle("OK", forState: .Normal)
-        btnOkay.layer.cornerRadius = 5.0
-        self.viewInfo!.addSubview(btnOkay)
-    }
-    
     private func displayBranchInfo(branch: BranchModelRepresentation) {
-        if self.viewInfo == nil {
-            self.setupInfoView()
-        }
+//        if self.viewInfo == nil {
+//            self.setupInfoView()
+//        }
+        
+        self.viewInfoHolder.hidden = false
         
         //display info here
-        self.lblBranchName!.text = branch.branchName
-        self.lblAddress!.text = branch.address
-        self.lblPhone!.text = branch.contactNumber
-        self.lblHours!.text = branch.operatingHours
+//        self.lblBranchName!.text = self.currentBranch!.branchName
+        self.labelCityInfo.text = self.currentBranch!.branchName
+        self.labelAddressInfo!.text = self.currentBranch!.address
+        self.labelPhoneInfo!.text = self.currentBranch!.contactNumber
+        self.labelHoursInfo!.text = self.currentBranch!.operatingHours
     }
     
-    func didPressOkay(sender: UIButton) {
-        self.viewInfo!.removeFromSuperview()
+    //MARK: Button Actions
+    @IBAction func didPressBackButton(sender: UIButton) {
+        
+        self.dismissViewControllerAnimated(true) {
+            
+            
+        }
+        
     }
     
+    
+    @IBAction func didPressButtonOkay(sender: UIButton) {
+        
+        self.viewInfoHolder.hidden = true
+        
+    }
+   
     //MARK: IBAction Delegate
     @IBAction func didPressBranches(sender: AnyObject) {
         if self.arrayCities.count > 0 {
@@ -1116,12 +1068,16 @@ class BranchesViewController : UIViewController, GMSMapViewDelegate {
                     let arrayFiltered = (self.arrayBranches as NSArray).filteredArrayUsingPredicate(predicate) as NSArray
                     
                     let content = arrayFiltered[0] as! BranchModelRepresentation
+                    self.currentBranch = content
                     
-                    print(content.address)
-                    print(content.city)
-                    print(content.branchName)
                     let target = CLLocationCoordinate2D(latitude: Double(content.longitude)!, longitude: Double(content.latitude)!)
                     self.mapView.camera = GMSCameraPosition.cameraWithTarget(target, zoom: 15)
+                    
+                    let marker = GMSMarker()
+                    marker.position = CLLocationCoordinate2D(latitude: Double(content.longitude)!, longitude: Double(content.latitude)!)
+                    marker.title = content.city
+                    marker.snippet = content.branchName
+                    marker.map = self.mapView
                     
                 }
 
@@ -1136,6 +1092,7 @@ class BranchesViewController : UIViewController, GMSMapViewDelegate {
     //MARK: - GMSMapView Delegate
     func mapView(mapView: GMSMapView, didTapMarker marker: GMSMarker) -> Bool {
         
+        self.displayBranchInfo(self.currentBranch!)
         
         return true
     }
