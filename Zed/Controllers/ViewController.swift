@@ -16,7 +16,7 @@ let userID = "7E177E8A450562B7B65F77881C817B47"
 let password = "FDFE29DF7FF33EC5078B03F468B7A04C"
 let merchantID = "581"
 let timezone = "GMT+800"
-let channel = "app"
+let channel = "WEB"
 let currency = "PHP"
 
 func generateTransactionIDWithTimestamp(timeStamp: String) -> String {
@@ -642,8 +642,8 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
         cell.labelQuestion.text = dictionary["label"] as? String
         cell.labelContent.text = dictionary["value"] as? String
         
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "didTap:")
-        cell.button.addTarget(self, action: "didTap:", forControlEvents: .TouchUpInside)
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(RegsitrationFormViewController.didTap(_:)))
+        cell.button.addTarget(self, action: #selector(RegsitrationFormViewController.didTap(_:)), forControlEvents: .TouchUpInside)
         cell.viewContentHolder.tag = indexPath.row
         cell.button.tag = indexPath.row
         cell.viewContentHolder.addGestureRecognizer(tapGestureRecognizer)

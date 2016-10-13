@@ -116,6 +116,24 @@ class BranchModelRepresentation: NSObject {
         self.operatingHours = dictBranch["operatingHours"] as! String
         self.province = dictBranch["province"] as! String
     }
+    
+    func convertManagedObjectToBranchModelInfo(managedObject: Branch) {
+        self.branchId = managedObject.branchId!
+        self.branchName = managedObject.branchName!
+        self.address = managedObject.address!
+        self.city = managedObject.city!
+        self.contactNumber = managedObject.contactNumber!
+        self.is24Hours = managedObject.is24Hours as! Bool
+        self.isBreakFast = managedObject.isBreakfast as! Bool
+        self.isDelivery = managedObject.isDelivery as! Bool
+        self.isDriverThru = managedObject.isDriveThru as! Bool
+        self.isSmartParty = managedObject.isSmartParty as! Bool
+        self.latitude = managedObject.latitude!
+        self.longitude = managedObject.longitude!
+        self.merchant = managedObject.merchant!
+        self.operatingHours = managedObject.operatingHours!
+        self.province = managedObject.province!
+    }
 }
 
 //MARK: - Menu Content Model

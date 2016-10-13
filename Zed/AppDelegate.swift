@@ -18,7 +18,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
 //    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 //        // Override point for customization after application launch.
 //        
@@ -45,7 +44,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FBSDKAppEvents.activateApp()
         
 //        GMSServices.provideAPIKey("AIzaSyCVRfcouQyXB28ZfvbLZmoKjN5jOJJnJ1I")
-        GMSServices.provideAPIKey("AIzaSyD6JXMgaHDYTeiDB0eGplaWIGtLlZs4nKE")
     }
     
     func applicationWillTerminate(application: UIApplication) {
@@ -58,6 +56,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         application.registerForRemoteNotifications()
+        
+        GMSServices.provideAPIKey("AIzaSyD6JXMgaHDYTeiDB0eGplaWIGtLlZs4nKE")
+        syncBranchesData()
+        
+        self.identifyRootViewController()
         
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         //        return true
@@ -129,6 +132,93 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 abort()
             }
         }
+    }
+    
+    //MARK: - Methods
+    func identifyRootViewController() {
+        let managedContext = self.managedObjectContext
+        let fetchRequest = NSFetchRequest(entityName: "User")
+        
+        do {
+            let results = try managedContext.executeFetchRequest(fetchRequest) as! [User]
+            
+            if results.count > 0 {
+                let predicate = NSPredicate(format: "self.isLoggedIn == 1")
+                let arrayFiltered = (results as NSArray).filteredArrayUsingPredicate(predicate)
+                
+                if arrayFiltered.count > 0 {
+                    //change root view controller
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    let controller = storyboard.instantiateInitialViewController()
+                    self.window?.rootViewController = controller
+                }
+            }
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
+        }
+    }
+    
+    func syncBranchesData() {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+            let url:NSURL = NSURL(string: "http://180.87.143.52/funapp/GetBranches.aspx")!
+            let session = NSURLSession.sharedSession()
+            
+            let request = NSMutableURLRequest(URL: url)
+            request.HTTPMethod = "GET"
+            request.cachePolicy = NSURLRequestCachePolicy.ReloadIgnoringCacheData
+            
+            let task = session.dataTaskWithRequest(request) {
+                (
+                let data, let response, let error) in
+                
+                guard let _:NSData = data, let _:NSURLResponse = response  where error == nil else {
+                    print("error")
+                    return
+                }
+                
+                do {
+                    let objJSON = try NSJSONSerialization.JSONObjectWithData(data!, options: [])
+                    let results = objJSON["Result"]
+                    if results == nil {
+                        print("format/server error")
+                        return
+                    }
+                    
+                    if results!!.isKindOfClass(NSArray.classForCoder()) {
+                        (results  as! NSArray).enumerateObjectsUsingBlock { (obj, index, stop) -> Void in
+                            if obj.isKindOfClass(NSDictionary.classForCoder()) {
+                                //save to core data
+                                let managedContext = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType) //on bg thread
+                                managedContext.persistentStoreCoordinator = self.persistentStoreCoordinator
+                                
+                                let entity =  NSEntityDescription.entityForName("Branch", inManagedObjectContext:managedContext)
+                                let branch = NSManagedObject(entity: entity!, insertIntoManagedObjectContext: managedContext) as! Branch
+                                
+                                let dictObj = obj as! NSDictionary
+                                branch.convertDictionaryToBranchManagedObject(dictObj)
+                                
+                                do {
+                                    try managedContext.save()
+                                } catch let error as NSError  {
+                                    print("Could not save \(error), \(error.userInfo)")
+                                }
+                                
+                            } else {
+                                print("format/server error")
+                            }
+                        }
+                    } else {
+                        print("format/server error")
+                    }
+                    
+                } catch let error as NSError {
+                    print("json error: \(error.localizedDescription)")
+                }
+                
+            }
+            
+            task.resume()
+        })
     }
 }
 

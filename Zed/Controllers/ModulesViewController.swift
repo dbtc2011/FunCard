@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import GoogleMaps
 import ActionSheetPicker_3_0
+import CoreData
 
 let keyResult = "Result"
 let keyOptions = "ANSWERSET"
@@ -17,8 +18,6 @@ let keyOption = "ANSWER"
 let keyOptionID = "AID"
 let keyQuestion = "QUESTION"
 let keyQuestionID = "QID"
-
-
 
 //MARK: - Survey View Controller
 class SurveyViewController : UIViewController, UITableViewDataSource, UITableViewDelegate, WebServiceDelegate {
@@ -416,10 +415,7 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
         self.labelOption4.text = dictionary1["row4"] as? String
         self.labelQuestion.text = dictionary1["question"] as? String
         
-        
         self.labelNumber.text = "\(self.counter + 1)"
-        
-        
     }
     
     private func updateContent() {
@@ -466,8 +462,6 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
         self.resetValues()
         self.resetButtons()
         self.setButtonColors()
-        
-        
     }
     
     func resetButtons() {
@@ -563,10 +557,38 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
     
     //MARK: API Call
     private func getBranches() {
-        
+        /*
         self.webService.name = "getBranch"
         self.webService.connectAndGetBranches()
-
+        */
+        
+        //fetch branches from core data
+        let qualityOfServiceClass = QOS_CLASS_BACKGROUND
+        let backgroundQueue = dispatch_get_global_queue(qualityOfServiceClass, 0)
+        dispatch_async(backgroundQueue, {
+            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+            let managedContext = appDelegate.managedObjectContext
+            let fetchRequest = NSFetchRequest(entityName: "Branch")
+            
+            do {
+                let results = try managedContext.executeFetchRequest(fetchRequest) as! [Branch]
+                
+                if results.count > 0 {
+                    (results as NSArray).enumerateObjectsUsingBlock({ (obj, index, stop) in
+                        let branch = BranchModelRepresentation()
+                        branch.convertManagedObjectToBranchModelInfo(obj as! Branch)
+                        self.arrayBranches.append(branch)
+                        
+                        let city = branch.city
+                        if !self.arrayCities.contains(city) {
+                            self.arrayCities.append(city)
+                        }
+                    })
+                }
+            } catch let error as NSError {
+                print("Could not fetch \(error), \(error.userInfo)")
+            }
+        })
     }
     
     private func sendPulsify(answer: String) {
@@ -888,7 +910,6 @@ class PasaPointsViewController : UIViewController, WebServiceDelegate {
 
 //MARK: - Branches View Controller
 
-
 class BranchesViewController : UIViewController, GMSMapViewDelegate {
     
     //MARK: Properties
@@ -910,7 +931,6 @@ class BranchesViewController : UIViewController, GMSMapViewDelegate {
     @IBOutlet weak var labelHoursInfo: UILabel!
     @IBOutlet weak var imgInfoBackground: UIImageView!
     
-    
     //MARK: View Life Cycle
     
     override func viewDidLoad() {
@@ -918,7 +938,6 @@ class BranchesViewController : UIViewController, GMSMapViewDelegate {
         super.viewDidLoad()
         
         self.presetValues()
-        self.fetchBranches()
         
         self.viewInfoBranch.layer.cornerRadius = 5
         self.imgInfoBackground.layer.cornerRadius = 5
@@ -926,13 +945,19 @@ class BranchesViewController : UIViewController, GMSMapViewDelegate {
         
     }
     
-    //MARK: - Memory Management
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+    
+        self.fetchBranches()
+    }
+    
+    //MARK: Memory Management
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
     }
     
-    //MARK: - Methods
+    //MARK: Methods
     
     private func presetValues() {
         //for now
@@ -959,6 +984,7 @@ class BranchesViewController : UIViewController, GMSMapViewDelegate {
     }
     
     private func fetchBranches() {
+        /*
         let url:NSURL = NSURL(string: "http://180.87.143.52/funapp/GetBranches.aspx")!
         let session = NSURLSession.sharedSession()
         
@@ -992,6 +1018,35 @@ class BranchesViewController : UIViewController, GMSMapViewDelegate {
         }
         
         task.resume()
+        */
+        
+        //fetch branches from core data
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let managedContext = appDelegate.managedObjectContext
+        let fetchRequest = NSFetchRequest(entityName: "Branch")
+        
+        do {
+            let results = try managedContext.executeFetchRequest(fetchRequest) as! [Branch]
+            
+            if results.count > 0 {
+                (results as NSArray).enumerateObjectsUsingBlock({ (obj, index, stop) in
+                    let branch = BranchModelRepresentation()
+                    branch.convertManagedObjectToBranchModelInfo(obj as! Branch)
+                    self.arrayBranches.append(branch)
+                    
+                    let city = branch.city
+                    if !self.arrayCities.contains(city) {
+                        self.arrayCities.append(city)
+                    }
+                })
+                
+                dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                    self.setupGoogleMaps()
+                }
+            }
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
+        }
     }
     
     private func parseResponse(arrayJSON: NSArray) {
@@ -1056,7 +1111,7 @@ class BranchesViewController : UIViewController, GMSMapViewDelegate {
     //MARK: IBAction Delegate
     @IBAction func didPressBranches(sender: AnyObject) {
         if self.arrayCities.count > 0 {
-            ActionSheetStringPicker.showPickerWithTitle("", rows: self.arrayCities, initialSelection: 0, doneBlock: { (picker, index, value) -> Void in
+            ActionSheetStringPicker.showPickerWithTitle("", rows: self.arrayCities, initialSelection: self.arrayCities.indexOf(self.lblCityName.text!)!, doneBlock: { (picker, index, value) -> Void in
                 
                 dispatch_async(dispatch_get_main_queue()) { () -> Void in
                     

@@ -24,8 +24,8 @@
 		67003D351DAA8669006C78F1 /* FunCard.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 67003D331DAA8669006C78F1 /* FunCard.xcdatamodeld */; };
 		67003D3A1DAA89F4006C78F1 /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67003D361DAA89F4006C78F1 /* User+CoreDataProperties.swift */; };
 		67003D3B1DAA89F4006C78F1 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67003D371DAA89F4006C78F1 /* User.swift */; };
-		67003D3C1DAA89F4006C78F1 /* Branches+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67003D381DAA89F4006C78F1 /* Branches+CoreDataProperties.swift */; };
-		67003D3D1DAA89F4006C78F1 /* Branches.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67003D391DAA89F4006C78F1 /* Branches.swift */; };
+		67003D3C1DAA89F4006C78F1 /* Branch+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67003D381DAA89F4006C78F1 /* Branch+CoreDataProperties.swift */; };
+		67003D3D1DAA89F4006C78F1 /* Branch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67003D391DAA89F4006C78F1 /* Branch.swift */; };
 		676171F41D6EC12E00389472 /* WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 676171F21D6EC12E00389472 /* WebService.swift */; };
 		676171F51D6EC12E00389472 /* XMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 676171F31D6EC12E00389472 /* XMLParser.swift */; };
 		6763D36F1D7694E40033DEA6 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6763D36E1D7694E40033DEA6 /* FBSDKCoreKit.framework */; };
@@ -58,8 +58,8 @@
 		67003D341DAA8669006C78F1 /* FunCard.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FunCard.xcdatamodel; sourceTree = "<group>"; };
 		67003D361DAA89F4006C78F1 /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "User+CoreDataProperties.swift"; path = "Core Data/User+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		67003D371DAA89F4006C78F1 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = User.swift; path = "Core Data/User.swift"; sourceTree = "<group>"; };
-		67003D381DAA89F4006C78F1 /* Branches+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Branches+CoreDataProperties.swift"; path = "Core Data/Branches+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		67003D391DAA89F4006C78F1 /* Branches.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Branches.swift; path = "Core Data/Branches.swift"; sourceTree = "<group>"; };
+		67003D381DAA89F4006C78F1 /* Branch+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Branch+CoreDataProperties.swift"; path = "Core Data/Branch+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		67003D391DAA89F4006C78F1 /* Branch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Branch.swift; path = "Core Data/Branch.swift"; sourceTree = "<group>"; };
 		676171F21D6EC12E00389472 /* WebService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WebService.swift; path = Subclass/WebService.swift; sourceTree = "<group>"; };
 		676171F31D6EC12E00389472 /* XMLParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XMLParser.swift; path = Subclass/XMLParser.swift; sourceTree = "<group>"; };
 		6763D36E1D7694E40033DEA6 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "Pods/../build/Debug-iphoneos/FBSDKCoreKit/FBSDKCoreKit.framework"; sourceTree = "<group>"; };
@@ -188,8 +188,8 @@
 			children = (
 				67003D371DAA89F4006C78F1 /* User.swift */,
 				67003D361DAA89F4006C78F1 /* User+CoreDataProperties.swift */,
-				67003D391DAA89F4006C78F1 /* Branches.swift */,
-				67003D381DAA89F4006C78F1 /* Branches+CoreDataProperties.swift */,
+				67003D391DAA89F4006C78F1 /* Branch.swift */,
+				67003D381DAA89F4006C78F1 /* Branch+CoreDataProperties.swift */,
 			);
 			name = ManagedObjects;
 			sourceTree = "<group>";
@@ -334,9 +334,9 @@
 				676171F51D6EC12E00389472 /* XMLParser.swift in Sources */,
 				676171F41D6EC12E00389472 /* WebService.swift in Sources */,
 				5025E48B1D34E93300699AFB /* ViewController.swift in Sources */,
-				67003D3D1DAA89F4006C78F1 /* Branches.swift in Sources */,
+				67003D3D1DAA89F4006C78F1 /* Branch.swift in Sources */,
 				67003D351DAA8669006C78F1 /* FunCard.xcdatamodeld in Sources */,
-				67003D3C1DAA89F4006C78F1 /* Branches+CoreDataProperties.swift in Sources */,
+				67003D3C1DAA89F4006C78F1 /* Branch+CoreDataProperties.swift in Sources */,
 				5025E4821D34D99900699AFB /* ModulesViewController.swift in Sources */,
 				358553951CD8811400C1DD55 /* ObjectModel.swift in Sources */,
 				500748AF1DACB7F800094D4D /* NavigationController.swift in Sources */,
@@ -470,6 +470,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = Loktu.zed;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "a08fb1e8-3ee8-4bcd-9dba-6059740b7d8c";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Debug;
 		};
@@ -493,6 +494,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = Loktu.zed;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "a08fb1e8-3ee8-4bcd-9dba-6059740b7d8c";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Release;
 		};
