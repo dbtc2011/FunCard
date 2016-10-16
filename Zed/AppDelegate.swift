@@ -147,10 +147,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 let arrayFiltered = (results as NSArray).filteredArrayUsingPredicate(predicate)
                 
                 if arrayFiltered.count > 0 {
+                    /*
                     //change root view controller
                     let storyboard = UIStoryboard(name: "Main", bundle: nil)
                     let controller = storyboard.instantiateInitialViewController()
-                    self.window?.rootViewController = controller
+                    */
+                    let storyboard = UIStoryboard(name: "Navigation", bundle: nil)
+                    let vc = storyboard.instantiateViewControllerWithIdentifier("navigationView") as! FunNavigationController
+                    self.window?.rootViewController = vc
                 }
             }
         } catch let error as NSError {

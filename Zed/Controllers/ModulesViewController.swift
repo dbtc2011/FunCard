@@ -918,6 +918,8 @@ class BranchesViewController : UIViewController, GMSMapViewDelegate {
     @IBOutlet var lblMerchantName: UILabel!
     @IBOutlet var lblCityName: UILabel!
     
+    var user: UserModelRepresentation?
+    
     var arrayBranches = [BranchModelRepresentation]()
     var arrayCities = [String]()
     

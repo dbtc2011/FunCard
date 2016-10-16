@@ -30,6 +30,19 @@ func generateTimeStamp() -> String {
     return dateFormatter.stringFromDate(NSDate())
 }
 
+
+protocol HomePageDelegate {
+    
+    func homeGoToSurvey()
+    func homeGoToPulsify()
+    func homeGoToBranches()
+    func homeGoToPasaPoints()
+    func homeGoToPromos()
+    func homeGoToGames()
+    func homeGoToCoupons()
+    func homeGoToProducts()
+    
+}
 //MARK: - View Controller
 class ViewController: UIViewController , UIScrollViewDelegate, WebServiceDelegate {
     
@@ -40,6 +53,7 @@ class ViewController: UIViewController , UIScrollViewDelegate, WebServiceDelegat
     
     var user: UserModelRepresentation?
     let webService = WebService()
+    var delegate: HomePageDelegate?
 
     @IBOutlet weak var pageIndicator: UIPageControl!
     @IBOutlet weak var scrollView: UIScrollView!
@@ -59,8 +73,28 @@ class ViewController: UIViewController , UIScrollViewDelegate, WebServiceDelegat
         self.view.bringSubviewToFront(self.cardInfo)
         self.view.bringSubviewToFront(self.header)
         self.getDashboardInfo()
+        
+        
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        for contstraints in self.view.constraints {
+            
+            if contstraints.firstItem as? NSObject == self.view {
+                
+                if contstraints.firstAttribute == NSLayoutAttribute.Height {
+                    contstraints.constant = UIScreen.mainScreen().bounds.size.height
+                }else if contstraints.firstAttribute == NSLayoutAttribute.Width {
+                    contstraints.constant = UIScreen.mainScreen().bounds.size.width
+                }
+                
+            }
+        }
+        
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -96,7 +130,7 @@ class ViewController: UIViewController , UIScrollViewDelegate, WebServiceDelegat
                 button.addTarget(self, action: #selector(ViewController.buttonsClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
                 self.scrollView.addSubview(button)
                 
-                xLocation = xLocation + self.view.frame.size.width
+                xLocation = xLocation + UIScreen.mainScreen().bounds.size.width
                 
             }
             
@@ -115,16 +149,7 @@ class ViewController: UIViewController , UIScrollViewDelegate, WebServiceDelegat
             self.cardInfo.setupView()
             self.view.addSubview(self.cardInfo)
             
-            for contstraints in self.view.constraints {
-                
-                if contstraints.firstItem as? NSObject == self.scrollView && contstraints.firstAttribute == NSLayoutAttribute.Height {
-                    
-                    contstraints.constant = (UIScreen.mainScreen().bounds.size.height) * 0.47
-                    
-                    
-                }
             
-            }
         }
         
     }
@@ -241,22 +266,23 @@ class ViewController: UIViewController , UIScrollViewDelegate, WebServiceDelegat
     //MARK: Button Actions
     func buttonsClicked(sender: UIButton) {
         
+        
         if sender.tag == 1 {
-            self.goToPulsify()
+            self.delegate?.homeGoToPulsify()
         }else if sender.tag == 2 {
-            
+            self.delegate?.homeGoToPromos()
         }else if sender.tag == 3 {
-            
+            self.delegate?.homeGoToProducts()
         }else if sender.tag == 4 {
-            self.goToPasaPoints()
+            self.delegate?.homeGoToGames()
         }else if sender.tag == 5 {
-            
+            self.delegate?.homeGoToCoupons()
         }else if sender.tag == 6 {
-            self.goToSurvey()
+            self.delegate?.homeGoToSurvey()
         }else if sender.tag == 7 {
-            self.goToPasaPoints()
+            self.delegate?.homeGoToPasaPoints()
         }else if sender.tag == 8 {
-            self.goToBranches()
+            self.delegate?.homeGoToBranches()
         }
         
     }
@@ -871,6 +897,7 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
         user.birthday = self.tableContents[2]["value"] as? String
         user.address = self.tableContents[4]["value"] as? String
         user.email = self.tableContents[5]["value"] as? String
+        user.points = "0.0"
         user.mobileNumber = self.user!.mobileNumber
         user.isLoggedIn = true
         
@@ -931,10 +958,13 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
             if status == "0" {
                 //save to core data
                 self.saveUserToCoreData()
-                
+                /*
                 //proceed to dashboard
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let vc = storyboard.instantiateViewControllerWithIdentifier("main") as! ViewController
+                */
+                let storyboard = UIStoryboard(name: "Navigation", bundle: nil)
+                let vc = storyboard.instantiateViewControllerWithIdentifier("navigationView") as! FunNavigationController
                 vc.user = self.user!
                 self.presentViewController(vc, animated: true, completion: nil)
                 
@@ -982,10 +1012,13 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
             if status == "0" {
                 //save to core data here
                 self.saveUserToCoreData()
-                
+                /*
                 //proceed to dashboard
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let vc = storyboard.instantiateViewControllerWithIdentifier("main")
+                */
+                let storyboard = UIStoryboard(name: "Navigation", bundle: nil)
+                let vc = storyboard.instantiateViewControllerWithIdentifier("navigationView") as! FunNavigationController
                 self.presentViewController(vc, animated: true, completion: nil)
                 
                 return
@@ -1001,10 +1034,13 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
             if status == "0" {
                 //save to core data here
                 self.saveUserToCoreData()
-                
+                /*
                 //proceed to dashboard
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let vc = storyboard.instantiateViewControllerWithIdentifier("main")
+                 */
+                let storyboard = UIStoryboard(name: "Navigation", bundle: nil)
+                let vc = storyboard.instantiateViewControllerWithIdentifier("navigationView") as! FunNavigationController
                 self.presentViewController(vc, animated: true, completion: nil)
                 
                 return
@@ -1518,6 +1554,10 @@ class PinVerificationViewController : UIViewController, WebServiceDelegate {
         user.email = self.user!.email
         user.mobileNumber = self.user!.mobileNumber
         user.isLoggedIn = true
+        user.points = "0.0"
+        user.cardNumber1 = ""
+        user.cardNumber2 = ""
+        user.cardNumber3 = ""
         
         do {
             try managedContext.save()
@@ -1551,12 +1591,20 @@ class PinVerificationViewController : UIViewController, WebServiceDelegate {
             //save to core data
             self.saveUserToCoreData()
             
+            
+            /*
             //proceed to dashboard
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let vc = storyboard.instantiateViewControllerWithIdentifier("main") as! ViewController
             vc.user = self.user
             
             self.presentViewController(vc, animated: true, completion: nil)
+            */
+            
+            let storyboard = UIStoryboard(name: "Navigation", bundle: nil)
+            let vc = storyboard.instantiateViewControllerWithIdentifier("navigationView") as! FunNavigationController
+            self.presentViewController(vc, animated: true, completion: nil)
+            
             return
         }
         
