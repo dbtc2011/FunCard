@@ -305,8 +305,7 @@
                                         <exclude reference="vOa-ua-HHX"/>
                                     </mask>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                    <rect key="frame" x="355" y="28" width="35" height="35"/>
+                                <variation key="heightClass=regular-widthClass=compact">
                                     <mask key="constraints">
                                         <include reference="YqM-dq-jhn"/>
                                         <include reference="vOa-ua-HHX"/>
