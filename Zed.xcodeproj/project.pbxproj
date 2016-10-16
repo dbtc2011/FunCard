@@ -33,6 +33,7 @@
 		6763D3731D7694ED0033DEA6 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6763D3721D7694ED0033DEA6 /* FBSDKLoginKit.framework */; };
 		67A29CB21DA0F1E7006AEF95 /* Branches.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67A29CB01DA0F1E7006AEF95 /* Branches.storyboard */; };
 		67A29CB31DA0F1E7006AEF95 /* PasaPoints.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67A29CB11DA0F1E7006AEF95 /* PasaPoints.storyboard */; };
+		67C0270F1DB3BB22003D11D7 /* Products.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67C0270E1DB3BB22003D11D7 /* Products.storyboard */; };
 		A756E49C980244889A36123A /* Pods_Zed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A46C81A50E1D170E037957D /* Pods_Zed.framework */; };
 /* End PBXBuildFile section */
 
@@ -67,6 +68,7 @@
 		6763D3721D7694ED0033DEA6 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = "Pods/../build/Debug-iphoneos/FBSDKLoginKit/FBSDKLoginKit.framework"; sourceTree = "<group>"; };
 		67A29CB01DA0F1E7006AEF95 /* Branches.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Branches.storyboard; path = Storyboard/Branches.storyboard; sourceTree = "<group>"; };
 		67A29CB11DA0F1E7006AEF95 /* PasaPoints.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = PasaPoints.storyboard; path = Storyboard/PasaPoints.storyboard; sourceTree = "<group>"; };
+		67C0270E1DB3BB22003D11D7 /* Products.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Products.storyboard; path = Storyboard/Products.storyboard; sourceTree = "<group>"; };
 		F68C8322F13D4FDD1AFE2C8D /* Pods-Zed.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Zed.release.xcconfig"; path = "Pods/Target Support Files/Pods-Zed/Pods-Zed.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -161,6 +163,7 @@
 				50EAD4281D409D160086704F /* Pulsify.storyboard */,
 				50E116D51D49DFA90012F6DB /* Registration.storyboard */,
 				500748B01DACBBDF00094D4D /* Navigation.storyboard */,
+				67C0270E1DB3BB22003D11D7 /* Products.storyboard */,
 			);
 			name = Storyboard;
 			sourceTree = "<group>";
@@ -272,6 +275,7 @@
 				67A29CB21DA0F1E7006AEF95 /* Branches.storyboard in Resources */,
 				500748B11DACBBDF00094D4D /* Navigation.storyboard in Resources */,
 				67A29CB31DA0F1E7006AEF95 /* PasaPoints.storyboard in Resources */,
+				67C0270F1DB3BB22003D11D7 /* Products.storyboard in Resources */,
 				358553881CD880F300C1DD55 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

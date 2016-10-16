@@ -214,19 +214,7 @@ class ViewController: UIViewController , UIScrollViewDelegate, WebServiceDelegat
             
             if results.count > 0 {
                 let user = results.last!
-                
-                self.user!.facebookID = user.facebookId!
-                self.user!.firstName = user.firstName!
-                self.user!.lastName = user.lastName!
-                self.user!.gender = user.gender!
-                self.user!.birthday = user.birthday!
-                self.user!.address = user.address!
-                self.user!.email = user.email!
-                self.user!.mobileNumber = user.mobileNumber!
-                self.user!.points = user.points!
-                self.user!.cardNumber = user.cardNumber1!
-                self.user!.cardNumber2 = user.cardNumber2!
-                self.user!.cardNumber3 = user.cardNumber3!
+                self.user!.convertManagedObjectToUserModelInfo(user)
             }
             
         } catch let error as NSError {
@@ -245,6 +233,8 @@ class ViewController: UIViewController , UIScrollViewDelegate, WebServiceDelegat
             if results.count > 0 {
                 let user = results.last!
                 user.points = self.user!.points
+                
+                //update display here
                 
                 try managedContext.save()
             }
@@ -265,8 +255,6 @@ class ViewController: UIViewController , UIScrollViewDelegate, WebServiceDelegat
     
     //MARK: Button Actions
     func buttonsClicked(sender: UIButton) {
-        
-        
         if sender.tag == 1 {
             self.delegate?.homeGoToPulsify()
         }else if sender.tag == 2 {
@@ -655,6 +643,8 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
             cell.viewLabelHolder.layer.cornerRadius = 10
             cell.selectionStyle = UITableViewCellSelectionStyle.None
             
+            cell.layer.cornerRadius = 3.0
+            
             return cell
             
         }
@@ -668,10 +658,16 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
         cell.labelQuestion.text = dictionary["label"] as? String
         cell.labelContent.text = dictionary["value"] as? String
         
+        if (dictionary["type"] as? String) == "gender" {
+            cell.button.setImage(UIImage(named: "dropdown"), forState: .Normal)
+        }
+        
+        //uncomment
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(RegsitrationFormViewController.didTap(_:)))
         cell.button.addTarget(self, action: #selector(RegsitrationFormViewController.didTap(_:)), forControlEvents: .TouchUpInside)
         cell.viewContentHolder.tag = indexPath.row
         cell.button.tag = indexPath.row
+        //uncomment
         cell.viewContentHolder.addGestureRecognizer(tapGestureRecognizer)
         
         cell.selectionStyle = UITableViewCellSelectionStyle.None
@@ -897,7 +893,10 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
         user.birthday = self.tableContents[2]["value"] as? String
         user.address = self.tableContents[4]["value"] as? String
         user.email = self.tableContents[5]["value"] as? String
-        user.points = "0.0"
+        user.points = "0.00"
+        user.cardNumber1 = self.user!.cardNumber
+        user.cardNumber2 = ""
+        user.cardNumber3 = ""
         user.mobileNumber = self.user!.mobileNumber
         user.isLoggedIn = true
         
@@ -1108,12 +1107,14 @@ class RegistrationCardViewController : UIViewController {
 }
 
 //MARK: - Registration Mobile Number View Controller
-class RegistrationMobileNumberViewController : UIViewController, WebServiceDelegate {
+class RegistrationMobileNumberViewController : UIViewController, WebServiceDelegate, UITextFieldDelegate {
     
     //MARK: Properties
     let user = UserModelRepresentation()
     let webService = WebService()
     
+    @IBOutlet var viewHolderMobileNumber: UIView!
+    @IBOutlet var viewHolderLabel: UIView!
     @IBOutlet weak var textNumber: UITextField!
     
     //MARK: View life cycle
@@ -1121,13 +1122,17 @@ class RegistrationMobileNumberViewController : UIViewController, WebServiceDeleg
         self.webService.delegate = self
     }
     
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.viewHolderMobileNumber.layer.cornerRadius = 5.0
+        self.viewHolderLabel.layer.cornerRadius = 5.0
     }
     
     //MARK: IBAction Delegate
     @IBAction func buttonClicked(sender: UIButton) {
         
+        self.textNumber.resignFirstResponder()
         let number = self.textNumber.text!
         
         if number.hasPrefix("639") == false {
@@ -1186,6 +1191,12 @@ class RegistrationMobileNumberViewController : UIViewController, WebServiceDeleg
             //error
             break
         }
+    }
+    
+    //MARK: UITextfield Delegate
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
     
     //MARK: WebService Delegate
@@ -1300,7 +1311,7 @@ class RegistrationMobileNumberViewController : UIViewController, WebServiceDeleg
 }
 
 //MARK: - Registration Card Number View Controller
-class RegistrationCardNumberViewController : UIViewController, WebServiceDelegate {
+class RegistrationCardNumberViewController : UIViewController, WebServiceDelegate, UITextFieldDelegate {
     
     //MARK: Properties
     let user = UserModelRepresentation()
@@ -1308,18 +1319,28 @@ class RegistrationCardNumberViewController : UIViewController, WebServiceDelegat
     
     @IBOutlet weak var txtCardNumber: UITextField!
     @IBOutlet weak var txtMobileNumber: UITextField!
+    @IBOutlet var viewHolderCardNumber: UIView!
+    @IBOutlet var viewHolderMobileNumber: UIView!
+    @IBOutlet var viewHolderCardNumberLabel: UIView!
+    @IBOutlet var viewHolderMobileNumberLabel: UIView!
     
     //MARK: View life cycle
     override func viewDidLoad() {
         self.webService.delegate = self
     }
     
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.viewHolderCardNumber.layer.cornerRadius = 5.0
+        self.viewHolderCardNumberLabel.layer.cornerRadius = 5.0
+        self.viewHolderMobileNumber.layer.cornerRadius = 5.0
+        self.viewHolderMobileNumberLabel.layer.cornerRadius = 5.0
     }
     
     //MARK: IBAction Delegate
     @IBAction func buttonClicked(sender: UIButton) {
+        self.view.endEditing(true)
         let mobileNumber = self.txtMobileNumber.text!
         
         if mobileNumber.hasPrefix("639") == false {
@@ -1336,7 +1357,44 @@ class RegistrationCardNumberViewController : UIViewController, WebServiceDelegat
         self.webService.connectAndRegColMsisdnWithMsisdn(mobileNumber)
     }
     
-    //MARK: Methods
+    //MARK: UITextfield Delegate
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        
+        return true
+    }
+    
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        if textField == self.txtMobileNumber {
+            return true
+        }
+        
+        let text = textField.text! + string
+        let charCount = text.characters.count
+        
+        if string.characters.count == 0 {
+            if charCount%5 == 0 {
+                textField.text = textField.text!.substringToIndex(textField.text!.endIndex.predecessor())
+            }
+            return true
+        }
+        
+        if charCount == 0 {
+            return true
+        }
+        
+        if charCount == 20 {
+            return false
+        }
+        
+        let dashCount = charCount/4
+        if (charCount-dashCount)%4 == 0 {
+            textField.text = textField.text! + "-"
+        }
+        
+        return true
+    }
     
     
     //MARK: Methods
@@ -1510,21 +1568,26 @@ class RegistrationCardNumberViewController : UIViewController, WebServiceDelegat
 }
 
 //MARK: - Pin Verification View Controller
-class PinVerificationViewController : UIViewController, WebServiceDelegate {
+class PinVerificationViewController : UIViewController, WebServiceDelegate, UITextFieldDelegate {
     
     //MARK: Properties
     let webService = WebService()
     var user: UserModelRepresentation?
     
     @IBOutlet weak var txtPinCode: UITextField!
+    @IBOutlet var viewCenter: UIView!
+    @IBOutlet var viewTextfield: UIView!
     
     //MARK: View life cycle
     override func viewDidLoad() {
         self.webService.delegate = self
     }
     
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.viewCenter.layer.cornerRadius = 5.0
+        self.viewTextfield.layer.cornerRadius = 5.0
     }
     
     //MARK: Methods
@@ -1554,8 +1617,8 @@ class PinVerificationViewController : UIViewController, WebServiceDelegate {
         user.email = self.user!.email
         user.mobileNumber = self.user!.mobileNumber
         user.isLoggedIn = true
-        user.points = "0.0"
-        user.cardNumber1 = ""
+        user.points = "0.00"
+        user.cardNumber1 = self.user!.cardNumber
         user.cardNumber2 = ""
         user.cardNumber3 = ""
         
@@ -1564,6 +1627,12 @@ class PinVerificationViewController : UIViewController, WebServiceDelegate {
         } catch let error as NSError  {
             print("Could not save \(error), \(error.userInfo)")
         }
+    }
+    
+    //MARK: UITextfield Delegate
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
     
     //MARK: IBAction Delegate
@@ -1674,12 +1743,12 @@ class RegistrationFacebookViewController : UIViewController, FBSDKLoginButtonDel
     //MARK: Properties
     var user: UserModelRepresentation?
     
-    @IBOutlet var facebookButton: FBSDKLoginButton!
+    @IBOutlet var facebookButton: UIButton!
 
     //MARK: View life cycle
     override func viewDidLoad() {
-        self.facebookButton.delegate = self
-        self.facebookButton.readPermissions = ["public_profile", "email", "user_friends"]
+        //self.facebookButton.delegate = self
+        //self.facebookButton.readPermissions = ["public_profile", "email", "user_friends"]
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -1688,7 +1757,57 @@ class RegistrationFacebookViewController : UIViewController, FBSDKLoginButtonDel
     
     //MARK: Button Actions
     @IBAction func fbButtonClicked(sender: FBSDKLoginButton) {
-        
+        let fbLoginManager : FBSDKLoginManager = FBSDKLoginManager()
+        fbLoginManager.logInWithReadPermissions(["public_profile", "email", "user_friends"], fromViewController: self) { (result, error) -> Void in
+            if (error == nil){
+                let fbloginresult : FBSDKLoginManagerLoginResult = result
+                if(fbloginresult.grantedPermissions.contains("email"))
+                {
+                    self.getFBUserData()
+                }
+            }
+        }
+    }
+    
+    func getFBUserData(){
+        if((FBSDKAccessToken.currentAccessToken()) != nil){
+            FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name, picture.type(large), email"]).startWithCompletionHandler({ (connection, result, error) -> Void in
+                if (error == nil){
+                    //everything works print the user data
+                    print(result)
+                    
+                    if (FBSDKAccessToken.currentAccessToken() != nil) {
+                        
+                        let parametersDictionary = NSMutableDictionary()
+                        parametersDictionary.setObject("id", forKey: "fields")
+                        parametersDictionary.setObject("first_name, last_name, picture, email, gender", forKey: "fields")
+                        let request = FBSDKGraphRequest(graphPath: "me", parameters: parametersDictionary as AnyObject as! [NSObject : AnyObject], HTTPMethod: "GET")
+                        request.startWithCompletionHandler({ (connection, result, error) -> Void in
+                            
+                            
+                            
+                            let dictionaryResult = result as! NSDictionary
+                            print(result)
+                            //                let dictionaryPicture = dictionaryResult["picture"] as! NSDictionary
+                            //                let dictionaryData = dictionaryPicture["data"] as! NSDictionary
+                            
+                            //self.user = nil
+                            //self.user = UserModelRepresentation()
+                            
+                            self.user?.firstName = dictionaryResult["first_name"] as! String
+                            self.user?.email = dictionaryResult["email"] as! String
+                            self.user?.lastName = dictionaryResult["last_name"] as! String
+                            self.user?.facebookID = dictionaryResult["id"] as! String
+                            self.user?.gender = dictionaryResult["gender"] as! String
+                            
+                            self.performSegueWithIdentifier("goToForm", sender: nil)
+                            
+                            
+                        })
+                    }
+                }
+            })
+        }
     }
     
     @IBAction func buttonClicked(sender: UIButton) {

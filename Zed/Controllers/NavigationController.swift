@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-
+import CoreData
 
 class FunNavigationController : UIViewController, UITableViewDelegate, UITableViewDataSource, HomePageDelegate {
     
@@ -23,13 +23,13 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
     
     @IBOutlet weak var tableMenu: UITableView!
     
-    
     var user: UserModelRepresentation?
     
     var home : ViewController?
     var survey : SurveyViewController?
+    var products : ProductsViewController?
     var pulsify : PulsifyViewController?
-    var branches : BranchesViewController?
+    var branches : BranchSelectionViewContoller?
     var pasaPoints : PasaPointsViewController?
     
     
@@ -52,9 +52,8 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         self.tableMenu.dataSource = self
         
         self.setupNavigation()
-        
+        self.setupUser()
     }
-    
     
     //MARK: Method
     func setupNavigation() {
@@ -68,13 +67,35 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         
     }
     
+    func setupUser() {
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let managedContext = appDelegate.managedObjectContext
+        let fetchRequest = NSFetchRequest(entityName: "User")
+        
+        do {
+            let results = try managedContext.executeFetchRequest(fetchRequest) as! [User]
+            
+            if results.count > 0 {
+                let predicate = NSPredicate(format: "self.isLoggedIn == 1")
+                let arrayFiltered = (results as NSArray).filteredArrayUsingPredicate(predicate)
+                
+                if arrayFiltered.count > 0 {
+                    self.user = UserModelRepresentation()
+                    self.user!.convertManagedObjectToUserModelInfo(arrayFiltered.first! as! User)
+                }
+            }
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
+        }
+    }
+    
     //MARK: Action Navigation
     func goToHomePage() {
     
         self.removeSubviewsOfMain()
         self.toggleMenuButton()
     }
-
+    
     func goToSurvey() {
         
         if self.survey != nil {
@@ -94,6 +115,29 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         self.survey = storyboard.instantiateViewControllerWithIdentifier("surveyController") as? SurveyViewController
         self.survey!.user = self.user!
         self.viewMain.addSubview(self.survey!.view)
+        
+        self.toggleMenuButton()
+        
+    }
+    
+    func goToProducts() {
+        
+        if self.products != nil {
+            self.toggleMenuButton()
+            return
+        }
+        
+        self.removeSubviewsOfMain()
+        
+        if self.user == nil {
+            
+            self.user = UserModelRepresentation()
+            
+        }
+        
+        let storyboard = UIStoryboard(name: "Products", bundle: nil)
+        self.products = storyboard.instantiateInitialViewController() as? ProductsViewController
+        self.viewMain.addSubview(self.products!.view)
         
         self.toggleMenuButton()
         
@@ -132,15 +176,8 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         
         self.removeSubviewsOfMain()
         
-        if self.user == nil {
-            
-            self.user = UserModelRepresentation()
-            
-        }
-        
         let storyboard = UIStoryboard(name: "Branches", bundle: nil)
-        self.branches = storyboard.instantiateInitialViewController()! as? BranchesViewController
-        self.branches!.user = self.user!
+        self.branches = storyboard.instantiateInitialViewController()! as? BranchSelectionViewContoller
         self.viewMain.addSubview(self.branches!.view)
         
         self.toggleMenuButton()
@@ -168,6 +205,36 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         self.viewMain.addSubview(self.pasaPoints!.view)
         
         self.toggleMenuButton()
+    }
+    
+    func logout() {
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let managedContext = appDelegate.managedObjectContext
+        let fetchRequest = NSFetchRequest(entityName: "User")
+        
+        do {
+            let results = try managedContext.executeFetchRequest(fetchRequest) as! [User]
+            
+            if results.count > 0 {
+                let predicate = NSPredicate(format: "self.isLoggedIn == 1")
+                let arrayFiltered = (results as NSArray).filteredArrayUsingPredicate(predicate)
+                
+                if arrayFiltered.count > 0 {
+                    let user = arrayFiltered.first as! User
+                    user.isLoggedIn = 0
+                    
+                    try managedContext.save()
+                    
+                    //back to start
+                    let storyboard = UIStoryboard(name: "Registration", bundle: nil)
+                    let vc = storyboard.instantiateInitialViewController()
+                    appDelegate.window!.rootViewController = vc
+                }
+            }
+            
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
+        }
     }
     
     func removeSubviewsOfMain() {
@@ -304,8 +371,7 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
             //promos
             self.toggleMenuButton()
         }else if indexPath.row == 3 {
-            // Products
-            self.toggleMenuButton()
+            self.goToProducts()
         }else if indexPath.row == 4 {
             //games
             self.toggleMenuButton()
@@ -318,6 +384,8 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
             self.goToPasaPoints()
         }else if indexPath.row == 8 {
             self.goToBranches()
+        }else if indexPath.row == 9 {
+            self.logout()
         }
      
     }
@@ -364,7 +432,8 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
     
     func homeGoToProducts() {
         
-        
+        self.buttonMenu.selected = !self.buttonMenu.selected
+        self.goToProducts()
     }
     
     func homeGoToPromos() {

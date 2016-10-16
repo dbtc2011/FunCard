@@ -799,7 +799,7 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
 }
 
 //MARK: - Pasa Points View Controller
-class PasaPointsViewController : UIViewController, WebServiceDelegate {
+class PasaPointsViewController : UIViewController, WebServiceDelegate, UITextFieldDelegate {
     
     //MARK: Properties
     
@@ -866,7 +866,7 @@ class PasaPointsViewController : UIViewController, WebServiceDelegate {
         
         dictParams["transactionId"] = generateTransactionIDWithTimestamp(timeStamp)
         dictParams["senderCardNumber"] = self.user!.cardNumber
-        dictParams["receiverCardNumber"] = self.textCardNumber.text
+        dictParams["receiverCardNumber"] = self.textCardNumber.text!.stringByReplacingOccurrencesOfString("-", withString: "")
         dictParams["amount"] = self.textAmount.text
         dictParams["currency"] = currency
         dictParams["paymentChannel"] = channel
@@ -875,6 +875,45 @@ class PasaPointsViewController : UIViewController, WebServiceDelegate {
         
         //print(dictParams)
         self.webService.connectAndPasaPointsWithInfo(dictParams)
+    }
+    
+    //MARK: UITextfield Delegate
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        
+        return true
+    }
+    
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        if textField == self.textAmount {
+            return true
+        }
+        
+        let text = textField.text! + string
+        let charCount = text.characters.count
+        
+        if string.characters.count == 0 {
+            if charCount%5 == 0 {
+                textField.text = textField.text!.substringToIndex(textField.text!.endIndex.predecessor())
+            }
+            return true
+        }
+        
+        if charCount == 0 {
+            return true
+        }
+        
+        if charCount == 20 {
+            return false
+        }
+        
+        let dashCount = charCount/4
+        if (charCount-dashCount)%4 == 0 {
+            textField.text = textField.text! + "-"
+        }
+        
+        return true
     }
     
     //MARK: WebService Delegate
@@ -908,6 +947,19 @@ class PasaPointsViewController : UIViewController, WebServiceDelegate {
     }
 }
 
+//MARK: - Branch Selection View Controller
+
+class BranchSelectionViewContoller : UIViewController {
+    
+    //MARK: View Life Cycle
+    
+    override func viewDidLoad() {
+        
+        super.viewDidLoad()
+        
+    }
+}
+
 //MARK: - Branches View Controller
 
 class BranchesViewController : UIViewController, GMSMapViewDelegate {
@@ -917,6 +969,7 @@ class BranchesViewController : UIViewController, GMSMapViewDelegate {
     @IBOutlet weak var mapView: GMSMapView!
     @IBOutlet var lblMerchantName: UILabel!
     @IBOutlet var lblCityName: UILabel!
+    @IBOutlet var viewHolderCity: UIView!
     
     var user: UserModelRepresentation?
     
@@ -931,7 +984,6 @@ class BranchesViewController : UIViewController, GMSMapViewDelegate {
     @IBOutlet weak var labelAddressInfo: UILabel!
     @IBOutlet weak var labelPhoneInfo: UILabel!
     @IBOutlet weak var labelHoursInfo: UILabel!
-    @IBOutlet weak var imgInfoBackground: UIImageView!
     
     //MARK: View Life Cycle
     
@@ -941,22 +993,18 @@ class BranchesViewController : UIViewController, GMSMapViewDelegate {
         
         self.presetValues()
         
-        self.viewInfoBranch.layer.cornerRadius = 5
-        self.imgInfoBackground.layer.cornerRadius = 5
-        self.viewInfoBranch.layer.backgroundColor = UIColor.blackColor().CGColor
-        
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-    
+        
         self.fetchBranches()
-    }
-    
-    //MARK: Memory Management
-    
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
+        
+        self.viewHolderCity.layer.cornerRadius = 8.0
+        self.viewInfoBranch.layer.cornerRadius = 8.0
+        self.viewInfoBranch.layer.borderWidth = 2.0
+        self.viewInfoBranch.layer.borderColor = UIColor.blackColor().CGColor
+        
     }
     
     //MARK: Methods
@@ -982,6 +1030,7 @@ class BranchesViewController : UIViewController, GMSMapViewDelegate {
         marker.position = CLLocationCoordinate2D(latitude: Double(self.currentBranch!.longitude)!, longitude: Double(self.currentBranch!.latitude)!)
         marker.title = self.currentBranch!.city
         marker.snippet = self.currentBranch!.branchName
+        marker.icon = UIImage(named: "mapPin")
         marker.map = self.mapView
     }
     
@@ -1087,7 +1136,7 @@ class BranchesViewController : UIViewController, GMSMapViewDelegate {
         
         //display info here
 //        self.lblBranchName!.text = self.currentBranch!.branchName
-        self.labelCityInfo.text = self.currentBranch!.branchName
+        self.labelCityInfo.text = self.currentBranch!.branchName.uppercaseString
         self.labelAddressInfo!.text = self.currentBranch!.address
         self.labelPhoneInfo!.text = self.currentBranch!.contactNumber
         self.labelHoursInfo!.text = self.currentBranch!.operatingHours
@@ -1134,6 +1183,7 @@ class BranchesViewController : UIViewController, GMSMapViewDelegate {
                     marker.position = CLLocationCoordinate2D(latitude: Double(content.longitude)!, longitude: Double(content.latitude)!)
                     marker.title = content.city
                     marker.snippet = content.branchName
+                    marker.icon = UIImage(named: "mapPin")
                     marker.map = self.mapView
                     
                 }
@@ -1152,5 +1202,29 @@ class BranchesViewController : UIViewController, GMSMapViewDelegate {
         self.displayBranchInfo(self.currentBranch!)
         
         return true
+    }
+}
+
+let productsLink = "http://180.87.143.55/fun.menu/"
+
+//MARK: - Products View Controller
+
+class ProductsViewController : UIViewController {
+    
+    //MARK: Properties
+    @IBOutlet var lblStore: UILabel!
+    @IBOutlet var webView: UIWebView!
+    
+    //MARK: View Life Cycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.webView.loadRequest(NSURLRequest(URL: NSURL(string: productsLink)!))
+    }
+    
+    //MARK: Button Actions
+    @IBAction func didPressBack(sender: AnyObject) {
+        //go back to dashboard
     }
 }

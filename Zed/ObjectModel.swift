@@ -47,6 +47,21 @@ class UserModelRepresentation: NSObject {
     var cardNumber3: String = ""
     var cardPin: String = ""
     var mobileNumber: String = ""
+    
+    func convertManagedObjectToUserModelInfo(managedObject: User) {
+        self.facebookID = managedObject.facebookId!
+        self.firstName = managedObject.firstName!
+        self.lastName = managedObject.lastName!
+        self.gender = managedObject.gender!
+        self.birthday = managedObject.birthday!
+        self.address = managedObject.address!
+        self.email = managedObject.email!
+        self.mobileNumber = managedObject.mobileNumber!
+        self.points = managedObject.points!
+        self.cardNumber = managedObject.cardNumber1!
+        self.cardNumber2 = managedObject.cardNumber2!
+        self.cardNumber3 = managedObject.cardNumber3!
+    }
 }
 
 //MARK: - Transaction Model

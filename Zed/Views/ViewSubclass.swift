@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-
+import CoreData
 
 //MARK: - Point Header View
 class PointHeaderView: UIView {
@@ -52,8 +52,41 @@ class PointHeaderView: UIView {
         let buttonLogOff = UIButton(type: UIButtonType.Custom)
         buttonLogOff.frame = CGRectMake(self.frame.size.width - 45, 10, 35, 35)
         buttonLogOff.setImage(UIImage(named: "logoff"), forState: UIControlState.Normal)
+        //uncomment
+        buttonLogOff.addTarget(self, action: #selector(PointHeaderView.logoffButtonClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.addSubview(buttonLogOff)
+    }
+    
+    //MARK: Button Actions
+    func logoffButtonClicked(sender: UIButton) {
         
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let managedContext = appDelegate.managedObjectContext
+        let fetchRequest = NSFetchRequest(entityName: "User")
+        
+        do {
+            let results = try managedContext.executeFetchRequest(fetchRequest) as! [User]
+            
+            if results.count > 0 {
+                let predicate = NSPredicate(format: "self.isLoggedIn == 1")
+                let arrayFiltered = (results as NSArray).filteredArrayUsingPredicate(predicate)
+                
+                if arrayFiltered.count > 0 {
+                    let user = arrayFiltered.first as! User
+                    user.isLoggedIn = 0
+                    
+                    try managedContext.save()
+                    
+                    //back to start
+                    let storyboard = UIStoryboard(name: "Registration", bundle: nil)
+                    let vc = storyboard.instantiateInitialViewController()
+                    appDelegate.window!.rootViewController = vc
+                }
+            }
+            
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
+        }
     }
     
 }
