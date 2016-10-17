@@ -28,7 +28,7 @@
                                         <variation key="heightClass=regular-widthClass=compact" constant="18"/>
                                     </constraint>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                 <color key="textColor" red="0.1176470588" green="0.61960784310000006" blue="0.90196078430000004" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                                 <variation key="default">
@@ -46,7 +46,7 @@
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Rc-zQ-vr7">
                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
-                                <color key="backgroundColor" red="0.83570620890000002" green="0.69721422700000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="80" id="9cI-a3-JoK">
                                         <variation key="heightClass=regular-widthClass=compact" constant="100"/>
@@ -55,7 +55,7 @@
                                         <variation key="heightClass=regular-widthClass=compact" constant="40"/>
                                     </constraint>
                                 </constraints>
-                                <state key="normal" title="Submit">
+                                <state key="normal" image="submit">
                                     <color key="titleColor" red="0.074509803920000006" green="0.3411764706" blue="0.61960784310000006" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <variation key="default">
@@ -85,7 +85,7 @@
                                                 <variation key="heightClass=regular-widthClass=compact" constant="50"/>
                                             </constraint>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="25"/>
                                         <color key="textColor" red="0.1176470588" green="0.61960784310000006" blue="0.90196078430000004" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                         <variation key="default">
@@ -101,12 +101,6 @@
                                             </mask>
                                         </variation>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Are you employed" lineBreakMode="tailTruncation" numberOfLines="10" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="Htx-xJ-MUI">
-                                        <rect key="frame" x="-42" y="-21" width="42" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="13"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Utw-z0-AZP">
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -118,9 +112,9 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="240" height="99"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gl7-aw-XoY">
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="radio" translatesAutoresizingMaskIntoConstraints="NO" id="gl7-aw-XoY">
                                                             <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                                                            <color key="backgroundColor" red="0.09934996129113717" green="0.4814531379933692" blue="0.8793223391732985" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="20" id="UHL-fH-gvq">
                                                                     <variation key="heightClass=regular-widthClass=compact" constant="16"/>
@@ -202,7 +196,7 @@
                                             <constraint firstAttribute="width" constant="100" id="XDU-yC-aOv"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
-                                        <state key="normal" title="Next &gt;">
+                                        <state key="normal">
                                             <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <variation key="default">
@@ -221,6 +215,12 @@
                                             <action selector="nextClicked:" destination="P2w-be-Kvi" eventType="touchUpInside" id="ZAl-m5-Kt9"/>
                                         </connections>
                                     </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Are you employed" lineBreakMode="tailTruncation" numberOfLines="10" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="Htx-xJ-MUI">
+                                        <rect key="frame" x="-42" y="-21" width="42" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="13"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -244,9 +244,9 @@
                                 <variation key="default">
                                     <mask key="subviews">
                                         <exclude reference="uDB-N9-oPg"/>
-                                        <exclude reference="Htx-xJ-MUI"/>
                                         <exclude reference="Utw-z0-AZP"/>
                                         <exclude reference="7qI-VZ-9Wj"/>
+                                        <exclude reference="Htx-xJ-MUI"/>
                                     </mask>
                                     <mask key="constraints">
                                         <exclude reference="QHj-Qd-LSF"/>
@@ -266,9 +266,9 @@
                                 <variation key="heightClass=regular-widthClass=compact">
                                     <mask key="subviews">
                                         <include reference="uDB-N9-oPg"/>
-                                        <include reference="Htx-xJ-MUI"/>
                                         <include reference="Utw-z0-AZP"/>
                                         <include reference="7qI-VZ-9Wj"/>
+                                        <include reference="Htx-xJ-MUI"/>
                                     </mask>
                                     <mask key="constraints">
                                         <include reference="QHj-Qd-LSF"/>
@@ -298,7 +298,7 @@
                                     </constraint>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                <state key="normal" backgroundImage="iconBack"/>
+                                <state key="normal" image="iconBack"/>
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="YqM-dq-jhn"/>
@@ -384,7 +384,7 @@
                         <outlet property="labelNumber" destination="uDB-N9-oPg" id="kNQ-mP-Kui"/>
                         <outlet property="labelQuestion" destination="Htx-xJ-MUI" id="xAf-uq-LYh"/>
                         <outlet property="tableView" destination="Utw-z0-AZP" id="2Fe-sE-BKo"/>
-                        <outlet property="viewContent" destination="Zlb-d9-Qwl" id="dYg-ZI-rHD"/>
+                        <outlet property="viewContent" destination="Zlb-d9-Qwl" id="dmh-Te-Kkp"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bC7-cE-GTR" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -395,5 +395,7 @@
     <resources>
         <image name="bg" width="375" height="667"/>
         <image name="iconBack" width="55" height="55"/>
+        <image name="radio" width="22" height="22"/>
+        <image name="submit" width="128" height="44"/>
     </resources>
 </document>

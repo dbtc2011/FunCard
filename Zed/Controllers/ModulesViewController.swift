@@ -27,6 +27,7 @@ protocol ModuleViewControllerDelegate {
     func pulsifyDidClose()
     func branchesDidClose()
     func pasaPointsDidClose()
+    func productsDidClose()
     
     
 }
@@ -71,13 +72,29 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
         super.viewWillAppear(animated)
         
         self.getSurveyInfo()
-        
+        self.view.bringSubviewToFront(self.viewContent)
         
     }
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
     }
-    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        for contstraints in self.view.constraints {
+            
+            if contstraints.firstItem as? NSObject == self.view {
+                
+                if contstraints.firstAttribute == NSLayoutAttribute.Height {
+                    contstraints.constant = UIScreen.mainScreen().bounds.size.height
+                }else if contstraints.firstAttribute == NSLayoutAttribute.Width {
+                    contstraints.constant = UIScreen.mainScreen().bounds.size.width
+                }
+                
+            }
+        }
+        
+    }
     
     //MARK: Method
     func reloadSurveyUI() {
@@ -85,7 +102,7 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
         dispatch_async(dispatch_get_main_queue()) { () -> Void in
             
             let content = self.surveyContent[self.currentIndex] as! NSDictionary
-            self.labelNumber.text = "\(self.currentIndex + 1)"
+            self.labelNumber.text = "\(self.currentIndex + 1)."
             self.labelQuestion.text = content[keyQuestion] as? String
             self.tableView.reloadData()
             
@@ -465,8 +482,10 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
         self.counter = self.counter + 1
         
         if self.counter >= self.contents.count {
+            dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                self.delegate?.pulsifyDidClose()
+            }
             
-            self.delegate?.pulsifyDidClose()
             return
         }
         
@@ -498,7 +517,7 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
         self.labelOption3.text = dictionary["row3"] as? String
         self.labelOption4.text = dictionary["row4"] as? String
         self.labelQuestion.text = dictionary["question"] as? String
-        self.labelNumber.text = "\(self.counter + 1)"
+        self.labelNumber.text = "\(self.counter + 1)."
         
         self.resetValues()
         self.resetButtons()
@@ -1005,6 +1024,10 @@ class PasaPointsViewController : UIViewController, WebServiceDelegate, UITextFie
 
 class BranchSelectionViewContoller : UIViewController {
     
+    //MARK: Properties
+    
+    var delegate : ModuleViewControllerDelegate?
+    
     //MARK: View Life Cycle
     
     override func viewDidLoad() {
@@ -1012,6 +1035,16 @@ class BranchSelectionViewContoller : UIViewController {
         super.viewDidLoad()
         
     }
+    
+    //MARK: Button Actions
+    @IBAction func backButtonClicked(sender: UIButton) {
+        
+        dispatch_async(dispatch_get_main_queue()) { () -> Void in
+            self.delegate?.branchesDidClose()
+        }
+        
+    }
+    
 }
 
 //MARK: - Branches View Controller
@@ -1269,6 +1302,8 @@ class ProductsViewController : UIViewController {
     @IBOutlet var lblStore: UILabel!
     @IBOutlet var webView: UIWebView!
     
+    var delegate : ModuleViewControllerDelegate?
+    
     //MARK: View Life Cycle
     
     override func viewDidLoad() {
@@ -1280,5 +1315,10 @@ class ProductsViewController : UIViewController {
     //MARK: Button Actions
     @IBAction func didPressBack(sender: AnyObject) {
         //go back to dashboard
+        dispatch_async(dispatch_get_main_queue()) { () -> Void in
+            
+            self.delegate?.productsDidClose()
+            
+        }
     }
 }

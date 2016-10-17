@@ -29,10 +29,10 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="16p-mc-POZ">
-                                        <variation key="heightClass=regular-widthClass=compact" constant="55"/>
+                                        <variation key="heightClass=regular-widthClass=compact" constant="35"/>
                                     </constraint>
                                     <constraint firstAttribute="width" constant="35" id="lIY-Gj-RVm">
-                                        <variation key="heightClass=regular-widthClass=compact" constant="55"/>
+                                        <variation key="heightClass=regular-widthClass=compact" constant="35"/>
                                     </constraint>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="21"/>
@@ -52,7 +52,7 @@
                                     </mask>
                                 </variation>
                                 <connections>
-                                    <action selector="didPressBackButton:" destination="wEr-wQ-TiS" eventType="touchUpInside" id="hLf-Kh-Puw"/>
+                                    <action selector="backButtonClicked:" destination="ubn-8d-iQj" eventType="touchUpInside" id="ol1-EE-O7X"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Branches" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AXN-Jf-veZ">
@@ -80,8 +80,12 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="zJk-e5-Vhz">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="55" id="LZB-a6-4fH"/>
-                                    <constraint firstAttribute="height" constant="55" id="gbj-Hz-swB"/>
+                                    <constraint firstAttribute="width" constant="55" id="LZB-a6-4fH">
+                                        <variation key="heightClass=regular-widthClass=compact" constant="35"/>
+                                    </constraint>
+                                    <constraint firstAttribute="height" constant="55" id="gbj-Hz-swB">
+                                        <variation key="heightClass=regular-widthClass=compact" constant="35"/>
+                                    </constraint>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
@@ -560,10 +564,10 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="35" id="HUx-OM-FIh">
-                                        <variation key="heightClass=regular-widthClass=compact" constant="55"/>
+                                        <variation key="heightClass=regular-widthClass=compact" constant="35"/>
                                     </constraint>
                                     <constraint firstAttribute="height" constant="35" id="WWA-4q-0vv">
-                                        <variation key="heightClass=regular-widthClass=compact" constant="55"/>
+                                        <variation key="heightClass=regular-widthClass=compact" constant="35"/>
                                     </constraint>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="21"/>

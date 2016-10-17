@@ -138,6 +138,7 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         
         let storyboard = UIStoryboard(name: "Products", bundle: nil)
         self.products = storyboard.instantiateInitialViewController() as? ProductsViewController
+        self.products?.delegate = self
         self.viewMain.addSubview(self.products!.view)
         
         self.toggleMenuButton()
@@ -180,6 +181,7 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         
         let storyboard = UIStoryboard(name: "Branches", bundle: nil)
         self.branches = storyboard.instantiateInitialViewController()! as? BranchSelectionViewContoller
+        self.branches?.delegate = self
         self.viewMain.addSubview(self.branches!.view)
         
         self.toggleMenuButton()
@@ -261,6 +263,11 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
             
             self.pasaPoints!.view.removeFromSuperview()
             self.pasaPoints = nil
+            
+        }else if self.products != nil {
+            
+            self.products!.view.removeFromSuperview()
+            self.products = nil
             
         }
 
@@ -458,28 +465,41 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
     
     //MARK: Modules Delegate/Call back
     func pulsifyDidClose() {
+        
         self.buttonMenu.selected = !self.buttonMenu.selected
         self.goToHomePage()
         
     }
     
     func surveyDidClose() {
+        
         self.buttonMenu.selected = !self.buttonMenu.selected
         self.goToHomePage()
         
     }
     
     func pasaPointsDidClose() {
+        
         self.buttonMenu.selected = !self.buttonMenu.selected
         self.goToHomePage()
         
     }
     
     func branchesDidClose() {
+        
         self.buttonMenu.selected = !self.buttonMenu.selected
         self.goToHomePage()
         
     }
+    
+    func productsDidClose() {
+        
+        self.buttonMenu.selected = !self.buttonMenu.selected
+        self.goToHomePage()
+        
+    }
+    
+    
     
 
 

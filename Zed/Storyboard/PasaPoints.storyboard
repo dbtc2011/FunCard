@@ -281,10 +281,10 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="5LQ-BJ-XoY">
-                                        <variation key="heightClass=regular-widthClass=compact" constant="55"/>
+                                        <variation key="heightClass=regular-widthClass=compact" constant="35"/>
                                     </constraint>
                                     <constraint firstAttribute="width" constant="35" id="ve2-gP-EiV">
-                                        <variation key="heightClass=regular-widthClass=compact" constant="55"/>
+                                        <variation key="heightClass=regular-widthClass=compact" constant="35"/>
                                     </constraint>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
