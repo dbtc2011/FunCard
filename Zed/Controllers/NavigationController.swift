@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import CoreData
 
-class FunNavigationController : UIViewController, UITableViewDelegate, UITableViewDataSource, HomePageDelegate {
+class FunNavigationController : UIViewController, UITableViewDelegate, UITableViewDataSource, HomePageDelegate, ModuleViewControllerDelegate {
     
     //MARK: Properties
     @IBOutlet weak var viewMenu: UIView!
@@ -113,6 +113,7 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         
         let storyboard = UIStoryboard(name: "Survey", bundle: nil)
         self.survey = storyboard.instantiateViewControllerWithIdentifier("surveyController") as? SurveyViewController
+        self.survey?.delegate = self
         self.survey!.user = self.user!
         self.viewMain.addSubview(self.survey!.view)
         
@@ -161,6 +162,7 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         let storyboard = UIStoryboard(name: "Pulsify", bundle: nil)
         self.pulsify = storyboard.instantiateViewControllerWithIdentifier("pulsify") as? PulsifyViewController
         self.pulsify!.user = self.user!
+        self.pulsify?.delegate = self
         self.viewMain.addSubview(self.pulsify!.view)
         
         self.toggleMenuButton()
@@ -202,6 +204,7 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         let storyboard = UIStoryboard(name: "PasaPoints", bundle: nil)
         self.pasaPoints = storyboard.instantiateViewControllerWithIdentifier("pasaPoints") as? PasaPointsViewController
         self.pasaPoints!.user = self.user!
+        self.pasaPoints?.delegate = self
         self.viewMain.addSubview(self.pasaPoints!.view)
         
         self.toggleMenuButton()
@@ -260,37 +263,42 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
             self.pasaPoints = nil
             
         }
+
     }
     func toggleMenuButton() {
         
-        self.buttonMenu.selected = !self.buttonMenu.selected
-        
-        for contstraints in self.view.constraints {
-            if (contstraints.firstItem as? NSObject == self.viewMain || contstraints.firstItem as? NSObject == self.buttonMenu) && contstraints.firstAttribute == NSLayoutAttribute.Leading {
-                
-                contstraints.constant = 0
-                if self.buttonMenu.selected {
-                    
-                    contstraints.constant = 260
-                    
-                }
-                
-            }else if contstraints.firstItem as? NSObject == self.viewMenu && contstraints.firstAttribute == NSLayoutAttribute.Leading {
-                
-                contstraints.constant = -260
-                if self.buttonMenu.selected {
+        dispatch_async(dispatch_get_main_queue()) { () -> Void in
+            
+            self.buttonMenu.selected = !self.buttonMenu.selected
+            for contstraints in self.view.constraints {
+                if (contstraints.firstItem as? NSObject == self.viewMain || contstraints.firstItem as? NSObject == self.buttonMenu) && contstraints.firstAttribute == NSLayoutAttribute.Leading {
                     
                     contstraints.constant = 0
+                    if self.buttonMenu.selected {
+                        
+                        contstraints.constant = 260
+                        
+                    }
+                    
+                }else if contstraints.firstItem as? NSObject == self.viewMenu && contstraints.firstAttribute == NSLayoutAttribute.Leading {
+                    
+                    contstraints.constant = -260
+                    if self.buttonMenu.selected {
+                        
+                        contstraints.constant = 0
+                        
+                    }
                     
                 }
-                
+            }
+            
+            
+            UIView.animateWithDuration(0.3) {
+                self.view.layoutIfNeeded()
             }
         }
         
         
-        UIView.animateWithDuration(0.3) {
-            self.view.layoutIfNeeded()
-        }
         
     }
     
@@ -447,5 +455,32 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         self.goToPulsify()
         
     }
+    
+    //MARK: Modules Delegate/Call back
+    func pulsifyDidClose() {
+        self.buttonMenu.selected = !self.buttonMenu.selected
+        self.goToHomePage()
+        
+    }
+    
+    func surveyDidClose() {
+        self.buttonMenu.selected = !self.buttonMenu.selected
+        self.goToHomePage()
+        
+    }
+    
+    func pasaPointsDidClose() {
+        self.buttonMenu.selected = !self.buttonMenu.selected
+        self.goToHomePage()
+        
+    }
+    
+    func branchesDidClose() {
+        self.buttonMenu.selected = !self.buttonMenu.selected
+        self.goToHomePage()
+        
+    }
+    
+
 
 }

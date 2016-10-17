@@ -19,6 +19,18 @@ let keyOptionID = "AID"
 let keyQuestion = "QUESTION"
 let keyQuestionID = "QID"
 
+
+//MARK: - Module Delegate/Call back
+protocol ModuleViewControllerDelegate {
+    
+    func surveyDidClose()
+    func pulsifyDidClose()
+    func branchesDidClose()
+    func pasaPointsDidClose()
+    
+    
+}
+
 //MARK: - Survey View Controller
 class SurveyViewController : UIViewController, UITableViewDataSource, UITableViewDelegate, WebServiceDelegate {
     
@@ -30,6 +42,7 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
     
     @IBOutlet weak var buttonSubmit: UIButton!
     
+    @IBOutlet weak var viewContent: UIView!
     @IBOutlet weak var buttonNext: NSLayoutConstraint!
     
     var tempOption: NSMutableArray = NSMutableArray()
@@ -41,12 +54,14 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
     var currentIndex : Int = 0
     var selectedAnswer : Int = -1
     
+    var delegate : ModuleViewControllerDelegate?
+    
     //MARK: View life cycle
     override func viewDidLoad() {
         
         self.webService.delegate = self
         self.tableView.separatorColor = UIColor.clearColor()
-        
+        self.viewContent.layer.cornerRadius = 10
         self.surveyContent.removeAllObjects()
         
     }
@@ -161,10 +176,8 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
     
     @IBAction func backClicked(sender: UIButton) {
         
-        self.dismissViewControllerAnimated(true) {
-            
-            
-        }
+        
+        self.delegate?.surveyDidClose()
         
     }
     
@@ -252,9 +265,13 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
             self.selectedAnswer = -1
             if self.currentIndex == self.surveyContent.count {
                 
-                self.dismissViewControllerAnimated(true, completion: {
-                    return
-                })
+                dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                    
+                    self.delegate?.surveyDidClose()
+                    
+                }
+                
+                
                 return
                 
             }
@@ -311,6 +328,11 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
     @IBOutlet weak var labelCity: UILabel!
     
     @IBOutlet weak var labelBranch: UILabel!
+    @IBOutlet weak var viewBranch: UIView!
+    @IBOutlet weak var viewContent: UIView!
+    @IBOutlet weak var viewCity: UIView!
+    
+    var delegate : ModuleViewControllerDelegate?
     
     
     var counter : Int = 0
@@ -330,6 +352,10 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
     override func viewDidLoad() {
         self.webService.delegate = self
         self.presetValues()
+        
+        self.viewBranch.layer.cornerRadius = 10
+        self.viewCity.layer.cornerRadius = 10
+        self.viewContent.layer.cornerRadius = 10
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -352,26 +378,42 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
         for views in self.viewOption1.subviews {
             
             let button = views as! UIButton
-            button.backgroundColor = UIColor.blueColor()
+            let graySmiley = "graysmiley" + "\(6 - button.tag)"
+            button.setImage(UIImage(named: graySmiley), forState: UIControlState.Normal)
+            let smiley = "smiley" + "\(6 - button.tag)"
+            button.setImage(UIImage(named: smiley), forState: UIControlState.Selected)
+            button.backgroundColor = UIColor.clearColor()
         }
         
         for views in self.viewOption2.subviews {
             
             let button = views as! UIButton
-            button.backgroundColor = UIColor.blueColor()
+            button.backgroundColor = UIColor.clearColor()
+            let graySmiley = "graysmiley" + "\(6 - button.tag)"
+            button.setImage(UIImage(named: graySmiley), forState: UIControlState.Normal)
+            let smiley = "smiley" + "\(6 - button.tag)"
+            button.setImage(UIImage(named: smiley), forState: UIControlState.Selected)
             
         }
         
         for views in self.viewOption3.subviews {
             
             let button = views as! UIButton
-            button.backgroundColor = UIColor.blueColor()
+            button.backgroundColor = UIColor.clearColor()
+            let graySmiley = "graysmiley" + "\(6 - button.tag)"
+            button.setImage(UIImage(named: graySmiley), forState: UIControlState.Normal)
+            let smiley = "smiley" + "\(6 - button.tag)"
+            button.setImage(UIImage(named: smiley), forState: UIControlState.Selected)
             
         }
         
         for views in self.viewOption4.subviews {
             let button = views as! UIButton
-            button.backgroundColor = UIColor.blueColor()
+            button.backgroundColor = UIColor.clearColor()
+            let graySmiley = "graysmiley" + "\(6 - button.tag)"
+            button.setImage(UIImage(named: graySmiley), forState: UIControlState.Normal)
+            let smiley = "smiley" + "\(6 - button.tag)"
+            button.setImage(UIImage(named: smiley), forState: UIControlState.Selected)
             
         }
         
@@ -423,9 +465,8 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
         self.counter = self.counter + 1
         
         if self.counter >= self.contents.count {
-            self.dismissViewControllerAnimated(true, completion: { 
-                
-            })
+            
+            self.delegate?.pulsifyDidClose()
             return
         }
         
@@ -495,6 +536,8 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
         }
         
     }
+    
+    
     
     func resetValues() {
         
@@ -622,10 +665,10 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
         for views in self.viewOption1.subviews {
             
             let button = views as! UIButton
-            button.backgroundColor = UIColor.blueColor()
+            button.selected = false
+            
         }
-        
-        sender.backgroundColor = UIColor.greenColor()
+        sender.selected = true
         
         self.answers.setObject("\(sender.tag)", forKey: "option1")
         
@@ -644,11 +687,10 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
         for views in self.viewOption2.subviews {
             
             let button = views as! UIButton
-            button.backgroundColor = UIColor.blueColor()
+            button.selected = false
             
         }
-        
-        sender.backgroundColor = UIColor.greenColor()
+        sender.selected = true
         
         self.answers.setObject("\(sender.tag)", forKey: "option2")
         
@@ -668,11 +710,10 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
         for views in self.viewOption3.subviews {
             
             let button = views as! UIButton
-            button.backgroundColor = UIColor.blueColor()
+            button.selected = false
+            
         }
-        
-        sender.backgroundColor = UIColor.greenColor()
-        
+        sender.selected = true
         self.answers.setObject("\(sender.tag)", forKey: "option3")
         
         self.sendPulsify("\(sender.tag)")
@@ -690,11 +731,10 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
         for views in self.viewOption4.subviews {
             
             let button = views as! UIButton
-            button.backgroundColor = UIColor.blueColor()
+            button.selected = false
+            
         }
-        
-        sender.backgroundColor = UIColor.greenColor()
-        
+        sender.selected = true
         self.answers.setObject("\(sender.tag)", forKey: "option4")
         
         self.sendPulsify("\(sender.tag)")
@@ -717,6 +757,12 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
     
     @IBAction func buttonBranchClicked(sender: UIButton) {
         
+        if self.labelCity.text! == "" {
+            
+            return
+            
+        }
+        
         self.customPicker = nil
         self.customPicker = CustomPickerView()
         self.customPicker?.frame = CGRectMake(0, 0, UIScreen.mainScreen().bounds.size.width, UIScreen.mainScreen().bounds.size.height)
@@ -728,10 +774,8 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
     
     @IBAction func backButtonClicked(sender: UIButton) {
         
-        self.dismissViewControllerAnimated(true) { 
-            
-            
-        }
+        self.delegate?.pulsifyDidClose()
+        // remove view
         
     }
     
@@ -810,6 +854,8 @@ class PasaPointsViewController : UIViewController, WebServiceDelegate, UITextFie
     var user: UserModelRepresentation?
     let webService = WebService()
     
+    var delegate : ModuleViewControllerDelegate?
+    
     //MARK: View life cycle
     
     override func viewDidLoad() {
@@ -827,8 +873,9 @@ class PasaPointsViewController : UIViewController, WebServiceDelegate, UITextFie
     //MARK: Button Actions
     
     @IBAction func backClicked(sender: UIButton) {
-        self.dismissViewControllerAnimated(true) {
-        }
+        
+        self.delegate?.pasaPointsDidClose()
+        
     }
     
     @IBAction func goClicked(sender: UIButton) {

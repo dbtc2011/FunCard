@@ -29,7 +29,7 @@
                                     </constraint>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.09934996129113717" green="0.4814531379933692" blue="0.8793223391732985" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" red="0.1176470588" green="0.61960784310000006" blue="0.90196078430000004" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                                 <variation key="default">
                                     <mask key="constraints">
@@ -86,7 +86,7 @@
                                             </constraint>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                        <color key="textColor" red="0.074509803920000006" green="0.3411764706" blue="0.61960784310000006" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="textColor" red="0.1176470588" green="0.61960784310000006" blue="0.90196078430000004" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                         <variation key="default">
                                             <mask key="constraints">
@@ -103,7 +103,7 @@
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Are you employed" lineBreakMode="tailTruncation" numberOfLines="10" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="Htx-xJ-MUI">
                                         <rect key="frame" x="-42" y="-21" width="42" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="13"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -144,7 +144,7 @@
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AH1-8q-EOM">
                                                             <rect key="frame" x="-42" y="-21" width="42" height="21"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="13"/>
                                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
@@ -288,7 +288,7 @@
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TpF-Lt-Mfm">
                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
-                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="50" id="YqM-dq-jhn">
                                         <variation key="heightClass=regular-widthClass=compact" constant="35"/>
@@ -298,7 +298,7 @@
                                     </constraint>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                <state key="normal" title="&lt;"/>
+                                <state key="normal" backgroundImage="iconBack"/>
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="YqM-dq-jhn"/>
@@ -384,6 +384,7 @@
                         <outlet property="labelNumber" destination="uDB-N9-oPg" id="kNQ-mP-Kui"/>
                         <outlet property="labelQuestion" destination="Htx-xJ-MUI" id="xAf-uq-LYh"/>
                         <outlet property="tableView" destination="Utw-z0-AZP" id="2Fe-sE-BKo"/>
+                        <outlet property="viewContent" destination="Zlb-d9-Qwl" id="dYg-ZI-rHD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bC7-cE-GTR" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -393,5 +394,6 @@
     </scenes>
     <resources>
         <image name="bg" width="375" height="667"/>
+        <image name="iconBack" width="55" height="55"/>
     </resources>
 </document>
