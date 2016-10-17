@@ -587,6 +587,34 @@ class CustomAlertView: UIView {
     }
 }
 
+//MARK: - Custom Loading View
+class CustomLoadingView: UIView {
+    
+    //MARK: View Life Cycle
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        let bgView = UIView(frame: frame)
+        bgView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.8)
+        self.addSubview(bgView)
+        
+        let imgAnimated = UIImageView(image: UIImage(named: ""))
+        imgAnimated.frame.origin = CGPoint(x: (self.frame.width-imgAnimated.frame.width)/2, y: (self.frame.height-imgAnimated.frame.height)/2)
+        let arrayImageNames = [UIImage(named: "")!,
+                               UIImage(named: "")!,
+                               UIImage(named: "")!,
+                               UIImage(named: "")!]
+        imgAnimated.animationImages = arrayImageNames
+        imgAnimated.startAnimating()
+        self.addSubview(imgAnimated)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 //MARK: - Extension UI
 extension UILabel {
     
