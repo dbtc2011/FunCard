@@ -853,8 +853,11 @@ class PasaPointsViewController : UIViewController, WebServiceDelegate, UITextFie
     
     var user: UserModelRepresentation?
     let webService = WebService()
-    
+
     var delegate : ModuleViewControllerDelegate?
+
+    var alertView: CustomAlertView?
+
     
     //MARK: View life cycle
     
@@ -888,8 +891,12 @@ class PasaPointsViewController : UIViewController, WebServiceDelegate, UITextFie
             return
         }
         
-        //alert error here
-        print("invalid inputs")
+        if self.alertView == nil {
+            self.alertView = CustomAlertView(frame: self.view.frame)
+        }
+        
+        self.alertView!.setAlertMessage("Invalid inputs.")
+        self.view.addSubview(self.alertView!)
     }
     
     //MARK: - Methods

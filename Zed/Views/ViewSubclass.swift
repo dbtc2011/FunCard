@@ -418,6 +418,7 @@ protocol CustomPickerViewDelegate {
     func pickerDidSelect(picker: CustomPickerView, value: String, index: Int)
     
 }
+
 class CustomPickerView : UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     
     //MARK: Properties
@@ -427,7 +428,6 @@ class CustomPickerView : UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     var pickerIdentifier = ""
     
     var selectedIndex : Int = 0
-    
     
     //MARK: Setup
     func setupPicker(title: String, content: NSMutableArray) {
@@ -523,6 +523,98 @@ class CustomPickerView : UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     
     
 }
+
+//MARK: - Custom Alert View
+class CustomAlertView: UIView {
+    
+    //MARK: Properties
+    
+    var lblMessage: UILabel?
+    
+    //MARK: View Life Cycle
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        let bgView = UIView(frame: frame)
+        bgView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.8)
+        self.addSubview(bgView)
+        
+        let centerView = UIView(frame: CGRect(x: 20, y: (self.frame.height-200)/2, width: self.frame.width-40, height: 200))
+        centerView.backgroundColor = UIColor.whiteColor()
+        centerView.layer.cornerRadius = 5.0
+        self.addSubview(centerView)
+        
+        self.lblMessage = UILabel(frame: CGRect(x: 10, y: 20, width: centerView.frame.width-20, height: centerView.frame.height-104))
+        self.lblMessage!.text = ""
+        self.lblMessage!.textAlignment = .Center
+        self.lblMessage!.numberOfLines = 0
+        self.lblMessage!.font = UIFont.systemFontOfSize(20.0)
+        self.lblMessage!.textColor = UIColor(red: 30.0/255.0, green: 158.0/255.0, blue: 230.0/255.0, alpha: 1.0)
+        centerView.addSubview(self.lblMessage!)
+        
+        let btnOkay = UIButton(type: .Custom)
+        btnOkay.frame = CGRect(x: (centerView.frame.width-128)/2, y:centerView.frame.height-66, width: 128, height: 44)
+        btnOkay.setImage(UIImage(named: "ok"), forState: .Normal)
+        btnOkay.addTarget(self, action: #selector(CustomAlertView.didClickOkay(_:)), forControlEvents: .TouchUpInside)
+        centerView.addSubview(btnOkay)
+        
+        //divider
+        let imgViewDivider = UIImageView(image: UIImage(named: ""))
+        imgViewDivider.frame.origin = CGPoint(x: 0, y: self.frame.height-imgViewDivider.frame.height)
+        self.addSubview(imgViewDivider)
+        
+        //icon at the bottom
+        let imgViewIcon = UIImageView(image: UIImage(named: ""))
+        imgViewIcon.frame.origin = CGPoint(x: self.frame.width-imgViewIcon.frame.width, y: self.frame.height-imgViewIcon.frame.height)
+        self.addSubview(imgViewIcon)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    //MARK: Custom
+    
+    func setAlertMessage(message: String) {
+        self.lblMessage!.text = message
+    }
+    
+    //MARK: Button Actions
+    
+    func didClickOkay(sender: UIButton) {
+        self.removeFromSuperview()
+    }
+}
+
+//MARK: - Custom Loading View
+class CustomLoadingView: UIView {
+    
+    //MARK: View Life Cycle
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        let bgView = UIView(frame: frame)
+        bgView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.8)
+        self.addSubview(bgView)
+        
+        let imgAnimated = UIImageView(image: UIImage(named: ""))
+        imgAnimated.frame.origin = CGPoint(x: (self.frame.width-imgAnimated.frame.width)/2, y: (self.frame.height-imgAnimated.frame.height)/2)
+        let arrayImageNames = [UIImage(named: "")!,
+                               UIImage(named: "")!,
+                               UIImage(named: "")!,
+                               UIImage(named: "")!]
+        imgAnimated.animationImages = arrayImageNames
+        imgAnimated.startAnimating()
+        self.addSubview(imgAnimated)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 //MARK: - Extension UI
 extension UILabel {
     
