@@ -31,7 +31,7 @@ protocol ModuleViewControllerDelegate {
 }
 
 //MARK: - Survey View Controller
-class SurveyViewController : BaseViewController, UITableViewDataSource, UITableViewDelegate, WebServiceDelegate {
+class SurveyViewController : BaseViewController, UITableViewDataSource, UITableViewDelegate, WebServiceDelegate, CustomAlertViewDelegate {
     
     //MARK: Properties
     @IBOutlet weak var labelNumber: UILabel!
@@ -62,7 +62,6 @@ class SurveyViewController : BaseViewController, UITableViewDataSource, UITableV
         self.tableView.separatorColor = UIColor.clearColor()
         self.viewContent.layer.cornerRadius = 10
         self.surveyContent.removeAllObjects()
-        
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -157,7 +156,6 @@ class SurveyViewController : BaseViewController, UITableViewDataSource, UITableV
         
     }
     
-    
     //MARK: Table View Data Source
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let content = self.surveyContent[self.currentIndex] as! NSDictionary
@@ -202,6 +200,11 @@ class SurveyViewController : BaseViewController, UITableViewDataSource, UITableV
         return label.getLabelHeight((option[keyOption] as? String)!, font: UIFont.systemFontOfSize(17), maxSize: CGSizeMake(label.frame.size.width, label.frame.size.height)) + 10
     }
     
+    //MARK: CustomAlertView Delegate
+    func customAlertDidPressOkay() {
+        self.delegate?.surveyDidClose()
+    }
+    
     //MARK: WebService Delegate
     func webServiceDidFinishLoadingWithResponseDictionary(parsedDictionary: NSDictionary) {
         dispatch_async(dispatch_get_main_queue()) {
@@ -230,9 +233,9 @@ class SurveyViewController : BaseViewController, UITableViewDataSource, UITableV
             if self.currentIndex == self.surveyContent.count {
                 
                 dispatch_async(dispatch_get_main_queue()) { () -> Void in
-                    
+
                     self.displayAlert("Thank you for your participation!", title: "")
-                    self.delegate?.surveyDidClose()
+                    self.alertView!.delegate = self
                     
                 }
                 
@@ -273,7 +276,7 @@ class SurveyViewController : BaseViewController, UITableViewDataSource, UITableV
 }
 
 //MARK: - Pulsify View Controller
-class PulsifyViewController : BaseViewController, WebServiceDelegate, CustomPickerViewDelegate {
+class PulsifyViewController : BaseViewController, WebServiceDelegate, CustomPickerViewDelegate, CustomAlertViewDelegate {
     
     //MARK: Properties
     @IBOutlet weak var labelNumber: UILabel!
@@ -422,7 +425,7 @@ class PulsifyViewController : BaseViewController, WebServiceDelegate, CustomPick
             
             dispatch_async(dispatch_get_main_queue()) { () -> Void in
                 self.displayAlert("Thank you for your participation!", title: "")
-                self.delegate?.pulsifyDidClose()
+                self.alertView!.delegate = self
             }
             
             return
@@ -547,6 +550,11 @@ class PulsifyViewController : BaseViewController, WebServiceDelegate, CustomPick
         
         return true
         
+    }
+    
+    //MARK: CustomAlertView Delegate
+    func customAlertDidPressOkay() {
+        self.delegate?.pulsifyDidClose()
     }
     
     //MARK: API Call

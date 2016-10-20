@@ -524,6 +524,10 @@ class CustomPickerView : UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     
 }
 
+protocol CustomAlertViewDelegate {
+    func customAlertDidPressOkay()
+}
+
 //MARK: - Custom Alert View
 class CustomAlertView: UIView {
     
@@ -531,6 +535,8 @@ class CustomAlertView: UIView {
     
     var lblTitle: UILabel?
     var lblMessage: UILabel?
+    
+    var delegate: CustomAlertViewDelegate?
     
     //MARK: View Life Cycle
     
@@ -595,6 +601,10 @@ class CustomAlertView: UIView {
     
     func didClickOkay(sender: UIButton) {
         self.removeFromSuperview()
+        
+        if self.delegate != nil {
+            self.delegate!.customAlertDidPressOkay()
+        }
     }
 }
 
