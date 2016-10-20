@@ -98,7 +98,7 @@ class BaseViewController: UIViewController {
 }
 
 //MARK: - View Controller
-class ViewController: UIViewController , UIScrollViewDelegate, WebServiceDelegate {
+class ViewController: BaseViewController , UIScrollViewDelegate, WebServiceDelegate {
     
     //MARK: Properties
     var counter = 0
@@ -127,8 +127,6 @@ class ViewController: UIViewController , UIScrollViewDelegate, WebServiceDelegat
         self.view.bringSubviewToFront(self.cardInfo)
         self.view.bringSubviewToFront(self.header)
         self.getDashboardInfo()
-        
-        
     }
 
     override func viewDidLayoutSubviews() {
@@ -290,6 +288,7 @@ class ViewController: UIViewController , UIScrollViewDelegate, WebServiceDelegat
                 
                 //update display here
                 
+                
                 try managedContext.save()
             }
             
@@ -348,8 +347,7 @@ class ViewController: UIViewController , UIScrollViewDelegate, WebServiceDelegat
             return
         }
         
-        print("error >>> \(description)")
-
+        displayAlertRequestError(status, descripion: description)
     }
     
     func webServiceDidFinishLoadingWithResponseArray(parsedArray: NSArray) {
@@ -358,11 +356,11 @@ class ViewController: UIViewController , UIScrollViewDelegate, WebServiceDelegat
     }
     
     func webServiceDidTimeout() {
-        print("timeout")
+        displayAlertTimedOut("Failed to fetch updated information")
     }
     
     func webServiceDidFailWithError(error: NSError) {
-        print(error)
+        displayAlertWithError(error)
     }
    
 

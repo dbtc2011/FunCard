@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Zed/Controllers/ModulesViewController.swift"
-            timestampString = "498667449.339736"
+            timestampString = "498669449.617281"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "415"
-            endingLineNumber = "415"
+            startingLineNumber = "423"
+            endingLineNumber = "423"
             landmarkName = "updateContent()"
             landmarkType = "7">
          </BreakpointContent>

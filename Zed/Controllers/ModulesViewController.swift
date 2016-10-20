@@ -109,7 +109,9 @@ class SurveyViewController : BaseViewController, UITableViewDataSource, UITableV
     
     //MARK: API Call
     func getSurveyInfo() {
-        displayLoadingScreen()
+        dispatch_async(dispatch_get_main_queue()) {
+            self.displayLoadingScreen()
+        }
         
         self.webService.name = "surveyInfo"
         self.webService.connectAndGetSurveyInfo(self.user!.facebookID)
@@ -134,7 +136,9 @@ class SurveyViewController : BaseViewController, UITableViewDataSource, UITableV
         params.setObject("", forKey: "sParam")
         params.setObject(content[keyQuestionID] as! String, forKey: "qid")
         
-        displayLoadingScreen()
+        dispatch_async(dispatch_get_main_queue()) {
+            self.displayLoadingScreen()
+        }
         
         self.webService.name = "surveySubmit"
         self.webService.connectAndSendSurvey(params)
@@ -142,7 +146,7 @@ class SurveyViewController : BaseViewController, UITableViewDataSource, UITableV
     
     //MARK: Button Actions
     @IBAction func submitClicked(sender: UIButton) {
-        self.submitAnswer()
+        
     }
     
     @IBAction func backClicked(sender: UIButton) {
@@ -186,6 +190,7 @@ class SurveyViewController : BaseViewController, UITableViewDataSource, UITableV
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         self.selectedAnswer = indexPath.row
+        self.submitAnswer()
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -199,7 +204,9 @@ class SurveyViewController : BaseViewController, UITableViewDataSource, UITableV
     
     //MARK: WebService Delegate
     func webServiceDidFinishLoadingWithResponseDictionary(parsedDictionary: NSDictionary) {
-        hideLoadingScreen()
+        dispatch_async(dispatch_get_main_queue()) {
+            self.hideLoadingScreen()
+        }
         
         if self.webService.name == "surveyInfo" {
             let result = parsedDictionary[keyResult] as! NSArray
@@ -242,7 +249,9 @@ class SurveyViewController : BaseViewController, UITableViewDataSource, UITableV
     }
     
     func webServiceDidTimeout() {
-        hideLoadingScreen()
+        dispatch_async(dispatch_get_main_queue()) {
+            self.hideLoadingScreen()
+        }
         
         var message = ""
         if self.webService.name == "surveyInfo" {
@@ -255,7 +264,10 @@ class SurveyViewController : BaseViewController, UITableViewDataSource, UITableV
     }
     
     func webServiceDidFailWithError(error: NSError) {
-        hideLoadingScreen()
+        dispatch_async(dispatch_get_main_queue()) {
+            self.hideLoadingScreen()
+        }
+        
         displayAlertWithError(error)
     }
 }
