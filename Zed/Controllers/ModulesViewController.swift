@@ -19,7 +19,6 @@ let keyOptionID = "AID"
 let keyQuestion = "QUESTION"
 let keyQuestionID = "QID"
 
-
 //MARK: - Module Delegate/Call back
 protocol ModuleViewControllerDelegate {
     
@@ -28,12 +27,11 @@ protocol ModuleViewControllerDelegate {
     func branchesDidClose()
     func pasaPointsDidClose()
     func productsDidClose()
-    
-    
+
 }
 
 //MARK: - Survey View Controller
-class SurveyViewController : UIViewController, UITableViewDataSource, UITableViewDelegate, WebServiceDelegate {
+class SurveyViewController : BaseViewController, UITableViewDataSource, UITableViewDelegate, WebServiceDelegate {
     
     //MARK: Properties
     @IBOutlet weak var labelNumber: UILabel!
@@ -67,7 +65,6 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
         
     }
     
-    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -78,6 +75,7 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
     }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
@@ -93,7 +91,6 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
                 
             }
         }
-        
     }
     
     //MARK: Method
@@ -107,53 +104,12 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
             self.tableView.reloadData()
             
         }
-        
-        
-        
+
     }
-    
-    private func fetchSurveyQuestions(fbId: String) {
-        let url:NSURL = NSURL(string: "http://180.87.143.52/funapp/Survey.aspx")!
-        let session = NSURLSession.sharedSession()
-        
-        let request = NSMutableURLRequest(URL: url)
-        request.HTTPMethod = "POST"
-        request.cachePolicy = NSURLRequestCachePolicy.ReloadIgnoringCacheData
-        
-        let postString = "fbid=\(fbId)&function=get"
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
-        
-        let task = session.dataTaskWithRequest(request) {
-            (
-            let data, let response, let error) in
-            
-            guard let _:NSData = data, let _:NSURLResponse = response  where error == nil else {
-                print("error")
-                return
-            }
-            
-            do {
-                let objJSON = try NSJSONSerialization.JSONObjectWithData(data!, options: [])
-                
-                print(objJSON)
-                if objJSON.isKindOfClass(NSDictionary.classForCoder()) {
-                    
-                } else {
-                    print("format/server error")
-                }
-                
-            } catch let error as NSError {
-                print("json error: \(error.localizedDescription)")
-            }
-            
-        }
-        
-        task.resume()
-    }
-    
     
     //MARK: API Call
     func getSurveyInfo() {
+        displayLoadingScreen()
         
         self.webService.name = "surveyInfo"
         self.webService.connectAndGetSurveyInfo(self.user!.facebookID)
@@ -161,8 +117,8 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
     }
     
     func submitAnswer() {
-        
         if self.selectedAnswer == -1 {
+            displayAlertValidationError()
             return
         }
         
@@ -178,43 +134,36 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
         params.setObject("", forKey: "sParam")
         params.setObject(content[keyQuestionID] as! String, forKey: "qid")
         
+        displayLoadingScreen()
+        
         self.webService.name = "surveySubmit"
         self.webService.connectAndSendSurvey(params)
-        
-        
     }
     
     //MARK: Button Actions
     @IBAction func submitClicked(sender: UIButton) {
-        
-        
-        
+        self.submitAnswer()
     }
     
     @IBAction func backClicked(sender: UIButton) {
-        
-        
         self.delegate?.surveyDidClose()
-        
     }
     
     @IBAction func nextClicked(sender: UIButton) {
         
-        
     }
     
     
-    //MARK: Delegate Table View
+    //MARK: Table View Data Source
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         let content = self.surveyContent[self.currentIndex] as! NSDictionary
         let options = content[keyOptions] as! NSArray
+        
         return options.count
     }
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
     
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCellWithIdentifier("cellOptions") as? OptionTableViewCell else {
-            
             let newCell : OptionTableViewCell = OptionTableViewCell.init(style: UITableViewCellStyle.Default, reuseIdentifier: "cellContentIdentifier")
             newCell.selectionStyle = UITableViewCellSelectionStyle.None
             return newCell
@@ -232,37 +181,27 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        
         cell.backgroundColor = self.tableView.backgroundColor
-        
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
         self.selectedAnswer = indexPath.row
-        self.submitAnswer()
     }
     
-    
-    
-    
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        
-        
         let content = self.surveyContent[self.currentIndex] as! NSDictionary
         let options = content[keyOptions] as! NSArray
         let option = options[indexPath.row] as! NSDictionary
         
         let label = UILabel(frame: CGRectMake(0, 0, UIScreen.mainScreen().bounds.size.width - 120, 1000))
         return label.getLabelHeight((option[keyOption] as? String)!, font: UIFont.systemFontOfSize(17), maxSize: CGSizeMake(label.frame.size.width, label.frame.size.height)) + 10
-        
     }
     
     //MARK: WebService Delegate
     func webServiceDidFinishLoadingWithResponseDictionary(parsedDictionary: NSDictionary) {
-        print("WEBSERVICE FINISH")
+        hideLoadingScreen()
+        
         if self.webService.name == "surveyInfo" {
-            
             let result = parsedDictionary[keyResult] as! NSArray
             
             for content in result {
@@ -271,12 +210,13 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
                 self.surveyContent.addObject(dictionaryContent)
                 
             }
+            
             self.tableView.delegate = self
             self.tableView.dataSource = self
+            
             self.reloadSurveyUI()
             
-            
-        }else {
+        } else {
             
             self.currentIndex = self.currentIndex + 1
             self.selectedAnswer = -1
@@ -284,19 +224,16 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
                 
                 dispatch_async(dispatch_get_main_queue()) { () -> Void in
                     
+                    self.displayAlert("Thank you for your participation!", title: "")
                     self.delegate?.surveyDidClose()
                     
                 }
                 
-                
                 return
-                
             }
-            self.reloadSurveyUI()
             
+            self.reloadSurveyUI()
         }
-        
-        
     }
     
     func webServiceDidFinishLoadingWithResponseArray(parsedArray: NSArray) {
@@ -305,52 +242,45 @@ class SurveyViewController : UIViewController, UITableViewDataSource, UITableVie
     }
     
     func webServiceDidTimeout() {
-        print("timeout")
+        hideLoadingScreen()
+        
+        var message = ""
+        if self.webService.name == "surveyInfo" {
+            message = "Failed to fetch survey questions."
+        } else {
+            message = "Failed to submit survey answers."
+        }
+        
+        displayAlertTimedOut(message)
     }
     
     func webServiceDidFailWithError(error: NSError) {
-        print(error)
+        hideLoadingScreen()
+        displayAlertWithError(error)
     }
-    
-
-
-    
 }
 
 //MARK: - Pulsify View Controller
-class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPickerViewDelegate {
-    
+class PulsifyViewController : BaseViewController, WebServiceDelegate, CustomPickerViewDelegate {
     
     //MARK: Properties
     @IBOutlet weak var labelNumber: UILabel!
-    
     @IBOutlet weak var labelQuestion: UILabel!
-    
     @IBOutlet weak var labelOption1: UILabel!
-    
     @IBOutlet weak var labelOption2: UILabel!
-    
     @IBOutlet weak var labelOption3: UILabel!
-    
     @IBOutlet weak var labelOption4: UILabel!
-    
     @IBOutlet weak var viewOption1: UIView!
-    
     @IBOutlet weak var viewOption2: UIView!
-    
     @IBOutlet weak var viewOption3: UIView!
-    
     @IBOutlet weak var viewOption4: UIView!
-    
     @IBOutlet weak var labelCity: UILabel!
-    
     @IBOutlet weak var labelBranch: UILabel!
     @IBOutlet weak var viewBranch: UIView!
     @IBOutlet weak var viewContent: UIView!
     @IBOutlet weak var viewCity: UIView!
     
     var delegate : ModuleViewControllerDelegate?
-    
     
     var counter : Int = 0
     
@@ -373,23 +303,19 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
         self.viewBranch.layer.cornerRadius = 10
         self.viewCity.layer.cornerRadius = 10
         self.viewContent.layer.cornerRadius = 10
+        
+        self.getBranches()
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        
         self.resetButtons()
         self.resetValues()
         self.setButtonColors()
-        self.getBranches()
-        
     }
     
-    /*
-
-    Temporary function to show the button selection
-*/
+    //MARK: Custom
     func setButtonColors() {
         
         for views in self.viewOption1.subviews {
@@ -436,7 +362,6 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
         
     }
     
-    
     //MARK: Functions
     func presetValues() {
         
@@ -482,7 +407,9 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
         self.counter = self.counter + 1
         
         if self.counter >= self.contents.count {
+            
             dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                self.displayAlert("Thank you for your participation!", title: "")
                 self.delegate?.pulsifyDidClose()
             }
             
@@ -556,10 +483,7 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
         
     }
     
-    
-    
     func resetValues() {
-        
         self.answers.setObject("", forKey: "option1")
         self.answers.setObject("", forKey: "option2")
         self.answers.setObject("", forKey: "option3")
@@ -582,7 +506,6 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
     }
     
     private func parseResponse(arrayJSON: NSArray) {
-        print("fetching branches..")
         arrayJSON.enumerateObjectsUsingBlock { (obj, index, stop) -> Void in
             if obj.isKindOfClass(NSDictionary.classForCoder()) {
                 let dictObj = obj as! NSDictionary
@@ -599,16 +522,13 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
                 print("format/server error")
             }
         }
-        
-    
     }
     
     private func completeData() -> Bool {
-        
         if self.labelBranch.text! == "" || self.labelCity.text! == "" {
             
             self.view.userInteractionEnabled = true
-            print("No City or Branch selected")
+            displayAlert("Please make sure that you have selected a City and a Branch.", title: "")
             return false
             
         }
@@ -644,6 +564,13 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
                         let city = branch.city
                         if !self.arrayCities.contains(city) {
                             self.arrayCities.append(city)
+                        }
+                        
+                        if index == 0 {
+                            dispatch_async(dispatch_get_main_queue(), {
+                                self.labelCity.text = branch.city
+                                self.labelBranch.text = branch.branchName
+                            })
                         }
                     })
                 }
@@ -714,8 +641,6 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
         self.answers.setObject("\(sender.tag)", forKey: "option2")
         
         self.sendPulsify("\(sender.tag)")
-    
-        
     }
     
     @IBAction func option3Clicked(sender: UIButton) {
@@ -757,7 +682,6 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
         self.answers.setObject("\(sender.tag)", forKey: "option4")
         
         self.sendPulsify("\(sender.tag)")
-        
     }
     
     @IBAction func buttonCityClicked(sender: UIButton) {
@@ -770,8 +694,6 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
         let array = NSMutableArray(array: self.arrayCities)
         self.customPicker?.setupPicker("City", content: array)
         self.view.addSubview(self.customPicker!)
-        
-        
     }
     
     @IBAction func buttonBranchClicked(sender: UIButton) {
@@ -788,7 +710,6 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
         self.customPicker?.delegate = self
         self.customPicker?.setupPicker("Branch", content: self.arrayBranch)
         self.view.addSubview(self.customPicker!)
-//
     }
     
     @IBAction func backButtonClicked(sender: UIButton) {
@@ -800,7 +721,6 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
     
     //MARK: WebService Delegate
     func webServiceDidFinishLoadingWithResponseDictionary(parsedDictionary: NSDictionary) {
-        
         self.view.userInteractionEnabled = true
         print(parsedDictionary)
         
@@ -811,30 +731,24 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
                 self.updateContent()
                 
             }
-            
         }
-        
     }
     
     func webServiceDidFinishLoadingWithResponseArray(parsedArray: NSArray) {
-        
         self.parseResponse(parsedArray)
-        
     }
     
     func webServiceDidTimeout() {
-        print("timeout")
+        displayAlertTimedOut("Failed to submit Pulsify answers.")
     }
     
     func webServiceDidFailWithError(error: NSError) {
-        print(error)
+        displayAlertWithError(error)
     }
     
     //MARK: Custom Picker View Delegate
     func pickerDidSelect(picker: CustomPickerView, value: String, index: Int) {
-        
         if picker.pickerIdentifier == "city" {
-            
             self.labelBranch.text = ""
             self.labelCity.text = value
             
@@ -844,25 +758,19 @@ class PulsifyViewController : UIViewController, WebServiceDelegate, CustomPicker
             self.arrayBranch.removeAllObjects()
             
             for content in arrayFiltered {
-                
                 let branchModel = content as! BranchModelRepresentation
                 self.arrayBranch.addObject(branchModel.branchName)
                 
             }
-            
-        }else {
-            
+        } else {
             self.labelBranch.text = value
             
         }
-    
-    
     }
-    
 }
 
 //MARK: - Pasa Points View Controller
-class PasaPointsViewController : UIViewController, WebServiceDelegate, UITextFieldDelegate {
+class PasaPointsViewController : BaseViewController, WebServiceDelegate, UITextFieldDelegate {
     
     //MARK: Properties
     
@@ -875,9 +783,6 @@ class PasaPointsViewController : UIViewController, WebServiceDelegate, UITextFie
 
     var delegate : ModuleViewControllerDelegate?
 
-    var alertView: CustomAlertView?
-
-    
     //MARK: View life cycle
     
     override func viewDidLoad() {
@@ -889,7 +794,7 @@ class PasaPointsViewController : UIViewController, WebServiceDelegate, UITextFie
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        //TODO: update points label here
+        self.labelPoints.text = self.user!.points
     }
     
     //MARK: Button Actions
@@ -901,26 +806,25 @@ class PasaPointsViewController : UIViewController, WebServiceDelegate, UITextFie
     }
     
     @IBAction func goClicked(sender: UIButton) {
+        sender.enabled = false
         
         //validate fields first
         if self.validateFields() == true {
             //proceed
+            btnSender = sender
+            
             self.callPasaPointsApi()
             
             return
         }
         
-        if self.alertView == nil {
-            self.alertView = CustomAlertView(frame: self.view.frame)
-        }
-        
-        self.alertView!.setAlertMessage("Invalid inputs.")
-        self.view.addSubview(self.alertView!)
+        sender.enabled = true
+        displayAlertValidationError()
     }
     
     //MARK: - Methods
     private func validateFields() -> Bool {
-        if self.textCardNumber.text != "" && self.textAmount.text != "" {
+        if self.textCardNumber.text != "" && self.textAmount.text != "" && self.textCardNumber.text?.characters.count == 19 && Float(self.textAmount.text!) > 0.0 {
             return true
         }
         
@@ -947,6 +851,7 @@ class PasaPointsViewController : UIViewController, WebServiceDelegate, UITextFie
         dictParams["requestTimestamp"] = timeStamp
         
         //print(dictParams)
+        displayLoadingScreen()
         self.webService.connectAndPasaPointsWithInfo(dictParams)
     }
     
@@ -997,26 +902,32 @@ class PasaPointsViewController : UIViewController, WebServiceDelegate, UITextFie
         let status = parsedDictionary["Status"] as! String
         let description = parsedDictionary["StatusDescription"] as! String
         
+        btnSender!.enabled = true
+        hideLoadingScreen()
+        
         if status == "0" {
-            print("successful")
+            displayAlert("You have successfully transferred some points to \(self.textCardNumber.text!).", title: "")
             
             return
         }
         
-        print("error >>> \(description)")
+        displayAlertRequestError(status, descripion: description)
     }
     
     func webServiceDidFinishLoadingWithResponseArray(parsedArray: NSArray) {
         
-        
     }
     
     func webServiceDidTimeout() {
-        print("timeout")
+        btnSender!.enabled = true
+        hideLoadingScreen()
+        displayAlertTimedOut("Unable to transfer points.")
     }
     
     func webServiceDidFailWithError(error: NSError) {
-        print(error)
+        btnSender!.enabled = true
+        hideLoadingScreen()
+        displayAlertWithError(error)
     }
 }
 
@@ -1107,18 +1018,24 @@ class BranchesViewController : UIViewController, GMSMapViewDelegate {
         
         self.currentBranch = self.arrayBranches[0]
         self.lblCityName.text = self.currentBranch!.city
-        let camera = GMSCameraPosition.cameraWithLatitude(Double(self.currentBranch!.longitude)!, longitude: Double(self.currentBranch!.latitude)!, zoom: 15.0)
-        self.mapView.camera = camera
-        mapView.myLocationEnabled = true
         
+        let predicate = NSPredicate(format: "self.city == '\(self.lblCityName.text!)'")
+        let arrayFiltered = (self.arrayBranches as NSArray).filteredArrayUsingPredicate(predicate) as NSArray
         
-        // Creates a marker in the center of the map.
-        let marker = GMSMarker()
-        marker.position = CLLocationCoordinate2D(latitude: Double(self.currentBranch!.longitude)!, longitude: Double(self.currentBranch!.latitude)!)
-        marker.title = self.currentBranch!.city
-        marker.snippet = self.currentBranch!.branchName
-        marker.icon = UIImage(named: "mapPin")
-        marker.map = self.mapView
+        arrayFiltered.enumerateObjectsUsingBlock({ (obj, index, stop) in
+            let content = obj as! BranchModelRepresentation
+            
+            let target = CLLocationCoordinate2D(latitude: Double(content.longitude)!, longitude: Double(content.latitude)!)
+            self.mapView.camera = GMSCameraPosition.cameraWithTarget(target, zoom: 15)
+            
+            let marker = GMSMarker()
+            marker.position = CLLocationCoordinate2D(latitude: Double(content.longitude)!, longitude: Double(content.latitude)!)
+            marker.title = content.city
+            marker.snippet = content.branchName
+            marker.icon = UIImage(named: "mapPin")
+            marker.userData = "\(index)"
+            marker.map = self.mapView
+        })
     }
     
     private func fetchBranches() {
@@ -1260,18 +1177,20 @@ class BranchesViewController : UIViewController, GMSMapViewDelegate {
                     let predicate = NSPredicate(format: "self.city == '\(stringCity)'")
                     let arrayFiltered = (self.arrayBranches as NSArray).filteredArrayUsingPredicate(predicate) as NSArray
                     
-                    let content = arrayFiltered[0] as! BranchModelRepresentation
-                    self.currentBranch = content
-                    
-                    let target = CLLocationCoordinate2D(latitude: Double(content.longitude)!, longitude: Double(content.latitude)!)
-                    self.mapView.camera = GMSCameraPosition.cameraWithTarget(target, zoom: 15)
-                    
-                    let marker = GMSMarker()
-                    marker.position = CLLocationCoordinate2D(latitude: Double(content.longitude)!, longitude: Double(content.latitude)!)
-                    marker.title = content.city
-                    marker.snippet = content.branchName
-                    marker.icon = UIImage(named: "mapPin")
-                    marker.map = self.mapView
+                    arrayFiltered.enumerateObjectsUsingBlock({ (obj, index, stop) in
+                        let content = obj as! BranchModelRepresentation
+                        
+                        let target = CLLocationCoordinate2D(latitude: Double(content.longitude)!, longitude: Double(content.latitude)!)
+                        self.mapView.camera = GMSCameraPosition.cameraWithTarget(target, zoom: 15)
+                        
+                        let marker = GMSMarker()
+                        marker.position = CLLocationCoordinate2D(latitude: Double(content.longitude)!, longitude: Double(content.latitude)!)
+                        marker.title = content.city
+                        marker.snippet = content.branchName
+                        marker.icon = UIImage(named: "mapPin")
+                        marker.userData = "\(index)"
+                        marker.map = self.mapView
+                    })
                     
                 }
 
@@ -1285,7 +1204,7 @@ class BranchesViewController : UIViewController, GMSMapViewDelegate {
     
     //MARK: - GMSMapView Delegate
     func mapView(mapView: GMSMapView, didTapMarker marker: GMSMarker) -> Bool {
-        
+        self.currentBranch = self.arrayBranches[(marker.userData as! NSString).integerValue]
         self.displayBranchInfo(self.currentBranch!)
         
         return true
@@ -1296,7 +1215,7 @@ let productsLink = "http://180.87.143.55/fun.menu/"
 
 //MARK: - Products View Controller
 
-class ProductsViewController : UIViewController {
+class ProductsViewController : BaseViewController, UIWebViewDelegate {
     
     //MARK: Properties
     @IBOutlet var lblStore: UILabel!
@@ -1309,6 +1228,7 @@ class ProductsViewController : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.webView.delegate = self
         self.webView.loadRequest(NSURLRequest(URL: NSURL(string: productsLink)!))
     }
     
@@ -1320,5 +1240,18 @@ class ProductsViewController : UIViewController {
             self.delegate?.productsDidClose()
             
         }
+    }
+    
+    func webViewDidStartLoad(webView: UIWebView) {
+        displayLoadingScreen()
+    }
+    
+    func webViewDidFinishLoad(webView: UIWebView) {
+        hideLoadingScreen()
+    }
+    
+    func webView(webView: UIWebView, didFailLoadWithError error: NSError) {
+        hideLoadingScreen()
+        displayAlertWithError(error)
     }
 }

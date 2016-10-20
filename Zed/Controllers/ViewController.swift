@@ -30,7 +30,6 @@ func generateTimeStamp() -> String {
     return dateFormatter.stringFromDate(NSDate())
 }
 
-
 protocol HomePageDelegate {
     
     func homeGoToSurvey()
@@ -41,8 +40,63 @@ protocol HomePageDelegate {
     func homeGoToGames()
     func homeGoToCoupons()
     func homeGoToProducts()
-    
 }
+
+//MARK: - Base View Controller
+class BaseViewController: UIViewController {
+    
+    //MARK: Properties
+    
+    var alertView: CustomAlertView?
+    var loadingView: CustomLoadingView?
+    var btnSender: UIButton?
+    
+    //MARK: Methods
+    
+    //alert
+    func displayAlert(message: String, title: String) {
+        if self.alertView == nil {
+            self.alertView = CustomAlertView(frame: self.view.frame)
+        }
+        
+        self.alertView!.setAlertMessageAndTitle(message, title: title)
+        self.view.addSubview(self.alertView!)
+    }
+    
+    func displayAlertValidationError() {
+        self.displayAlert("Please check if your inputs have been filled out correctly.",
+                          title: "Validation Error")
+    }
+    
+    func displayAlertRequestError(status: String, descripion: String) {
+        self.displayAlert("\(status): \(description)",
+                          title: "Request Error")
+    }
+    
+    func displayAlertTimedOut(message: String) {
+        self.displayAlert("\(message)",
+                          title: "Request Timed Out")
+    }
+    
+    func displayAlertWithError(error: NSError) {
+        self.displayAlert("\(error.code): \(error.localizedDescription)",
+                          title: "Internal Error")
+    }
+    
+    //loading
+    func displayLoadingScreen() {
+        if self.loadingView == nil {
+            self.loadingView = CustomLoadingView(frame: self.view.frame)
+        }
+        
+        self.view.addSubview(self.loadingView!)
+    }
+    
+    func hideLoadingScreen() {
+        self.loadingView!.removeFromSuperview()
+    }
+}
+
 //MARK: - View Controller
 class ViewController: UIViewController , UIScrollViewDelegate, WebServiceDelegate {
     
@@ -505,7 +559,7 @@ class MenuViewController : UIViewController, UITableViewDataSource, UITableViewD
 //MARK: - Registration Form View Controller
 import ActionSheetPicker_3_0
 
-class RegsitrationFormViewController : UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, WebServiceDelegate {
+class RegsitrationFormViewController : BaseViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, WebServiceDelegate {
     
     //MARK: Properties
     let webService = WebService()
@@ -787,6 +841,7 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
         dictParams["msisdn"] = self.user!.mobileNumber
         
         //print(dictParams)
+        displayLoadingScreen()
         self.webService.connectAndRegisterFbInfoWithInfo(dictParams)
     }
     
@@ -803,6 +858,7 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
         dictParams["address"] = self.tableContents[4]["value"] as! String
         
         //print(dictParams)
+        displayLoadingScreen()
         self.webService.connectAndUpdateFbInfoWithInfo(dictParams)
     }
     
@@ -820,6 +876,7 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
         dictParams["address"] = self.tableContents[4]["value"] as! String
         dictParams["email"] = self.tableContents[5]["value"] as! String
         
+        displayLoadingScreen()
         self.webService.connectAndValidateVirtualCardWithInfo(dictParams)
     }
     
@@ -851,6 +908,7 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
             dictParams["gender"] = self.tableContents[3]["value"] as! String
             dictParams["lastName"] = self.tableContents[1]["value"] as! String
             
+            displayLoadingScreen()
             self.webService.connectAndMemberEmailWithInfo(dictParams)
             
             return
@@ -866,6 +924,7 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
         dictParams["transactionId"] = generateTransactionIDWithTimestamp(generateTimeStamp())
         dictParams["mobileNumber"] = self.user!.mobileNumber
         
+        displayLoadingScreen()
         self.webService.connectAndForgotPinWithInfo(dictParams)
     }
     
@@ -916,10 +975,13 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
             
             //print("Label: \(dictionary["label"] as! String) \(dictionary["value"] as! String)")
             if (dictionary["value"] as! String).characters.count == 0 {
-                print("Error >>>> Incomplete form")
+                displayAlertValidationError()
                 return
             }
         }
+        
+        sender.enabled = false
+        btnSender = sender
         
         //identify if with/without pin
         if self.user!.cardPin.characters.count == 0 {
@@ -939,6 +1001,7 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
     
     @IBAction func resendButtonClicked(sender: UIButton) {
         sender.enabled = false
+        btnSender = sender
         
         print("resending...")
         self.callResendPin()
@@ -955,6 +1018,8 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
             let description = parsedDictionary["DESCRIPTION"] as! String
             
             if status == "0" {
+                hideLoadingScreen()
+                
                 //save to core data
                 self.saveUserToCoreData()
                 /*
@@ -970,7 +1035,9 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
                 return
             }
             
-            print("error >>> \(description)")
+            btnSender!.enabled = true
+            hideLoadingScreen()
+            displayAlertRequestError(status, descripion: description)
             
             break
             
@@ -978,16 +1045,21 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
             let status = parsedDictionary["STATUS"] as! String
             let description = parsedDictionary["DESCRIPTION"] as! String
             
+            self.btnSender!.enabled = true
+            hideLoadingScreen()
+            
             if status == "0" {
                 let pinCode = parsedDictionary["PIN"] as! String
                 self.user!.cardPin = pinCode
                 print(pinCode)
-                print("resent!")
+                
+                displayAlert("Pin code has been successfully resent!", title: "")
                 
                 return
             }
             
-            print("error >>> \(description)")
+            btnSender!.enabled = true
+            displayAlertRequestError(status, descripion: description)
             break
         
         case WebServiceFor.FunMember_Email.rawValue:
@@ -1001,7 +1073,10 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
                 return
             }
             
-            print("error >>> \(errorMessage)")
+            btnSender!.enabled = true
+            hideLoadingScreen()
+            displayAlertRequestError(status, descripion: errorMessage)
+            
             break
             
         case WebServiceFor.RegisterFbInfo.rawValue:
@@ -1009,7 +1084,8 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
             let errorMessage = parsedDictionary["StatusDescription"] as! String
             
             if status == "0" {
-                //save to core data here
+                self.hideLoadingScreen()
+                
                 self.saveUserToCoreData()
                 /*
                 //proceed to dashboard
@@ -1023,7 +1099,10 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
                 return
             }
             
-            print("error >>> \(errorMessage)")
+            btnSender!.enabled = true
+            hideLoadingScreen()
+            displayAlertRequestError(status, descripion: errorMessage)
+            
             break
             
         case WebServiceFor.UpdateFbInfo.rawValue:
@@ -1031,6 +1110,8 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
             let errorMessage = parsedDictionary["StatusDescription"] as! String
             
             if status == "0" {
+                self.hideLoadingScreen()
+                
                 //save to core data here
                 self.saveUserToCoreData()
                 /*
@@ -1045,7 +1126,10 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
                 return
             }
             
-            print("error >>> \(errorMessage)")
+            btnSender!.enabled = true
+            hideLoadingScreen()
+            displayAlertRequestError(status, descripion: errorMessage)
+            
             break
             
         default:
@@ -1058,11 +1142,15 @@ class RegsitrationFormViewController : UIViewController, UITableViewDataSource, 
     }
     
     func webServiceDidTimeout() {
-        print("timeout")
+        btnSender!.enabled = true
+        hideLoadingScreen()
+        displayAlertTimedOut("Unable to proceed with registration.")
     }
     
     func webServiceDidFailWithError(error: NSError) {
-        print(error)
+        btnSender!.enabled = true
+        hideLoadingScreen()
+        displayAlertWithError(error)
     }
 }
 
@@ -1107,7 +1195,7 @@ class RegistrationCardViewController : UIViewController {
 }
 
 //MARK: - Registration Mobile Number View Controller
-class RegistrationMobileNumberViewController : UIViewController, WebServiceDelegate, UITextFieldDelegate {
+class RegistrationMobileNumberViewController : BaseViewController, WebServiceDelegate, UITextFieldDelegate {
     
     //MARK: Properties
     let user = UserModelRepresentation()
@@ -1135,21 +1223,27 @@ class RegistrationMobileNumberViewController : UIViewController, WebServiceDeleg
         self.textNumber.resignFirstResponder()
         let number = self.textNumber.text!
         
-        if number.hasPrefix("639") == false {
-            print("incorrect format")
-            //alert
+        if number.hasPrefix("639") == false || number.characters.count != 12 || Int(number) < 0 {
+            displayAlert("Please make sure that the mobile number you have entered is correct.",
+                         title: "Validation Error")
             
             return
         }
         
         sender.enabled = false
+        btnSender = sender
+        
         self.user.mobileNumber = number
+        
+        //connect to web service
+        displayLoadingScreen()
         self.webService.connectAndRegColMsisdnWithMsisdn(number)
     }
     
     //MARK: Methods
     private func processRegColResponse(parsedDict: NSDictionary) {
         let status = parsedDict["Status"] as! String
+        let description = parsedDict["Description"] as! String
         
         switch (status) {
         case "3":
@@ -1188,7 +1282,9 @@ class RegistrationMobileNumberViewController : UIViewController, WebServiceDeleg
             break
             
         default:
-            //error
+            btnSender!.enabled = true
+            hideLoadingScreen()
+            displayAlertRequestError(status, descripion: description)
             break
         }
     }
@@ -1265,7 +1361,9 @@ class RegistrationMobileNumberViewController : UIViewController, WebServiceDeleg
                 return
             }
             
-            print("error >>> \(description)")
+            btnSender!.enabled = true
+            hideLoadingScreen()
+            displayAlertRequestError(status, descripion: description)
             
             break
             
@@ -1282,7 +1380,9 @@ class RegistrationMobileNumberViewController : UIViewController, WebServiceDeleg
                 return
             }
             
-            print("error >>> \(description)")
+            btnSender!.enabled = true
+            hideLoadingScreen()
+            displayAlertRequestError(status, descripion: description)
             
             break
             
@@ -1297,11 +1397,15 @@ class RegistrationMobileNumberViewController : UIViewController, WebServiceDeleg
     }
     
     func webServiceDidTimeout() {
-        print("timeout")
+        btnSender!.enabled = true
+        hideLoadingScreen()
+        displayAlertTimedOut("Unable to proceed with registration.")
     }
     
     func webServiceDidFailWithError(error: NSError) {
-        print(error)
+        btnSender!.enabled = true
+        hideLoadingScreen()
+        displayAlertWithError(error)
     }
     
     //MARK: NavigationController Delegate
@@ -1311,7 +1415,7 @@ class RegistrationMobileNumberViewController : UIViewController, WebServiceDeleg
 }
 
 //MARK: - Registration Card Number View Controller
-class RegistrationCardNumberViewController : UIViewController, WebServiceDelegate, UITextFieldDelegate {
+class RegistrationCardNumberViewController : BaseViewController, WebServiceDelegate, UITextFieldDelegate {
     
     //MARK: Properties
     let user = UserModelRepresentation()
@@ -1343,17 +1447,20 @@ class RegistrationCardNumberViewController : UIViewController, WebServiceDelegat
         self.view.endEditing(true)
         let mobileNumber = self.txtMobileNumber.text!
         
-        if mobileNumber.hasPrefix("639") == false {
-            print("incorrect format")
-            //alert
+        if mobileNumber.hasPrefix("639") == false || mobileNumber.characters.count != 12 || Int(mobileNumber) < 0 || self.txtCardNumber.text!.characters.count < 19 {
+            displayAlertValidationError()
             
             return
         }
         
         sender.enabled = false
+        btnSender = sender
         
         self.user.cardNumber = self.txtCardNumber.text!
         self.user.mobileNumber = mobileNumber
+        
+        //connect to web service
+        displayLoadingScreen()
         self.webService.connectAndRegColMsisdnWithMsisdn(mobileNumber)
     }
     
@@ -1400,6 +1507,7 @@ class RegistrationCardNumberViewController : UIViewController, WebServiceDelegat
     //MARK: Methods
     private func processRegColResponse(parsedDict: NSDictionary) {
         let status = parsedDict["Status"] as! String
+        let description = parsedDict["Description"] as! String
         
         switch (status) {
         case "3":
@@ -1448,7 +1556,9 @@ class RegistrationCardNumberViewController : UIViewController, WebServiceDelegat
             break
             
         default:
-            //error
+            btnSender!.enabled = true
+            hideLoadingScreen()
+            displayAlertRequestError(status, descripion: description)
             break
         }
     }
@@ -1510,7 +1620,10 @@ class RegistrationCardNumberViewController : UIViewController, WebServiceDelegat
             if status != "0" && status != "77" {
                 //failed
                 let errorMessage = parsedDictionary["StatusDescription"] as! String
-                print("error >>>> \(errorMessage)")
+                
+                btnSender!.enabled = true
+                hideLoadingScreen()
+                displayAlertRequestError(status, descripion: errorMessage)
                 
                 return
             }
@@ -1538,7 +1651,9 @@ class RegistrationCardNumberViewController : UIViewController, WebServiceDelegat
                 return
             }
             
-            print("error >>> \(description)")
+            btnSender!.enabled = true
+            hideLoadingScreen()
+            displayAlertRequestError(status, descripion: description)
             
             break
             
@@ -1554,11 +1669,15 @@ class RegistrationCardNumberViewController : UIViewController, WebServiceDelegat
     }
     
     func webServiceDidTimeout() {
-        print("timeout")
+        btnSender!.enabled = true
+        hideLoadingScreen()
+        displayAlertTimedOut("Unable to proceed with registration.")
     }
     
     func webServiceDidFailWithError(error: NSError) {
-        print(error)
+        btnSender!.enabled = true
+        hideLoadingScreen()
+        displayAlertWithError(error)
     }
     
     //MARK: NavigationController Delegate
@@ -1568,7 +1687,7 @@ class RegistrationCardNumberViewController : UIViewController, WebServiceDelegat
 }
 
 //MARK: - Pin Verification View Controller
-class PinVerificationViewController : UIViewController, WebServiceDelegate, UITextFieldDelegate {
+class PinVerificationViewController : BaseViewController, WebServiceDelegate, UITextFieldDelegate {
     
     //MARK: Properties
     let webService = WebService()
@@ -1592,6 +1711,7 @@ class PinVerificationViewController : UIViewController, WebServiceDelegate, UITe
     
     //MARK: Methods
     private func saveUserToCoreData() {
+        displayLoadingScreen()
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let managedContext = appDelegate.managedObjectContext
         
@@ -1638,8 +1758,7 @@ class PinVerificationViewController : UIViewController, WebServiceDelegate, UITe
     //MARK: IBAction Delegate
     @IBAction func didPressOkay(sender: UIButton) {
         if self.txtPinCode.text!.characters.count == 0 {
-            print("invalid input")
-            //alert
+            displayAlertValidationError()
             
             return
         }
@@ -1647,8 +1766,7 @@ class PinVerificationViewController : UIViewController, WebServiceDelegate, UITe
         sender.enabled = false
         
         if self.user!.cardPin != self.txtPinCode.text! {
-            print("incorrect pin")
-            //alert
+            displayAlert("Pin code entered is incorrect.\nPlease try again.", title: "")
             
             sender.enabled = true
             
@@ -1660,7 +1778,6 @@ class PinVerificationViewController : UIViewController, WebServiceDelegate, UITe
             //save to core data
             self.saveUserToCoreData()
             
-            
             /*
             //proceed to dashboard
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -1669,6 +1786,8 @@ class PinVerificationViewController : UIViewController, WebServiceDelegate, UITe
             
             self.presentViewController(vc, animated: true, completion: nil)
             */
+            
+            hideLoadingScreen()
             
             let storyboard = UIStoryboard(name: "Navigation", bundle: nil)
             let vc = storyboard.instantiateViewControllerWithIdentifier("navigationView") as! FunNavigationController
@@ -1682,12 +1801,14 @@ class PinVerificationViewController : UIViewController, WebServiceDelegate, UITe
     
     @IBAction func didPressResend(sender: UIButton) {
         sender.enabled = false
+        btnSender = sender
         
         //resend pin to the mobile number provided earlier
         let dictParams = NSMutableDictionary()
         dictParams["transactionId"] = generateTransactionIDWithTimestamp(generateTimeStamp())
         dictParams["mobileNumber"] = self.user!.mobileNumber
         
+        displayLoadingScreen()
         self.webService.connectAndForgotPinWithInfo(dictParams)
     }
     
@@ -1701,16 +1822,21 @@ class PinVerificationViewController : UIViewController, WebServiceDelegate, UITe
             let status = parsedDictionary["STATUS"] as! String
             let description = parsedDictionary["DESCRIPTION"] as! String
             
+            self.btnSender!.enabled = true
+            hideLoadingScreen()
+            
             if status == "0" {
                 let pinCode = parsedDictionary["PIN"] as! String
                 self.user!.cardPin = pinCode
                 print(pinCode)
-                print("resent!")
+                
+                displayAlert("Pin code has been successfully resent!", title: "")
                 
                 return
             }
             
-            print("error >>> \(description)")
+            btnSender!.enabled = true
+            displayAlertRequestError(status, descripion: description)
             break
             
         default:
@@ -1724,11 +1850,15 @@ class PinVerificationViewController : UIViewController, WebServiceDelegate, UITe
     }
     
     func webServiceDidTimeout() {
-        print("timeout")
+        btnSender!.enabled = true
+        hideLoadingScreen()
+        displayAlertTimedOut("Unable to proceed with registration.")
     }
     
     func webServiceDidFailWithError(error: NSError) {
-        print(error)
+        btnSender!.enabled = true
+        hideLoadingScreen()
+        displayAlertWithError(error)
     }
     
     //MARK: NavigationController Delegate
@@ -1738,7 +1868,7 @@ class PinVerificationViewController : UIViewController, WebServiceDelegate, UITe
 }
 
 //MARK: - Registration Facebook View Controller
-class RegistrationFacebookViewController : UIViewController, FBSDKLoginButtonDelegate {
+class RegistrationFacebookViewController : BaseViewController, FBSDKLoginButtonDelegate {
     
     //MARK: Properties
     var user: UserModelRepresentation?
@@ -1757,6 +1887,9 @@ class RegistrationFacebookViewController : UIViewController, FBSDKLoginButtonDel
     
     //MARK: Button Actions
     @IBAction func fbButtonClicked(sender: FBSDKLoginButton) {
+        sender.enabled = false
+        displayLoadingScreen()
+        
         let fbLoginManager : FBSDKLoginManager = FBSDKLoginManager()
         fbLoginManager.logInWithReadPermissions(["public_profile", "email", "user_friends"], fromViewController: self) { (result, error) -> Void in
             if (error == nil){
@@ -1765,6 +1898,10 @@ class RegistrationFacebookViewController : UIViewController, FBSDKLoginButtonDel
                 {
                     self.getFBUserData()
                 }
+            } else {
+                sender.enabled = true
+                self.hideLoadingScreen()
+                self.displayAlertWithError(error)
             }
         }
     }
@@ -1784,7 +1921,7 @@ class RegistrationFacebookViewController : UIViewController, FBSDKLoginButtonDel
                         let request = FBSDKGraphRequest(graphPath: "me", parameters: parametersDictionary as AnyObject as! [NSObject : AnyObject], HTTPMethod: "GET")
                         request.startWithCompletionHandler({ (connection, result, error) -> Void in
                             
-                            
+                            self.hideLoadingScreen()
                             
                             let dictionaryResult = result as! NSDictionary
                             print(result)
@@ -1804,9 +1941,19 @@ class RegistrationFacebookViewController : UIViewController, FBSDKLoginButtonDel
                             
                             
                         })
+                    } else {
+                        self.btnSender!.enabled = true
+                        self.hideLoadingScreen()
                     }
+                } else {
+                    self.btnSender!.enabled = true
+                    self.hideLoadingScreen()
+                    self.displayAlertWithError(error)
                 }
             })
+        } else {
+            self.btnSender!.enabled = true
+            self.hideLoadingScreen()
         }
     }
     

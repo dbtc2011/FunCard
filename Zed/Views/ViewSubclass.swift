@@ -529,6 +529,7 @@ class CustomAlertView: UIView {
     
     //MARK: Properties
     
+    var lblTitle: UILabel?
     var lblMessage: UILabel?
     
     //MARK: View Life Cycle
@@ -537,19 +538,28 @@ class CustomAlertView: UIView {
         super.init(frame: frame)
         
         let bgView = UIView(frame: frame)
-        bgView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.8)
+        bgView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.7)
         self.addSubview(bgView)
         
-        let centerView = UIView(frame: CGRect(x: 20, y: (self.frame.height-200)/2, width: self.frame.width-40, height: 200))
+        let centerView = UIView(frame: CGRect(x: 15, y: (self.frame.height-200)/2, width: self.frame.width-30, height: 200))
         centerView.backgroundColor = UIColor.whiteColor()
         centerView.layer.cornerRadius = 5.0
         self.addSubview(centerView)
+        
+        self.lblTitle = UILabel(frame: CGRect(x: 20, y: centerView.frame.minY-50, width: centerView.frame.width, height: 50))
+        self.lblTitle!.text = ""
+        self.lblTitle!.textAlignment = .Center
+        self.lblTitle!.adjustsFontSizeToFitWidth = true
+        self.lblTitle!.minimumScaleFactor = 0.3
+        self.lblTitle!.font = UIFont.systemFontOfSize(20.0)
+        self.lblTitle!.textColor = UIColor(red: 30.0/255.0, green: 158.0/255.0, blue: 230.0/255.0, alpha: 1.0)
+        self.addSubview(self.lblTitle!)
         
         self.lblMessage = UILabel(frame: CGRect(x: 10, y: 20, width: centerView.frame.width-20, height: centerView.frame.height-104))
         self.lblMessage!.text = ""
         self.lblMessage!.textAlignment = .Center
         self.lblMessage!.numberOfLines = 0
-        self.lblMessage!.font = UIFont.systemFontOfSize(20.0)
+        self.lblMessage!.font = UIFont.systemFontOfSize(19.0)
         self.lblMessage!.textColor = UIColor(red: 30.0/255.0, green: 158.0/255.0, blue: 230.0/255.0, alpha: 1.0)
         centerView.addSubview(self.lblMessage!)
         
@@ -576,8 +586,9 @@ class CustomAlertView: UIView {
     
     //MARK: Custom
     
-    func setAlertMessage(message: String) {
+    func setAlertMessageAndTitle(message: String, title: String) {
         self.lblMessage!.text = message
+        self.lblTitle!.text = title
     }
     
     //MARK: Button Actions
@@ -601,10 +612,10 @@ class CustomLoadingView: UIView {
         
         let imgAnimated = UIImageView(image: UIImage(named: ""))
         imgAnimated.frame.origin = CGPoint(x: (self.frame.width-imgAnimated.frame.width)/2, y: (self.frame.height-imgAnimated.frame.height)/2)
-        let arrayImageNames = [UIImage(named: "")!,
-                               UIImage(named: "")!,
-                               UIImage(named: "")!,
-                               UIImage(named: "")!]
+        let arrayImageNames = [UIImage(named: "logo")!, //for now
+                               UIImage(named: "logo")!,
+                               UIImage(named: "logo")!,
+                               UIImage(named: "logo")!]
         imgAnimated.animationImages = arrayImageNames
         imgAnimated.startAnimating()
         self.addSubview(imgAnimated)
