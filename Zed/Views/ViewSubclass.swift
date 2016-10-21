@@ -11,12 +11,17 @@ import UIKit
 import CoreData
 
 //MARK: - Point Header View
+protocol PointHeaderViewDelegate {
+    func pointHeaderViewDidRefresh()
+}
+
 class PointHeaderView: UIView {
     
     //MARK: Properties
     let labelPoints: UILabel = UILabel()
     let labelLastUpdate: UILabel = UILabel()
 
+    var delegate: PointHeaderViewDelegate?
     
     //MARK: Method
     func setupView() {
@@ -32,7 +37,6 @@ class PointHeaderView: UIView {
         
         let pointWidth = self.frame.size.width * 0.6
         
-        
         let imagePoints = UIImageView(frame: CGRectMake((self.frame.size.width / 2) - ((pointWidth + 50)/2), CGRectGetMinY(self.labelLastUpdate.frame) - 40, pointWidth, 35))
         imagePoints.image = UIImage(named: "bar")
         self.addSubview(imagePoints)
@@ -47,6 +51,7 @@ class PointHeaderView: UIView {
         let buttonRefresh = UIButton(type: UIButtonType.Custom)
         buttonRefresh.frame = CGRectMake(CGRectGetMaxX(imagePoints.frame) + 10, CGRectGetMinY(imagePoints.frame), 35, 35)
         buttonRefresh.setImage(UIImage(named: "refresh"), forState: UIControlState.Normal)
+        buttonRefresh.addTarget(self, action: #selector(PointHeaderView.refreshButtonClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.addSubview(buttonRefresh)
         
         let buttonLogOff = UIButton(type: UIButtonType.Custom)
@@ -58,6 +63,10 @@ class PointHeaderView: UIView {
     }
     
     //MARK: Button Actions
+    func refreshButtonClicked(sender: UIButton) {
+        self.delegate?.pointHeaderViewDidRefresh()
+    }
+    
     func logoffButtonClicked(sender: UIButton) {
         
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate

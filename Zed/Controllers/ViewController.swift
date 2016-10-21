@@ -98,7 +98,7 @@ class BaseViewController: UIViewController {
 }
 
 //MARK: - View Controller
-class ViewController: BaseViewController , UIScrollViewDelegate, WebServiceDelegate {
+class ViewController: BaseViewController , UIScrollViewDelegate, WebServiceDelegate, PointHeaderViewDelegate {
     
     //MARK: Properties
     var counter = 0
@@ -117,8 +117,7 @@ class ViewController: BaseViewController , UIScrollViewDelegate, WebServiceDeleg
         super.viewDidLoad()
         self.setupUI()
         
-        // Do any additional setup after loading the view, typically from a nib.
-        
+        self.header.delegate = self
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -150,6 +149,11 @@ class ViewController: BaseViewController , UIScrollViewDelegate, WebServiceDeleg
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    //MARK: PointHeaderView Delegate
+    func pointHeaderViewDidRefresh() {
+        self.getDashboardInfo()
     }
     
     //MARK: Methods
@@ -200,8 +204,6 @@ class ViewController: BaseViewController , UIScrollViewDelegate, WebServiceDeleg
             }
             self.cardInfo.setupView()
             self.view.addSubview(self.cardInfo)
-            
-            
         }
         
     }
@@ -342,7 +344,7 @@ class ViewController: BaseViewController , UIScrollViewDelegate, WebServiceDeleg
             //update core data
             self.updateUserFromCoreData()
             
-            //update ui
+            //update ui here
             
             return
         }
