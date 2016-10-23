@@ -40,6 +40,9 @@ class XMLParser: NSObject, NSXMLParserDelegate {
     private var key = ""
     private var object: NSMutableString?
     
+    private var array: NSMutableArray?
+    private var arrayDictionary: NSMutableDictionary?
+    
     //MARK: - Methods
     
     func parse() -> Void {
@@ -51,6 +54,12 @@ class XMLParser: NSObject, NSXMLParserDelegate {
     func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
         self.key = elementName
         self.object = NSMutableString()
+        
+        if elementName == "LINKEDCARDNUMBER" || elementName == "LAST5TRANSACTION" {
+            self.array = NSMutableArray()
+        } else if elementName == "LINK" || elementName == "TRANSACTION" {
+            self.arrayDictionary = NSMutableDictionary()
+        }
     }
     
     func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
@@ -58,9 +67,27 @@ class XMLParser: NSObject, NSXMLParserDelegate {
             self.object = NSMutableString()
         }
         
-        if self.key != "" {
+//        if self.key != "" {
+//            parsedDictionary.setObject(self.object!, forKey: self.key)
+//        }
+        
+        if elementName == "LINKEDCARDNUMBER" {
+            parsedDictionary.setObject(self.array!, forKey: "LinkedCards")
+            self.array = nil
+        } else if elementName == "LAST5TRANSACTION" {
+            parsedDictionary.setObject(self.array!, forKey: "Transactions")
+            self.array = nil
+        } else if elementName == "LINK" || elementName == "TRANSACTION" {
+            self.array!.addObject(self.arrayDictionary!)
+            self.arrayDictionary = nil
+        }
+        
+        if self.array != nil && self.arrayDictionary != nil {
+            self.arrayDictionary!.setObject(self.object!, forKey: self.key)
+        } else {
             parsedDictionary.setObject(self.object!, forKey: self.key)
         }
+
         
         self.object = nil
         self.key = ""

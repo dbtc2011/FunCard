@@ -42,8 +42,8 @@ class PointHeaderView: UIView {
         self.addSubview(imagePoints)
         
         self.labelPoints.frame = CGRectMake(CGRectGetMinX(imagePoints.frame) + (0.45 * imagePoints.frame.size.width), CGRectGetMinY(imagePoints.frame), imagePoints.frame.size.width * 0.55, 35)
-        self.labelPoints.textColor = UIColor.blueColor()
-        self.labelPoints.text = "0.0"
+        self.labelPoints.textColor = UIColor(red: 19/255, green: 158/255, blue: 234/255, alpha: 1.0)
+        self.labelPoints.text = "0.00"
         self.labelPoints.textAlignment = NSTextAlignment.Center
         self.labelPoints.font = UIFont.boldSystemFontOfSize(18)
         self.addSubview(self.labelPoints)
@@ -126,7 +126,7 @@ class CardInfoView: UIView {
             card1.frame = CGRectMake(10, 5, 80, 15)
         }
         card1.text = "Card 1:"
-        card1.textColor = UIColor.yellowColor()
+        card1.textColor = UIColor(red: 248/255, green: 227/255, blue: 56/255, alpha: 1.0)
         card1.font = UIFont.systemFontOfSize(13)
         card1.textAlignment = NSTextAlignment.Left
         self.addSubview(card1)
@@ -135,12 +135,12 @@ class CardInfoView: UIView {
         self.labelCard1.textColor = UIColor.whiteColor()
         self.labelCard1.font = UIFont.systemFontOfSize(13)
         self.labelCard1.textAlignment = NSTextAlignment.Right
-        self.labelCard1.text = "123456789"
+        self.labelCard1.text = "---"
         self.addSubview(self.labelCard1)
         
         let card2: UILabel = UILabel(frame: CGRectMake(10, CGRectGetMaxY(card1.frame), 80, 15))
         card2.text = "Card 2:"
-        card2.textColor = UIColor.yellowColor()
+        card2.textColor = UIColor(red: 248/255, green: 227/255, blue: 56/255, alpha: 1.0)
         card2.font = UIFont.systemFontOfSize(13)
         card2.textAlignment = NSTextAlignment.Left
         self.addSubview(card2)
@@ -149,12 +149,12 @@ class CardInfoView: UIView {
         self.labelCard2.textColor = UIColor.whiteColor()
         self.labelCard2.font = UIFont.systemFontOfSize(13)
         self.labelCard2.textAlignment = NSTextAlignment.Right
-        self.labelCard2.text = "123456789"
+        self.labelCard2.text = "---"
         self.addSubview(self.labelCard2)
         
         let card3: UILabel = UILabel(frame: CGRectMake(10, CGRectGetMaxY(card2.frame), 80, 15))
-        card3.text = "Card 2:"
-        card3.textColor = UIColor.yellowColor()
+        card3.text = "Card 3:"
+        card3.textColor = UIColor(red: 248/255, green: 227/255, blue: 56/255, alpha: 1.0)
         card3.font = UIFont.systemFontOfSize(13)
         card3.textAlignment = NSTextAlignment.Left
         self.addSubview(card3)
@@ -163,17 +163,15 @@ class CardInfoView: UIView {
         self.labelCard3.textColor = UIColor.whiteColor()
         self.labelCard3.font = UIFont.systemFontOfSize(13)
         self.labelCard3.textAlignment = NSTextAlignment.Right
-        self.labelCard3.text = "123456789"
+        self.labelCard3.text = "---"
         self.addSubview(self.labelCard3)
-        
-        
         
         let transaction: UILabel = UILabel(frame: CGRectMake(10, CGRectGetMaxY(card3.frame)+7, 300, 15))
         if UIScreen.mainScreen().bounds.size.height == 480 {
             transaction.frame = CGRectMake(10, CGRectGetMaxY(card3.frame)+3, 300, 15)
         }
         transaction.text = "LAST TRANSACTION"
-        transaction.textColor = UIColor.blueColor()
+        transaction.textColor = UIColor(red: 19/255, green: 158/255, blue: 234/255, alpha: 1.0)
         transaction.font = UIFont.boldSystemFontOfSize(15)
         transaction.textAlignment = NSTextAlignment.Left
         self.addSubview(transaction)
@@ -190,7 +188,7 @@ class CardInfoView: UIView {
         
         self.labelPointsEarned.frame = CGRectMake(CGRectGetMaxX(pointsEarned.frame) + 5, CGRectGetMinY(pointsEarned.frame), self.frame.size.width - 155, 15)
         self.labelPointsEarned.font = UIFont.systemFontOfSize(13)
-        self.labelPointsEarned.text = "12"
+        self.labelPointsEarned.text = "---"
         self.labelPointsEarned.textColor = UIColor.whiteColor()
         self.labelPointsEarned.textAlignment = NSTextAlignment.Right
         self.addSubview(self.labelPointsEarned)
@@ -237,9 +235,8 @@ class CardInfoView: UIView {
         self.labelTransactionDate.textAlignment = NSTextAlignment.Right
         self.addSubview(self.labelTransactionDate)
     }
-    
-    
 }
+
 //MARK: - MenuTypeTableViewCell
 class MenuTypeTableViewCell: UITableViewCell {
     
@@ -473,8 +470,7 @@ class CustomPickerView : UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         buttonCancel.backgroundColor = UIColor.blueColor()
         buttonCancel.setTitle("Cancel", forState: UIControlState.Normal)
         viewHolder.addSubview(buttonCancel)
-        
-        
+    
         let buttonOkay = UIButton(type: UIButtonType.Custom)
         buttonOkay.frame = CGRectMake(self.frame.size.width/2, 250, self.frame.size.width/2, 50)
         buttonOkay.backgroundColor = UIColor.blueColor()

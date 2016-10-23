@@ -48,6 +48,11 @@ class UserModelRepresentation: NSObject {
     var cardPin: String = ""
     var mobileNumber: String = ""
     
+    var lastPointsEarned: String = ""
+    var lastPointsRedeemed: String = ""
+    var lastPointsPasa: String = ""
+    var lastTransactionDate: String = ""
+    
     func convertManagedObjectToUserModelInfo(managedObject: User) {
         self.facebookID = managedObject.facebookId!
         self.firstName = managedObject.firstName!
@@ -61,6 +66,10 @@ class UserModelRepresentation: NSObject {
         self.cardNumber = managedObject.cardNumber1!
         self.cardNumber2 = managedObject.cardNumber2!
         self.cardNumber3 = managedObject.cardNumber3!
+        self.lastPointsEarned = managedObject.lastPointsEarned!
+        self.lastPointsRedeemed = managedObject.lastPointsRedeemed!
+        self.lastPointsPasa = managedObject.lastPointsPasa!
+        self.lastTransactionDate = managedObject.lastTransactionDate!
     }
 }
 

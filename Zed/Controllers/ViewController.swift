@@ -83,6 +83,11 @@ class BaseViewController: UIViewController {
                           title: "Internal Error")
     }
     
+    func displayAlertNoConnection() {
+        self.displayAlert("Make sure your device is connected to the internet.",
+                          title: "No Internet Connection")
+    }
+    
     //loading
     func displayLoadingScreen() {
         if self.loadingView == nil {
@@ -94,6 +99,15 @@ class BaseViewController: UIViewController {
     
     func hideLoadingScreen() {
         self.loadingView!.removeFromSuperview()
+    }
+    
+    //internet checking
+    func checkConnection() -> Bool {
+        if Reachability.isConnectedToNetwork() == true {
+            return true
+        }
+        
+        return false
     }
 }
 
@@ -164,8 +178,6 @@ class ViewController: BaseViewController , UIScrollViewDelegate, WebServiceDeleg
             self.view.backgroundColor = UIColor.blackColor()
             self.pageIndicator.enabled = false
             self.pageIndicator.numberOfPages = 8
-            self.pageIndicator.currentPageIndicatorTintColor = UIColor.yellowColor()
-            self.pageIndicator.pageIndicatorTintColor = UIColor.blueColor()
             
             self.scrollView.showsHorizontalScrollIndicator = false
             self.scrollView.showsVerticalScrollIndicator = false
@@ -197,13 +209,15 @@ class ViewController: BaseViewController , UIScrollViewDelegate, WebServiceDeleg
             self.header.setupView()
             self.view.addSubview(self.header)
             
-            self.cardInfo.frame = CGRectMake(10, UIScreen.mainScreen().bounds.size.height - ((UIScreen.mainScreen().bounds.size.height * 0.43) + 165 + 20), UIScreen.mainScreen().bounds.size.width - 20, 155)
+            self.cardInfo.frame = CGRectMake(10, UIScreen.mainScreen().bounds.size.height - ((UIScreen.mainScreen().bounds.size.height * 0.43) + 200), UIScreen.mainScreen().bounds.size.width - 20, 155)
             
             if UIScreen.mainScreen().bounds.size.height == 480 {
                 self.cardInfo.frame = CGRectMake(10, UIScreen.mainScreen().bounds.size.height - ((UIScreen.mainScreen().bounds.size.height * 0.43) + 155 + 5), UIScreen.mainScreen().bounds.size.width - 20, 135)
             }
             self.cardInfo.setupView()
             self.view.addSubview(self.cardInfo)
+            
+            self.fetchUserFromCoreData()
         }
         
     }
@@ -269,6 +283,60 @@ class ViewController: BaseViewController , UIScrollViewDelegate, WebServiceDeleg
             if results.count > 0 {
                 let user = results.last!
                 self.user!.convertManagedObjectToUserModelInfo(user)
+                
+                //update ui
+                var cardNumber1 = ""
+                for char in self.user!.cardNumber.characters {
+                    cardNumber1.append(char)
+                    
+                    let strForComparison = cardNumber1.stringByReplacingOccurrencesOfString("-", withString: "")
+                    if strForComparison.characters.count%4 == 0 && cardNumber1.characters.count < 19 {
+                        cardNumber1 += "-"
+                    }
+                }
+                
+                var cardNumber2 = ""
+                if self.user!.cardNumber2.characters.count > 3 {
+                    for char in self.user!.cardNumber2.characters {
+                        cardNumber2.append(char)
+                        
+                        let strForComparison = cardNumber2.stringByReplacingOccurrencesOfString("-", withString: "")
+                        if strForComparison.characters.count%4 == 0 && cardNumber2.characters.count < 19 {
+                            cardNumber2 += "-"
+                        }
+                    }
+                } else {
+                    cardNumber2 = self.user!.cardNumber2
+                }
+                
+                var cardNumber3 = ""
+                if self.user!.cardNumber3.characters.count > 3 {
+                    for char in self.user!.cardNumber3.characters {
+                        cardNumber3.append(char)
+                        
+                        let strForComparison = cardNumber3.stringByReplacingOccurrencesOfString("-", withString: "")
+                        if strForComparison.characters.count%4 == 0 && cardNumber3.characters.count < 19 {
+                            cardNumber3 += "-"
+                        }
+                    }
+                } else {
+                    cardNumber3 = self.user!.cardNumber3
+                }
+                
+                self.header.labelPoints.text = self.user!.points
+                self.cardInfo.labelCard1.text = cardNumber1
+                self.cardInfo.labelCard2.text = cardNumber2
+                self.cardInfo.labelCard3.text = cardNumber3
+                
+                self.cardInfo.labelPointsEarned.text = self.user!.lastPointsEarned
+                self.cardInfo.labelPointsRedeemed.text = self.user!.lastPointsRedeemed
+                self.cardInfo.labelPasaPoints.text = self.user!.lastPointsPasa
+                self.cardInfo.labelTransactionDate.text = self.user!.lastTransactionDate
+                
+                if NSUserDefaults.standardUserDefaults().objectForKey("lastUpdated") == nil {
+                    NSUserDefaults.standardUserDefaults().setObject("---", forKey: "lastUpdated")
+                }
+                self.header.labelLastUpdate.text = "Last Updated  \(NSUserDefaults.standardUserDefaults().objectForKey("lastUpdated")!)"
             }
             
         } catch let error as NSError {
@@ -287,9 +355,13 @@ class ViewController: BaseViewController , UIScrollViewDelegate, WebServiceDeleg
             if results.count > 0 {
                 let user = results.last!
                 user.points = self.user!.points
-                
-                //update display here
-                
+                user.cardNumber1 = self.user!.cardNumber
+                user.cardNumber2 = self.user!.cardNumber2
+                user.cardNumber3 = self.user!.cardNumber3
+                user.lastPointsEarned = self.user!.lastPointsEarned
+                user.lastPointsRedeemed = self.user!.lastPointsRedeemed
+                user.lastPointsPasa = self.user!.lastPointsPasa
+                user.lastTransactionDate = self.user!.lastTransactionDate
                 
                 try managedContext.save()
             }
@@ -302,10 +374,8 @@ class ViewController: BaseViewController , UIScrollViewDelegate, WebServiceDeleg
     //MARK: Delegate
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        
-        
         counter = (Int)(scrollView.contentOffset.x / self.view.frame.size.width)
-        self.pageIndicator.currentPage = counter
+        self.pageIndicator.currentPage = counter+1
     }
     
     //MARK: Button Actions
@@ -327,7 +397,6 @@ class ViewController: BaseViewController , UIScrollViewDelegate, WebServiceDeleg
         }else if sender.tag == 8 {
             self.delegate?.homeGoToBranches()
         }
-        
     }
     
     //MARK: WebService Delegate
@@ -338,13 +407,92 @@ class ViewController: BaseViewController , UIScrollViewDelegate, WebServiceDeleg
         let description = parsedDictionary["DESCRIPTION"] as! String
         
         if status == "0" {
-            let points = parsedDictionary["TOTALPOINTS"] as! String
-            self.user!.points = points
+            self.user!.points = parsedDictionary["TOTALPOINTS"] as! String
+            self.user!.cardNumber = parsedDictionary["PRIMARYCARDNUMBER"] as! String
+            
+            if parsedDictionary["LinkedCards"] != nil {
+                let cards = parsedDictionary["LinkedCards"] as! NSArray
+                
+                for card in cards {
+                    let index = cards.indexOfObject(card)
+                    
+                    switch index {
+                    case 0:
+                        self.user!.cardNumber2 = card["CARDNUMBER"] as! String
+                        
+                        var cardNumber2 = ""
+                        for char in self.user!.cardNumber2.characters {
+                            cardNumber2.append(char)
+                            
+                            let strForComparison = cardNumber2.stringByReplacingOccurrencesOfString("-", withString: "")
+                            if strForComparison.characters.count%4 == 0 && cardNumber2.characters.count < 19 {
+                                cardNumber2 += "-"
+                            }
+                        }
+                        
+                        self.cardInfo.labelCard2.text = cardNumber2
+                        
+                        break
+                    case 1:
+                        self.user!.cardNumber3 = card["CARDNUMBER"] as! String
+                        
+                        var cardNumber3 = ""
+                        for char in self.user!.cardNumber3.characters {
+                            cardNumber3.append(char)
+                            
+                            let strForComparison = cardNumber3.stringByReplacingOccurrencesOfString("-", withString: "")
+                            if strForComparison.characters.count%4 == 0 && cardNumber3.characters.count < 19 {
+                                cardNumber3 += "-"
+                            }
+                        }
+                        
+                        self.cardInfo.labelCard3.text = cardNumber3
+                        
+                        break
+                    default:
+                        break
+                    }
+                }
+            }
+            
+            if parsedDictionary["Transactions"] != nil {
+                let transactions = parsedDictionary["Transactions"] as! NSArray
+                if transactions.count > 0 {
+                    let lastTransaction = transactions.firstObject! as! NSDictionary
+                    
+                    self.user!.lastPointsEarned = lastTransaction["EARNED"] as! String
+                    self.user!.lastPointsPasa = lastTransaction["PASA"] as! String
+                    self.user!.lastPointsRedeemed = lastTransaction["REDEEMED"] as! String
+                    self.user!.lastTransactionDate = lastTransaction["DATE"] as! String
+                }
+            }
+            
+            let date = NSDate()
+            let dateFormatter = NSDateFormatter()
+            dateFormatter.dateFormat = "MMMM dd, yyyy | h:mm a"
+            NSUserDefaults.standardUserDefaults().setObject(dateFormatter.stringFromDate(date), forKey: "lastUpdated")
             
             //update core data
             self.updateUserFromCoreData()
             
             //update ui here
+            var cardNumber1 = ""
+            for char in self.user!.cardNumber.characters {
+                cardNumber1.append(char)
+                
+                let strForComparison = cardNumber1.stringByReplacingOccurrencesOfString("-", withString: "")
+                if strForComparison.characters.count%4 == 0 && cardNumber1.characters.count < 19 {
+                    cardNumber1 += "-"
+                }
+            }
+            
+            self.header.labelPoints.text = self.user!.points
+            self.cardInfo.labelCard1.text = cardNumber1
+            self.header.labelLastUpdate.text = "Last Updated  \(NSUserDefaults.standardUserDefaults().objectForKey("lastUpdated")!)"
+            self.cardInfo.labelPointsEarned.text = self.user!.lastPointsEarned
+            self.cardInfo.labelPointsRedeemed.text = self.user!.lastPointsRedeemed
+            self.cardInfo.labelPasaPoints.text = self.user!.lastPointsPasa
+            self.cardInfo.labelTransactionDate.text = self.user!.lastTransactionDate
             
             return
         }
@@ -954,8 +1102,12 @@ class RegsitrationFormViewController : BaseViewController, UITableViewDataSource
         user.email = self.tableContents[5]["value"] as? String
         user.points = "0.00"
         user.cardNumber1 = self.user!.cardNumber
-        user.cardNumber2 = ""
-        user.cardNumber3 = ""
+        user.cardNumber2 = "---"
+        user.cardNumber3 = "---"
+        user.lastTransactionDate = "---"
+        user.lastPointsPasa = "---"
+        user.lastPointsRedeemed = "---"
+        user.lastPointsEarned = "---"
         user.mobileNumber = self.user!.mobileNumber
         user.isLoggedIn = true
         
@@ -1739,8 +1891,12 @@ class PinVerificationViewController : BaseViewController, WebServiceDelegate, UI
         user.isLoggedIn = true
         user.points = "0.00"
         user.cardNumber1 = self.user!.cardNumber
-        user.cardNumber2 = ""
-        user.cardNumber3 = ""
+        user.cardNumber2 = "---"
+        user.cardNumber3 = "---"
+        user.lastTransactionDate = "---"
+        user.lastPointsPasa = "---"
+        user.lastPointsRedeemed = "---"
+        user.lastPointsEarned = "---"
         
         do {
             try managedContext.save()
