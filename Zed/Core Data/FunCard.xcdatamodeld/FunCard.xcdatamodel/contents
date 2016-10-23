@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11232" systemVersion="15G1004" minimumToolsVersion="Xcode 7.0" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10171" systemVersion="15C50" minimumToolsVersion="Xcode 7.0">
     <entity name="Branch" representedClassName=".Branch" syncable="YES">
         <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="branchId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="branchName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="city" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="contactNumber" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="is24Hours" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="isBreakfast" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="isDelivery" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="isDriveThru" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="isSmartParty" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="is24Hours" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="isBreakfast" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="isDelivery" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="isDriveThru" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="isSmartParty" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="latitude" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="longitude" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="merchant" optional="YES" attributeType="String" syncable="YES"/>
@@ -27,14 +27,18 @@
         <attribute name="facebookId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="gender" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="isLoggedIn" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="isLoggedIn" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastPointsEarned" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastPointsPasa" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastPointsRedeemed" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastTransactionDate" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="mobileNumber" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="points" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userId" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
         <element name="Branch" positionX="-54" positionY="-9" width="128" height="270"/>
-        <element name="User" positionX="-63" positionY="-18" width="128" height="255"/>
+        <element name="User" positionX="-63" positionY="-18" width="128" height="315"/>
     </elements>
 </model>

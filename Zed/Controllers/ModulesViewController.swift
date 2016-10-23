@@ -1270,8 +1270,8 @@ class ProductsViewController : BaseViewController, UIWebViewDelegate {
         hideLoadingScreen()
     }
     
-    func webView(webView: UIWebView, didFailLoadWithError error: NSError) {
+    func webView(webView: UIWebView, didFailLoadWithError error: NSError?) {
         hideLoadingScreen()
-        displayAlertWithError(error)
+        displayAlertWithError(error!)
     }
 }

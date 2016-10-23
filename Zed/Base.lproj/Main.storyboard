@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -21,6 +21,13 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg" translatesAutoresizingMaskIntoConstraints="NO" id="M9C-qM-JlR">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                             </imageView>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" translatesAutoresizingMaskIntoConstraints="NO" id="emM-kL-VUv">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="qdA-1t-9cf"/>
+                                </connections>
+                            </scrollView>
                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="3zZ-jH-bbq">
                                 <rect key="frame" x="-19" y="-18" width="39" height="37"/>
                                 <constraints>
@@ -31,6 +38,8 @@
                                     <constraint firstAttribute="width" constant="100" id="Vcn-RY-9Pi"/>
                                     <constraint firstAttribute="height" constant="37" id="vvf-LI-Lpv"/>
                                 </constraints>
+                                <color key="pageIndicatorTintColor" red="0.074509803921568626" green="0.61960784313725492" blue="0.91764705882352937" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="currentPageIndicatorTintColor" red="0.97254901960784312" green="0.89411764705882357" blue="0.14901960784313725" alpha="1" colorSpace="calibratedRGB"/>
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="6Si-p6-G9i"/>
@@ -52,13 +61,6 @@
                                     </mask>
                                 </variation>
                             </pageControl>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" translatesAutoresizingMaskIntoConstraints="NO" id="emM-kL-VUv">
-                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <connections>
-                                    <outlet property="delegate" destination="BYZ-38-t0r" id="qdA-1t-9cf"/>
-                                </connections>
-                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -89,8 +91,8 @@
                         <variation key="default">
                             <mask key="subviews">
                                 <exclude reference="M9C-qM-JlR"/>
-                                <exclude reference="3zZ-jH-bbq"/>
                                 <exclude reference="emM-kL-VUv"/>
+                                <exclude reference="3zZ-jH-bbq"/>
                             </mask>
                             <mask key="constraints">
                                 <exclude reference="UL7-sW-wJa"/>
@@ -119,8 +121,8 @@
                         <variation key="heightClass=compact-widthClass=compact">
                             <mask key="subviews">
                                 <include reference="M9C-qM-JlR"/>
-                                <include reference="3zZ-jH-bbq"/>
                                 <include reference="emM-kL-VUv"/>
+                                <include reference="3zZ-jH-bbq"/>
                             </mask>
                             <mask key="constraints">
                                 <include reference="goG-0a-BS1"/>
@@ -138,8 +140,8 @@
                         <variation key="heightClass=regular-widthClass=compact">
                             <mask key="subviews">
                                 <include reference="M9C-qM-JlR"/>
-                                <include reference="3zZ-jH-bbq"/>
                                 <include reference="emM-kL-VUv"/>
+                                <include reference="3zZ-jH-bbq"/>
                             </mask>
                             <mask key="constraints">
                                 <include reference="UL7-sW-wJa"/>

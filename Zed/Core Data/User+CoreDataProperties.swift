@@ -28,5 +28,10 @@ extension User {
     @NSManaged var cardNumber2: String?
     @NSManaged var mobileNumber: String?
     @NSManaged var isLoggedIn: NSNumber?
-
+    
+    //Last Transaction
+    @NSManaged var lastPointsEarned: String?
+    @NSManaged var lastPointsRedeemed: String?
+    @NSManaged var lastPointsPasa: String?
+    @NSManaged var lastTransactionDate: String?
 }
