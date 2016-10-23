@@ -11,7 +11,7 @@
                 <pageViewController storyboardIdentifier="FunPageViewController" autoresizesArchivedViewToFullSize="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" transitionStyle="pageCurl" navigationOrientation="horizontal" spineLocation="min" id="oWN-UT-q6r" customClass="FunPageViewContonroller" customModule="Zed" customModuleProvider="target" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="acm-D5-J0m" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="973.5" y="320.25"/>
+            <point key="canvasLocation" x="1161" y="552.75"/>
         </scene>
         <!--Fun Navigation Controller-->
         <scene sceneID="RBl-KD-Z9D">
@@ -29,15 +29,16 @@
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x9S-MJ-0Le">
+                            <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x9S-MJ-0Le">
                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
-                                <color key="backgroundColor" red="0.99874435409999995" green="1" blue="0.4730232915" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="OyB-0H-dNo">
                                         <variation key="heightClass=regular-widthClass=compact" constant="40"/>
                                     </constraint>
                                     <constraint firstAttribute="width" constant="30" id="iu7-uo-fdA"/>
                                 </constraints>
+                                <state key="normal" image="menu"/>
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="OyB-0H-dNo"/>
@@ -387,7 +388,22 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="y0I-LC-njo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="310.5" y="320.25"/>
+            <point key="canvasLocation" x="283.5" y="561"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="2l9-2L-FXX">
+            <objects>
+                <viewController id="B4K-av-4Lu" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="iH8-Zl-JCl">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="IHX-Bz-d1J" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
         </scene>
     </scenes>
+    <resources>
+        <image name="menu" width="25" height="50"/>
+    </resources>
 </document>

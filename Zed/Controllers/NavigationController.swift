@@ -22,6 +22,7 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
     @IBOutlet weak var labelProfile: UILabel!
     
     @IBOutlet weak var tableMenu: UITableView!
+    @IBOutlet weak var containerView: UIView!
     
     var user: UserModelRepresentation?
     
@@ -60,11 +61,12 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         self.home = storyboard.instantiateViewControllerWithIdentifier("main") as? ViewController
-        self.home!.setupUI()
         self.home!.delegate = self
-        
+        self.addChildViewController(self.home!)
         self.viewMain.addSubview(self.home!.view)
         
+        self.home!.willMoveToParentViewController(self)
+        self.home!.setupUI()
     }
     
     func setupUser() {
@@ -91,8 +93,21 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
     
     //MARK: Action Navigation
     func goToHomePage() {
-    
+        
+
         self.removeSubviewsOfMain()
+        
+        if self.user == nil {
+            
+            self.user = UserModelRepresentation()
+            
+        }
+        
+        self.addChildViewController(self.home!)
+        
+        self.viewMain.addSubview(self.home!.view)
+        self.home!.willMoveToParentViewController(self)
+        
         self.toggleMenuButton()
     }
     
@@ -115,7 +130,10 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         self.survey = storyboard.instantiateViewControllerWithIdentifier("surveyController") as? SurveyViewController
         self.survey?.delegate = self
         self.survey!.user = self.user!
+        self.addChildViewController(self.survey!)
+        
         self.viewMain.addSubview(self.survey!.view)
+        self.survey!.willMoveToParentViewController(self)
         
         self.toggleMenuButton()
         
@@ -139,7 +157,10 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         let storyboard = UIStoryboard(name: "Products", bundle: nil)
         self.products = storyboard.instantiateInitialViewController() as? ProductsViewController
         self.products?.delegate = self
+        self.addChildViewController(self.products!)
+        
         self.viewMain.addSubview(self.products!.view)
+        self.products!.willMoveToParentViewController(self)
         
         self.toggleMenuButton()
         
@@ -163,8 +184,12 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         let storyboard = UIStoryboard(name: "Pulsify", bundle: nil)
         self.pulsify = storyboard.instantiateViewControllerWithIdentifier("pulsify") as? PulsifyViewController
         self.pulsify!.user = self.user!
-        self.pulsify?.delegate = self
+        self.pulsify!.delegate = self
+        
+        self.addChildViewController(self.pulsify!)
+        
         self.viewMain.addSubview(self.pulsify!.view)
+        self.pulsify!.willMoveToParentViewController(self)
         
         self.toggleMenuButton()
         
@@ -182,7 +207,10 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         let storyboard = UIStoryboard(name: "Branches", bundle: nil)
         self.branches = storyboard.instantiateInitialViewController()! as? BranchSelectionViewContoller
         self.branches?.delegate = self
+        self.addChildViewController(self.branches!)
+        
         self.viewMain.addSubview(self.branches!.view)
+        self.branches!.willMoveToParentViewController(self)
         
         self.toggleMenuButton()
         
@@ -207,7 +235,10 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         self.pasaPoints = storyboard.instantiateViewControllerWithIdentifier("pasaPoints") as? PasaPointsViewController
         self.pasaPoints!.user = self.user!
         self.pasaPoints?.delegate = self
+        self.addChildViewController(self.pasaPoints!)
+        
         self.viewMain.addSubview(self.pasaPoints!.view)
+        self.pasaPoints!.willMoveToParentViewController(self)
         
         self.toggleMenuButton()
     }
@@ -244,29 +275,48 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
     
     func removeSubviewsOfMain() {
         
+        if self.home != nil {
+            
+            self.home!.willMoveToParentViewController(nil)
+            self.home!.view.removeFromSuperview()
+            self.home!.removeFromParentViewController()
+            
+        }
+        
         if self.survey != nil {
             
+            self.survey!.willMoveToParentViewController(nil)
             self.survey!.view.removeFromSuperview()
+            self.survey! .removeFromParentViewController()
+            
             self.survey = nil
             
         }else if self.pulsify != nil {
             
+            self.pulsify!.willMoveToParentViewController(nil)
             self.pulsify!.view.removeFromSuperview()
+            self.pulsify! .removeFromParentViewController()
             self.pulsify = nil
             
         }else if self.branches != nil {
             
+            self.branches!.willMoveToParentViewController(nil)
             self.branches!.view.removeFromSuperview()
+            self.branches! .removeFromParentViewController()
             self.branches = nil
             
         }else if self.pasaPoints != nil {
             
+            self.pasaPoints!.willMoveToParentViewController(nil)
             self.pasaPoints!.view.removeFromSuperview()
+            self.pasaPoints! .removeFromParentViewController()
             self.pasaPoints = nil
             
         }else if self.products != nil {
             
+            self.products!.willMoveToParentViewController(nil)
             self.products!.view.removeFromSuperview()
+            self.products! .removeFromParentViewController()
             self.products = nil
             
         }
@@ -500,7 +550,6 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
     }
     
     
-    
-
-
 }
+
+

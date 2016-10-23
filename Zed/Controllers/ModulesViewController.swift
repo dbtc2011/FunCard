@@ -276,7 +276,7 @@ class SurveyViewController : BaseViewController, UITableViewDataSource, UITableV
 }
 
 //MARK: - Pulsify View Controller
-class PulsifyViewController : BaseViewController, WebServiceDelegate, CustomPickerViewDelegate, CustomAlertViewDelegate {
+class PulsifyViewController : BaseViewController, WebServiceDelegate, CustomAlertViewDelegate {
     
     //MARK: Properties
     @IBOutlet weak var labelNumber: UILabel!
@@ -705,31 +705,57 @@ class PulsifyViewController : BaseViewController, WebServiceDelegate, CustomPick
     }
     
     @IBAction func buttonCityClicked(sender: UIButton) {
-        
-        self.customPicker = nil
-        self.customPicker = CustomPickerView()
-        self.customPicker?.frame = CGRectMake(0, 0, UIScreen.mainScreen().bounds.size.width, UIScreen.mainScreen().bounds.size.height)
-        self.customPicker?.pickerIdentifier = "city"
-        self.customPicker?.delegate = self
-        let array = NSMutableArray(array: self.arrayCities)
-        self.customPicker?.setupPicker("City", content: array)
-        self.view.addSubview(self.customPicker!)
+        if self.arrayCities.count == 0 {
+            // City not yet available
+            return
+        }
+        ActionSheetStringPicker.showPickerWithTitle("City", rows: self.arrayCities, initialSelection: 0, doneBlock: { (picker, index, value) -> Void in
+            //print(index)
+            // print(value)
+            
+            self.labelBranch.text = ""
+            self.labelCity.text = value as? String
+            
+            let predicate = NSPredicate(format: "self.city == '\(value)'")
+            let arrayFiltered = (self.arrayBranches as NSArray).filteredArrayUsingPredicate(predicate) as NSArray
+            
+            self.arrayBranch.removeAllObjects()
+            
+            for content in arrayFiltered {
+                let branchModel = content as! BranchModelRepresentation
+                self.arrayBranch.addObject(branchModel.branchName)
+                
+            }
+            
+            }, cancelBlock: { (picker) -> Void in
+                print("cancel")
+            }, origin: self.view)
     }
     
     @IBAction func buttonBranchClicked(sender: UIButton) {
         
-        if self.labelCity.text! == "" {
+        ActionSheetStringPicker.showPickerWithTitle("City", rows: self.arrayCities, initialSelection: 0, doneBlock: { (picker, index, value) -> Void in
+            //print(index)
+            // print(value)
             
-            return
+            self.labelBranch.text = ""
+            self.labelCity.text = value as? String
             
-        }
+            let predicate = NSPredicate(format: "self.city == '\(value)'")
+            let arrayFiltered = (self.arrayBranches as NSArray).filteredArrayUsingPredicate(predicate) as NSArray
+            
+            self.arrayBranch.removeAllObjects()
+            
+            for content in arrayFiltered {
+                let branchModel = content as! BranchModelRepresentation
+                self.arrayBranch.addObject(branchModel.branchName)
+                
+            }
+            
+            }, cancelBlock: { (picker) -> Void in
+                print("cancel")
+            }, origin: self.view)
         
-        self.customPicker = nil
-        self.customPicker = CustomPickerView()
-        self.customPicker?.frame = CGRectMake(0, 0, UIScreen.mainScreen().bounds.size.width, UIScreen.mainScreen().bounds.size.height)
-        self.customPicker?.delegate = self
-        self.customPicker?.setupPicker("Branch", content: self.arrayBranch)
-        self.view.addSubview(self.customPicker!)
     }
     
     @IBAction func backButtonClicked(sender: UIButton) {
@@ -766,27 +792,6 @@ class PulsifyViewController : BaseViewController, WebServiceDelegate, CustomPick
         displayAlertWithError(error)
     }
     
-    //MARK: Custom Picker View Delegate
-    func pickerDidSelect(picker: CustomPickerView, value: String, index: Int) {
-        if picker.pickerIdentifier == "city" {
-            self.labelBranch.text = ""
-            self.labelCity.text = value
-            
-            let predicate = NSPredicate(format: "self.city == '\(value)'")
-            let arrayFiltered = (self.arrayBranches as NSArray).filteredArrayUsingPredicate(predicate) as NSArray
-            
-            self.arrayBranch.removeAllObjects()
-            
-            for content in arrayFiltered {
-                let branchModel = content as! BranchModelRepresentation
-                self.arrayBranch.addObject(branchModel.branchName)
-                
-            }
-        } else {
-            self.labelBranch.text = value
-            
-        }
-    }
 }
 
 //MARK: - Pasa Points View Controller
@@ -1270,8 +1275,8 @@ class ProductsViewController : BaseViewController, UIWebViewDelegate {
         hideLoadingScreen()
     }
     
-    func webView(webView: UIWebView, didFailLoadWithError error: NSError) {
+    func webView(webView: UIWebView, didFailLoadWithError error: NSError?) {
         hideLoadingScreen()
-        displayAlertWithError(error)
+        displayAlertWithError(error!)
     }
 }
