@@ -374,8 +374,14 @@ class ViewController: BaseViewController , UIScrollViewDelegate, WebServiceDeleg
     //MARK: Delegate
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        counter = (Int)(scrollView.contentOffset.x / self.view.frame.size.width)
-        self.pageIndicator.currentPage = counter+1
+        
+        
+        counter = (Int)(scrollView.contentOffset.x / UIScreen.mainScreen().bounds.width)
+        self.pageIndicator.currentPage = counter
+        
+    
+        print("scroll offset = \(scrollView.contentOffset.x) view = \(self.view.frame.size.width)")
+        print("Page is == \((Int)(scrollView.contentOffset.x / self.view.frame.size.width))")
     }
     
     //MARK: Button Actions
