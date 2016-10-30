@@ -625,13 +625,13 @@ class CustomLoadingView: UIView {
         bgView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.8)
         self.addSubview(bgView)
         
-        let imgAnimated = UIImageView(image: UIImage(named: ""))
+        let imgAnimated = UIImageView(image: UIImage(named: "loader1"))
         imgAnimated.frame.origin = CGPoint(x: (self.frame.width-imgAnimated.frame.width)/2, y: (self.frame.height-imgAnimated.frame.height)/2)
-        let arrayImageNames = [UIImage(named: "logo")!, //for now
-                               UIImage(named: "logo")!,
-                               UIImage(named: "logo")!,
-                               UIImage(named: "logo")!]
+        let arrayImageNames = [UIImage(named: "loader2")!, //for now
+                               UIImage(named: "loader3")!,
+                               UIImage(named: "loader1")!]
         imgAnimated.animationImages = arrayImageNames
+        imgAnimated.animationDuration = 1.2
         imgAnimated.startAnimating()
         self.addSubview(imgAnimated)
     }

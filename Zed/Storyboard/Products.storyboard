@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="99v-gE-MEm">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="99v-gE-MEm">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -69,11 +69,7 @@
                                     </mask>
                                 </variation>
                             </imageView>
-                            <webView contentMode="scaleToFill" scalesPageToFit="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3wk-f6-PV7">
-                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="deviceRGB"/>
-                            </webView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pTs-p8-dNc">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="product" translatesAutoresizingMaskIntoConstraints="NO" id="pTs-p8-dNc">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="150" id="1VA-vW-6oS"/>
@@ -92,10 +88,12 @@
                                     </mask>
                                 </variation>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="LNQ-oz-IoI">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="divider" translatesAutoresizingMaskIntoConstraints="NO" id="LNQ-oz-IoI">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="10" id="ESm-qT-vcf"/>
+                                    <constraint firstAttribute="height" constant="10" id="ESm-qT-vcf">
+                                        <variation key="heightClass=regular-widthClass=compact" constant="5"/>
+                                    </constraint>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
@@ -113,7 +111,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="a6f-AP-dZl"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="22"/>
                                 <color key="textColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                                 <variation key="default">
@@ -127,6 +125,10 @@
                                     </mask>
                                 </variation>
                             </label>
+                            <webView contentMode="scaleToFill" scalesPageToFit="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3wk-f6-PV7">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <color key="backgroundColor" red="0.88235294117647056" green="0.88235294117647056" blue="0.88235294117647056" alpha="1" colorSpace="calibratedRGB"/>
+                            </webView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -159,10 +161,10 @@
                             <mask key="subviews">
                                 <exclude reference="1B0-gL-DWa"/>
                                 <exclude reference="aup-ot-kgT"/>
-                                <exclude reference="3wk-f6-PV7"/>
                                 <exclude reference="pTs-p8-dNc"/>
                                 <exclude reference="LNQ-oz-IoI"/>
                                 <exclude reference="soV-yg-AIA"/>
+                                <exclude reference="3wk-f6-PV7"/>
                             </mask>
                             <mask key="constraints">
                                 <exclude reference="WjR-IV-Mwi"/>
@@ -191,10 +193,10 @@
                             <mask key="subviews">
                                 <include reference="1B0-gL-DWa"/>
                                 <include reference="aup-ot-kgT"/>
-                                <include reference="3wk-f6-PV7"/>
                                 <include reference="pTs-p8-dNc"/>
                                 <include reference="LNQ-oz-IoI"/>
                                 <include reference="soV-yg-AIA"/>
+                                <include reference="3wk-f6-PV7"/>
                             </mask>
                             <mask key="constraints">
                                 <include reference="WjR-IV-Mwi"/>
@@ -233,6 +235,8 @@
     </scenes>
     <resources>
         <image name="bg" width="375" height="667"/>
+        <image name="divider" width="414" height="5"/>
         <image name="iconBack" width="55" height="55"/>
+        <image name="product" width="134" height="131"/>
     </resources>
 </document>

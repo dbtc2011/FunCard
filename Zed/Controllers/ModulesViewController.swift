@@ -981,6 +981,9 @@ class BranchSelectionViewContoller : UIViewController {
         
     }
     
+    @IBAction func didSelectBranch(sender: AnyObject) {
+        self.performSegueWithIdentifier("goToBranches", sender: self)
+    }
 }
 
 //MARK: - Branches View Controller
@@ -1174,10 +1177,7 @@ class BranchesViewController : UIViewController, GMSMapViewDelegate {
     //MARK: Button Actions
     @IBAction func didPressBackButton(sender: UIButton) {
         
-        self.dismissViewControllerAnimated(true) {
-            
-            
-        }
+        self.navigationController!.popViewControllerAnimated(true)
         
     }
     

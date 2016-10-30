@@ -205,11 +205,12 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         self.removeSubviewsOfMain()
         
         let storyboard = UIStoryboard(name: "Branches", bundle: nil)
-        self.branches = storyboard.instantiateInitialViewController()! as? BranchSelectionViewContoller
+        let navController = storyboard.instantiateInitialViewController() as! UINavigationController
+        self.branches = navController.viewControllers.first! as? BranchSelectionViewContoller
         self.branches?.delegate = self
-        self.addChildViewController(self.branches!)
+        self.addChildViewController(navController)
         
-        self.viewMain.addSubview(self.branches!.view)
+        self.viewMain.addSubview(navController.view)
         self.branches!.willMoveToParentViewController(self)
         
         self.toggleMenuButton()

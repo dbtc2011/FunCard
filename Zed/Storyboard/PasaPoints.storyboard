@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="AZd-WC-kta">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="AZd-WC-kta">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -305,27 +305,15 @@
                                     <action selector="backClicked:" destination="AZd-WC-kta" eventType="touchUpInside" id="9DL-0A-FIN"/>
                                 </connections>
                             </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4J4-1q-ptu">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pasa" translatesAutoresizingMaskIntoConstraints="NO" id="ETk-u7-pfy">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="10" id="R71-Ey-tEo"/>
-                                </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="R71-Ey-tEo"/>
-                                    </mask>
-                                </variation>
-                                <variation key="heightClass=regular-widthClass=compact">
-                                    <mask key="constraints">
-                                        <include reference="R71-Ey-tEo"/>
-                                    </mask>
-                                </variation>
-                            </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ETk-u7-pfy">
-                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="170" id="9Ls-Nm-UKZ"/>
-                                    <constraint firstAttribute="width" constant="165" id="TmO-XT-dMC"/>
+                                    <constraint firstAttribute="height" constant="170" id="9Ls-Nm-UKZ">
+                                        <variation key="heightClass=regular-widthClass=compact" constant="187"/>
+                                    </constraint>
+                                    <constraint firstAttribute="width" constant="165" id="TmO-XT-dMC">
+                                        <variation key="heightClass=regular-widthClass=compact" constant="228"/>
+                                    </constraint>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
@@ -340,13 +328,35 @@
                                     </mask>
                                 </variation>
                             </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="divider" translatesAutoresizingMaskIntoConstraints="NO" id="4J4-1q-ptu">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="10" id="R71-Ey-tEo">
+                                        <variation key="heightClass=regular-widthClass=compact" constant="5"/>
+                                    </constraint>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="R71-Ey-tEo"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="R71-Ey-tEo"/>
+                                    </mask>
+                                </variation>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="ETk-u7-pfy" secondAttribute="trailing" id="1q2-5b-qFd"/>
+                            <constraint firstAttribute="trailing" secondItem="ETk-u7-pfy" secondAttribute="trailing" id="1q2-5b-qFd">
+                                <variation key="heightClass=regular-widthClass=compact" constant="-45"/>
+                            </constraint>
                             <constraint firstItem="ity-sm-p8q" firstAttribute="centerY" secondItem="ij7-ib-mFD" secondAttribute="centerY" id="GuI-pS-vZe"/>
                             <constraint firstItem="9VS-Hv-PEK" firstAttribute="top" secondItem="cfx-hi-nwq" secondAttribute="bottom" id="QxC-Eh-ipG"/>
-                            <constraint firstItem="9VS-Hv-PEK" firstAttribute="top" secondItem="ETk-u7-pfy" secondAttribute="bottom" id="ULB-VE-Byu"/>
+                            <constraint firstItem="9VS-Hv-PEK" firstAttribute="top" secondItem="ETk-u7-pfy" secondAttribute="bottom" id="ULB-VE-Byu">
+                                <variation key="heightClass=regular-widthClass=compact" constant="-17"/>
+                            </constraint>
                             <constraint firstAttribute="trailing" secondItem="cfx-hi-nwq" secondAttribute="trailing" id="VQq-dh-F5E"/>
                             <constraint firstItem="4J4-1q-ptu" firstAttribute="leading" secondItem="ij7-ib-mFD" secondAttribute="leading" id="VkM-yk-9FE"/>
                             <constraint firstItem="cfx-hi-nwq" firstAttribute="leading" secondItem="ij7-ib-mFD" secondAttribute="leading" id="YZ0-5c-kgy"/>
@@ -363,8 +373,8 @@
                                 <exclude reference="cfx-hi-nwq"/>
                                 <exclude reference="ity-sm-p8q"/>
                                 <exclude reference="wy6-Ad-BJ3"/>
-                                <exclude reference="4J4-1q-ptu"/>
                                 <exclude reference="ETk-u7-pfy"/>
+                                <exclude reference="4J4-1q-ptu"/>
                             </mask>
                             <mask key="constraints">
                                 <exclude reference="QxC-Eh-ipG"/>
@@ -388,8 +398,8 @@
                                 <include reference="cfx-hi-nwq"/>
                                 <include reference="ity-sm-p8q"/>
                                 <include reference="wy6-Ad-BJ3"/>
-                                <include reference="4J4-1q-ptu"/>
                                 <include reference="ETk-u7-pfy"/>
+                                <include reference="4J4-1q-ptu"/>
                             </mask>
                             <mask key="constraints">
                                 <include reference="QxC-Eh-ipG"/>
@@ -423,7 +433,9 @@
     <resources>
         <image name="bar" width="349" height="55"/>
         <image name="bg" width="375" height="667"/>
+        <image name="divider" width="414" height="5"/>
         <image name="go" width="128" height="44"/>
         <image name="iconBack" width="55" height="55"/>
+        <image name="pasa" width="248" height="214"/>
     </resources>
 </document>
