@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "divider.png",
+      "filename" : "FUN-APP-DIVxN.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "divider@2x.png",
+      "filename" : "FUN-APP-DIVx2.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "divider@3x.png",
+      "filename" : "FUN-APP-DIVx3.png",
       "scale" : "3x"
     }
   ],
