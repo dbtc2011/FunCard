@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Zed/Controllers/ViewController.swift"
-            timestampString = "498295197.978931"
+            timestampString = "499230813.21055"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "879"
-            endingLineNumber = "879"
+            startingLineNumber = "885"
+            endingLineNumber = "885"
             landmarkName = "RegsitrationFormViewController"
             landmarkType = "3">
          </BreakpointContent>

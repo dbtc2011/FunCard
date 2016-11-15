@@ -5,7 +5,7 @@
 //  Created by Mark Louie Angeles on 11/10/2016.
 //  Copyright © 2016 Mark Angeles. All rights reserved.
 //
-
+// 260 width
 import Foundation
 import UIKit
 import CoreData
@@ -54,6 +54,9 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         
         self.setupNavigation()
         self.setupUser()
+        
+        
+        
     }
     
     //MARK: Method
@@ -73,6 +76,10 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let managedContext = appDelegate.managedObjectContext
         let fetchRequest = NSFetchRequest(entityName: "User")
+        
+        self.imageProfile.layer.cornerRadius = 45
+        self.imageProfile.layer.borderColor = UIColor.yellowColor().CGColor
+        self.imageProfile.layer.borderWidth = 2.0
         
         do {
             let results = try managedContext.executeFetchRequest(fetchRequest) as! [User]
@@ -417,6 +424,7 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
             return newCell
         }
         print(self.arrayMenu[indexPath.row])
+        
         cell.label.text = self.arrayMenu[indexPath.row]
         return cell
     }
