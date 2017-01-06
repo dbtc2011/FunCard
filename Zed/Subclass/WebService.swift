@@ -1040,3 +1040,24 @@ class WebService: NSObject, NSURLConnectionDelegate, XMLParserDelegate {
     }
     
 }
+
+
+//MARK: - Download Class
+
+
+class Download: NSObject {
+    // MARK: Properties
+    var url : String = ""
+    var isDownloading = false
+    var progress: Float = 0.0
+    var identifier : String = ""
+    
+    var downloadTask : NSURLSessionDownloadTask?
+    var data: NSData?
+    
+    init(url : String) {
+        
+        self.url = url
+        
+    }
+}

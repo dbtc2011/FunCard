@@ -69,7 +69,7 @@ class BaseViewController: UIViewController {
     }
     
     func displayAlertRequestError(status: String, descripion: String) {
-        self.displayAlert("\(status): \(description)",
+        self.displayAlert("\(status): \(descripion)",
                           title: "Request Error")
     }
     
@@ -1100,6 +1100,7 @@ class RegsitrationFormViewController : BaseViewController, UITableViewDataSource
         }
         
         user.facebookId = self.user!.facebookID
+        user.profileImage = self.user!.profileImage
         user.firstName = self.tableContents[0]["value"] as? String
         user.lastName = self.tableContents[1]["value"] as? String
         user.gender = self.tableContents[3]["value"] as? String
@@ -2087,9 +2088,10 @@ class RegistrationFacebookViewController : BaseViewController, FBSDKLoginButtonD
                             
                             let dictionaryResult = result as! NSDictionary
                             print(result)
-                            //                let dictionaryPicture = dictionaryResult["picture"] as! NSDictionary
-                            //                let dictionaryData = dictionaryPicture["data"] as! NSDictionary
                             
+                            let dictionaryPicture = dictionaryResult["picture"] as! NSDictionary
+                            let dictionaryData = dictionaryPicture["data"] as! NSDictionary
+                            self.user?.profileImage = dictionaryData["url"] as! String
                             //self.user = nil
                             //self.user = UserModelRepresentation()
                             

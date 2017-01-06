@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 
+
 //MARK: - Card Model
 class CardModelRepresentation: NSObject {
     
@@ -41,6 +42,7 @@ class UserModelRepresentation: NSObject {
     var email: String = ""
     var points: String = ""
     var pasaPoints: String = ""
+    var profileImage : String = ""
     
     var cardNumber: String = ""
     var cardNumber2: String = ""
@@ -70,6 +72,7 @@ class UserModelRepresentation: NSObject {
         self.lastPointsRedeemed = managedObject.lastPointsRedeemed!
         self.lastPointsPasa = managedObject.lastPointsPasa!
         self.lastTransactionDate = managedObject.lastTransactionDate!
+        self.profileImage = managedObject.profileImage!
     }
 }
 
