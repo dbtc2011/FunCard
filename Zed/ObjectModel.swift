@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-
+import CoreData
 
 //MARK: - Card Model
 class CardModelRepresentation: NSObject {
@@ -40,20 +40,20 @@ class UserModelRepresentation: NSObject {
     var birthday: String = ""
     var address: String = ""
     var email: String = ""
-    var points: String = ""
+    var points: String = "0.00"
     var pasaPoints: String = ""
     var profileImage : String = ""
     
     var cardNumber: String = ""
-    var cardNumber2: String = ""
-    var cardNumber3: String = ""
+    var cardNumber2: String = "---"
+    var cardNumber3: String = "---"
     var cardPin: String = ""
     var mobileNumber: String = ""
     
-    var lastPointsEarned: String = ""
-    var lastPointsRedeemed: String = ""
-    var lastPointsPasa: String = ""
-    var lastTransactionDate: String = ""
+    var lastPointsEarned: String = "---"
+    var lastPointsRedeemed: String = "---"
+    var lastPointsPasa: String = "---"
+    var lastTransactionDate: String = "---"
     
     func convertManagedObjectToUserModelInfo(managedObject: User) {
         self.facebookID = managedObject.facebookId!
@@ -74,6 +74,52 @@ class UserModelRepresentation: NSObject {
         self.lastTransactionDate = managedObject.lastTransactionDate!
         self.profileImage = managedObject.profileImage!
     }
+    
+    func saveUserToCoreData() {
+        
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let managedContext = appDelegate.managedObjectContext
+        
+        let entity =  NSEntityDescription.entityForName("User", inManagedObjectContext:managedContext)
+        let user = NSManagedObject(entity: entity!, insertIntoManagedObjectContext: managedContext) as! User
+        
+        user.setValue("1", forKey: "userId")
+        
+        let fetchRequest = NSFetchRequest(entityName: "User")
+        do {
+            let results = try managedContext.executeFetchRequest(fetchRequest) as! [NSManagedObject]
+            user.setValue("\(results.count+1)", forKey: "userId")
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
+        }
+        print("Profile = \(self.profileImage)")
+        user.facebookId = self.facebookID
+        user.profileImage = self.profileImage
+        user.firstName = self.firstName
+        user.lastName = self.lastName
+        user.gender = self.gender
+        user.birthday = self.birthday
+        user.address = self.address
+        user.email = self.email
+        user.points = self.points
+        user.cardNumber1 = self.cardNumber
+        user.cardNumber2 = self.cardNumber2
+        user.cardNumber3 = self.cardNumber3
+        user.lastTransactionDate = self.lastTransactionDate
+        user.lastPointsPasa = self.lastPointsPasa
+        user.lastPointsRedeemed = self.lastPointsRedeemed
+        user.lastPointsEarned = self.lastPointsEarned
+        user.mobileNumber = self.mobileNumber
+        user.isLoggedIn = true
+        
+        do {
+            try managedContext.save()
+            print("Save!!! \(user.isLoggedIn)")
+        } catch let error as NSError  {
+            print("Could not save \(error), \(error.userInfo)")
+        }
+    }
+    
 }
 
 //MARK: - Transaction Model

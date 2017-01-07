@@ -82,6 +82,7 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
     }
     
     func setupUser() {
+        
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let managedContext = appDelegate.managedObjectContext
         let fetchRequest = NSFetchRequest(entityName: "User")
@@ -102,7 +103,6 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
                     self.user!.convertManagedObjectToUserModelInfo(arrayFiltered.first! as! User)
                     
                     self.labelProfile.text = self.user!.firstName + " " + self.user!.lastName
-                    
                     if self.user!.profileImage != "" {
                         print("Download image \(self.user!.profileImage)")
                         let download = Download(url: self.user!.profileImage)
@@ -274,6 +274,14 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         self.pasaPoints!.willMoveToParentViewController(self)
         
         self.toggleMenuButton()
+    }
+    
+    func presentComingSoon(){
+        
+        let frame = CGRectMake(0, 0, UIScreen.mainScreen().bounds.size.width, UIScreen.mainScreen().bounds.size.height)
+        let comingsoon = ComingSoonView(frame: frame)
+        self.view.addSubview(comingsoon)
+        
     }
     
     func logout() {
@@ -520,12 +528,15 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
     
     func homeGoToCoupons() {
         
-
+        self.buttonMenu.selected = !self.buttonMenu.selected
+        self.presentComingSoon()
         
     }
     
     func homeGoToGames() {
         
+        self.buttonMenu.selected = !self.buttonMenu.selected
+        self.presentComingSoon()
         
     }
     
@@ -536,6 +547,7 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
     }
     
     func homeGoToPromos() {
+        
         
         
     }

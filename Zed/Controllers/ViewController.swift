@@ -1424,7 +1424,6 @@ class RegistrationMobileNumberViewController : BaseViewController, WebServiceDel
             self.user.lastName = parsedDict["LastName"] as! String
             self.user.middleName = parsedDict["MiddleName"] as! String
             self.user.cardNumber = parsedDict["PrimaryCardNumber"] as! String
-            
             let dictParams = NSMutableDictionary()
             dictParams["transactionId"] = generateTransactionIDWithTimestamp(generateTimeStamp())
             dictParams["mobileNumber"] = self.textNumber.text!
@@ -1513,6 +1512,7 @@ class RegistrationMobileNumberViewController : BaseViewController, WebServiceDel
                 } else {
                     //go to enter pin
                     segueId = "goToPinVerification"
+                    
                 }
                 
                 self.performSegueWithIdentifier(segueId, sender: nil)
@@ -1569,7 +1569,9 @@ class RegistrationMobileNumberViewController : BaseViewController, WebServiceDel
     
     //MARK: NavigationController Delegate
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
         segue.destinationViewController.setValue(self.user, forKey: "user")
+        
     }
 }
 
@@ -1698,6 +1700,8 @@ class RegistrationCardNumberViewController : BaseViewController, WebServiceDeleg
             self.user.lastName = parsedDict["LastName"] as! String
             self.user.middleName = parsedDict["MiddleName"] as! String
             self.user.cardNumber = parsedDict["PrimaryCardNumber"] as! String
+            
+            
             
             let dictParams = NSMutableDictionary()
             dictParams["transactionId"] = generateTransactionIDWithTimestamp(generateTimeStamp())
@@ -1904,6 +1908,7 @@ class PinVerificationViewController : BaseViewController, WebServiceDelegate, UI
         user.lastPointsPasa = "---"
         user.lastPointsRedeemed = "---"
         user.lastPointsEarned = "---"
+        user.profileImage = self.user!.profileImage
         
         do {
             try managedContext.save()
