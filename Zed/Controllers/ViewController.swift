@@ -69,7 +69,7 @@ class BaseViewController: UIViewController {
     }
     
     func displayAlertRequestError(status: String, descripion: String) {
-        self.displayAlert("\(status): \(description)",
+        self.displayAlert("\(status): \(descripion)",
                           title: "Request Error")
     }
     
@@ -1100,6 +1100,7 @@ class RegsitrationFormViewController : BaseViewController, UITableViewDataSource
         }
         
         user.facebookId = self.user!.facebookID
+        user.profileImage = self.user!.profileImage
         user.firstName = self.tableContents[0]["value"] as? String
         user.lastName = self.tableContents[1]["value"] as? String
         user.gender = self.tableContents[3]["value"] as? String
@@ -1423,7 +1424,6 @@ class RegistrationMobileNumberViewController : BaseViewController, WebServiceDel
             self.user.lastName = parsedDict["LastName"] as! String
             self.user.middleName = parsedDict["MiddleName"] as! String
             self.user.cardNumber = parsedDict["PrimaryCardNumber"] as! String
-            
             let dictParams = NSMutableDictionary()
             dictParams["transactionId"] = generateTransactionIDWithTimestamp(generateTimeStamp())
             dictParams["mobileNumber"] = self.textNumber.text!
@@ -1512,6 +1512,7 @@ class RegistrationMobileNumberViewController : BaseViewController, WebServiceDel
                 } else {
                     //go to enter pin
                     segueId = "goToPinVerification"
+                    
                 }
                 
                 self.performSegueWithIdentifier(segueId, sender: nil)
@@ -1568,7 +1569,9 @@ class RegistrationMobileNumberViewController : BaseViewController, WebServiceDel
     
     //MARK: NavigationController Delegate
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
         segue.destinationViewController.setValue(self.user, forKey: "user")
+        
     }
 }
 
@@ -1697,6 +1700,8 @@ class RegistrationCardNumberViewController : BaseViewController, WebServiceDeleg
             self.user.lastName = parsedDict["LastName"] as! String
             self.user.middleName = parsedDict["MiddleName"] as! String
             self.user.cardNumber = parsedDict["PrimaryCardNumber"] as! String
+            
+            
             
             let dictParams = NSMutableDictionary()
             dictParams["transactionId"] = generateTransactionIDWithTimestamp(generateTimeStamp())
@@ -1903,6 +1908,7 @@ class PinVerificationViewController : BaseViewController, WebServiceDelegate, UI
         user.lastPointsPasa = "---"
         user.lastPointsRedeemed = "---"
         user.lastPointsEarned = "---"
+        user.profileImage = self.user!.profileImage
         
         do {
             try managedContext.save()
@@ -2087,9 +2093,10 @@ class RegistrationFacebookViewController : BaseViewController, FBSDKLoginButtonD
                             
                             let dictionaryResult = result as! NSDictionary
                             print(result)
-                            //                let dictionaryPicture = dictionaryResult["picture"] as! NSDictionary
-                            //                let dictionaryData = dictionaryPicture["data"] as! NSDictionary
                             
+                            let dictionaryPicture = dictionaryResult["picture"] as! NSDictionary
+                            let dictionaryData = dictionaryPicture["data"] as! NSDictionary
+                            self.user?.profileImage = dictionaryData["url"] as! String
                             //self.user = nil
                             //self.user = UserModelRepresentation()
                             

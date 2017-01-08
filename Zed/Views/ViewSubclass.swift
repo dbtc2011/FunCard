@@ -631,7 +631,7 @@ class CustomLoadingView: UIView {
                                UIImage(named: "loader3")!,
                                UIImage(named: "loader1")!]
         imgAnimated.animationImages = arrayImageNames
-        imgAnimated.animationDuration = 1.2
+        imgAnimated.animationDuration = 1
         imgAnimated.startAnimating()
         self.addSubview(imgAnimated)
     }
@@ -639,6 +639,62 @@ class CustomLoadingView: UIView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+//MARK: - Coming Soon View
+class ComingSoonView : UIView {
+    //MARK: View Life Cycle
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        let bgView = UIView(frame: frame)
+        bgView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.8)
+        self.addSubview(bgView)
+        
+        var boarderFrame = CGRectMake((frame.size.width/2) - (200/2), (frame.size.height/2) - (100/2), 200, 100)
+        let boarderView : UIView = UIView(frame: boarderFrame)
+        boarderView.layer.cornerRadius = 8
+        boarderView.backgroundColor = UIColor.blackColor()
+        boarderView.layer.borderColor = UIColor.grayColor().CGColor
+        self.addSubview(boarderView)
+        
+        boarderFrame.size.height = 30
+        boarderFrame.origin.y = 10
+        boarderFrame.origin.x = 0
+        
+        let label : UILabel = UILabel(frame: boarderFrame)
+        label.text = "Coming Soon.."
+        label.textAlignment = NSTextAlignment.Center
+        label.font = UIFont.boldSystemFontOfSize(20)
+        label.textColor = UIColor.blueColor()
+        boarderView.addSubview(label)
+        
+        boarderFrame.origin.y = 50
+        boarderFrame.size.width = 80
+        
+        let button = UIButton(type: UIButtonType.Custom)
+        button.frame = boarderFrame
+        button.setTitle("OK", forState: UIControlState.Normal)
+        button.backgroundColor = UIColor.blueColor()
+        button.addTarget(self, action: #selector(ComingSoonView.buttonClikced(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        button.titleLabel?.backgroundColor = UIColor.yellowColor()
+        button.layer.cornerRadius = 8
+        boarderView.addSubview(button)
+        
+
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func buttonClikced(sender : UIButton) {
+        
+        self.removeFromSuperview()
+        
+    }
+    
 }
 
 //MARK: - Extension UI

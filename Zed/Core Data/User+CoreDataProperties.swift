@@ -16,6 +16,7 @@ extension User {
 
     @NSManaged var userId: String?
     @NSManaged var facebookId: String?
+    @NSManaged var profileImage: String?
     @NSManaged var firstName: String?
     @NSManaged var lastName: String?
     @NSManaged var gender: String?

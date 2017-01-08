@@ -10,9 +10,13 @@ import Foundation
 import UIKit
 import CoreData
 
+let keyProfile = "profile_picture"
+
+//MARK: - Navigation Controller
 class FunNavigationController : UIViewController, UITableViewDelegate, UITableViewDataSource, HomePageDelegate, ModuleViewControllerDelegate {
     
     //MARK: Properties
+    
     @IBOutlet weak var viewMenu: UIView!
     @IBOutlet weak var viewMain: UIView!
     @IBOutlet weak var buttonMenu: UIButton!
@@ -23,6 +27,8 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
     
     @IBOutlet weak var tableMenu: UITableView!
     @IBOutlet weak var containerView: UIView!
+    
+    var downloadsSession: NSURLSession?
     
     var user: UserModelRepresentation?
     
@@ -52,6 +58,9 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         self.tableMenu.delegate = self
         self.tableMenu.dataSource = self
         
+        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+        self.downloadsSession = NSURLSession(configuration: configuration, delegate: self, delegateQueue: nil)
+        
         self.setupNavigation()
         self.setupUser()
         
@@ -72,6 +81,7 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
     }
     
     func setupUser() {
+        
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let managedContext = appDelegate.managedObjectContext
         let fetchRequest = NSFetchRequest(entityName: "User")
@@ -79,7 +89,7 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         self.imageProfile.layer.cornerRadius = 45
         self.imageProfile.layer.borderColor = UIColor.yellowColor().CGColor
         self.imageProfile.layer.borderWidth = 2.0
-        
+    
         do {
             let results = try managedContext.executeFetchRequest(fetchRequest) as! [User]
             
@@ -90,6 +100,21 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
                 if arrayFiltered.count > 0 {
                     self.user = UserModelRepresentation()
                     self.user!.convertManagedObjectToUserModelInfo(arrayFiltered.first! as! User)
+                    
+                    self.labelProfile.text = self.user!.firstName + " " + self.user!.lastName
+                    if self.user!.profileImage != "" {
+                        print("Download image \(self.user!.profileImage)")
+                        let download = Download(url: self.user!.profileImage)
+                        
+                        let url: NSURL = NSURL(string: self.user!.profileImage)!
+                        // 2
+                        download.downloadTask = downloadsSession!.downloadTaskWithURL(url)
+                        // 3
+                        download.downloadTask!.resume()
+                        // 4
+                        download.isDownloading = true
+                    }
+                
                 }
             }
         } catch let error as NSError {
@@ -248,6 +273,14 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         self.pasaPoints!.willMoveToParentViewController(self)
         
         self.toggleMenuButton()
+    }
+    
+    func presentComingSoon(){
+        
+        let frame = CGRectMake(0, 0, UIScreen.mainScreen().bounds.size.width, UIScreen.mainScreen().bounds.size.height)
+        let comingsoon = ComingSoonView(frame: frame)
+        self.view.addSubview(comingsoon)
+        
     }
     
     func logout() {
@@ -493,12 +526,15 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
     
     func homeGoToCoupons() {
         
-
+        self.buttonMenu.selected = !self.buttonMenu.selected
+        self.presentComingSoon()
         
     }
     
     func homeGoToGames() {
         
+        self.buttonMenu.selected = !self.buttonMenu.selected
+        self.presentComingSoon()
         
     }
     
@@ -509,6 +545,7 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
     }
     
     func homeGoToPromos() {
+        
         
         
     }
@@ -556,7 +593,25 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         
     }
     
+
+}
+extension FunNavigationController : NSURLSessionDownloadDelegate {
+    
+    func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didFinishDownloadingToURL location: NSURL) {
+        
+        dispatch_async(dispatch_get_main_queue()) { 
+            
+            let dataImage = NSData(contentsOfURL: location)
+            print("Image = \(dataImage?.length)")
+            self.imageProfile.image = UIImage(data: dataImage!)
+            self.imageProfile.clipsToBounds = true
+        }
+       
+    }
+    
+    
     
 }
+
 
 
