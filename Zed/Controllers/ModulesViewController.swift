@@ -734,23 +734,10 @@ class PulsifyViewController : BaseViewController, WebServiceDelegate, CustomAler
     
     @IBAction func buttonBranchClicked(sender: UIButton) {
         
-        ActionSheetStringPicker.showPickerWithTitle("City", rows: self.arrayCities, initialSelection: 0, doneBlock: { (picker, index, value) -> Void in
+        ActionSheetStringPicker.showPickerWithTitle("Branch", rows: self.arrayBranch as [AnyObject], initialSelection: 0, doneBlock: { (picker, index, value) -> Void in
             //print(index)
             // print(value)
-            
-            self.labelBranch.text = ""
-            self.labelCity.text = value as? String
-            
-            let predicate = NSPredicate(format: "self.city == '\(value)'")
-            let arrayFiltered = (self.arrayBranches as NSArray).filteredArrayUsingPredicate(predicate) as NSArray
-            
-            self.arrayBranch.removeAllObjects()
-            
-            for content in arrayFiltered {
-                let branchModel = content as! BranchModelRepresentation
-                self.arrayBranch.addObject(branchModel.branchName)
-                
-            }
+            self.labelBranch.text = value as? String
             
             }, cancelBlock: { (picker) -> Void in
                 print("cancel")

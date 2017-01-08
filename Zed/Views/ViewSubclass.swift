@@ -643,58 +643,49 @@ class CustomLoadingView: UIView {
 
 //MARK: - Coming Soon View
 class ComingSoonView : UIView {
+    
+    //MARK: Properties
+    
+    var lblMessage: UILabel?
+    
     //MARK: View Life Cycle
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         let bgView = UIView(frame: frame)
-        bgView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.8)
+        bgView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.7)
         self.addSubview(bgView)
         
-        var boarderFrame = CGRectMake((frame.size.width/2) - (200/2), (frame.size.height/2) - (100/2), 200, 100)
-        let boarderView : UIView = UIView(frame: boarderFrame)
-        boarderView.layer.cornerRadius = 8
-        boarderView.backgroundColor = UIColor.blackColor()
-        boarderView.layer.borderColor = UIColor.grayColor().CGColor
-        self.addSubview(boarderView)
+        let centerView = UIView(frame: CGRect(x: 50, y: (self.frame.height-150)/2, width: self.frame.width-100, height: 150))
+        centerView.backgroundColor = UIColor.whiteColor()
+        centerView.layer.cornerRadius = 5.0
+        self.addSubview(centerView)
         
-        boarderFrame.size.height = 30
-        boarderFrame.origin.y = 10
-        boarderFrame.origin.x = 0
+        self.lblMessage = UILabel(frame: CGRect(x: 10, y: 20, width: centerView.frame.width-20, height: centerView.frame.height-104))
+        self.lblMessage!.text = "Coming soon..."
+        self.lblMessage!.textAlignment = .Center
+        self.lblMessage!.numberOfLines = 0
+        self.lblMessage!.font = UIFont.boldSystemFontOfSize(19.0)
+        self.lblMessage!.textColor = UIColor(red: 30.0/255.0, green: 158.0/255.0, blue: 230.0/255.0, alpha: 1.0)
+        centerView.addSubview(self.lblMessage!)
         
-        let label : UILabel = UILabel(frame: boarderFrame)
-        label.text = "Coming Soon.."
-        label.textAlignment = NSTextAlignment.Center
-        label.font = UIFont.boldSystemFontOfSize(20)
-        label.textColor = UIColor.blueColor()
-        boarderView.addSubview(label)
-        
-        boarderFrame.origin.y = 50
-        boarderFrame.size.width = 80
-        
-        let button = UIButton(type: UIButtonType.Custom)
-        button.frame = boarderFrame
-        button.setTitle("OK", forState: UIControlState.Normal)
-        button.backgroundColor = UIColor.blueColor()
-        button.addTarget(self, action: #selector(ComingSoonView.buttonClikced(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        button.titleLabel?.backgroundColor = UIColor.yellowColor()
-        button.layer.cornerRadius = 8
-        boarderView.addSubview(button)
-        
-
+        let btnOkay = UIButton(type: .Custom)
+        btnOkay.frame = CGRect(x: (centerView.frame.width-128)/2, y:centerView.frame.height-66, width: 128, height: 44)
+        btnOkay.setImage(UIImage(named: "ok"), forState: .Normal)
+        btnOkay.addTarget(self, action: #selector(CustomAlertView.didClickOkay(_:)), forControlEvents: .TouchUpInside)
+        centerView.addSubview(btnOkay)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func buttonClikced(sender : UIButton) {
-        
-        self.removeFromSuperview()
-        
-    }
+    //MARK: Button Actions
     
+    func didClickOkay(sender: UIButton) {
+        self.removeFromSuperview()
+    }
 }
 
 //MARK: - Extension UI

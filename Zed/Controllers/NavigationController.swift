@@ -277,13 +277,13 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
     
     func presentComingSoon(){
         
-        let frame = CGRectMake(0, 0, UIScreen.mainScreen().bounds.size.width, UIScreen.mainScreen().bounds.size.height)
-        let comingsoon = ComingSoonView(frame: frame)
-        self.view.addSubview(comingsoon)
+        let comingSoonView = ComingSoonView(frame: self.view.frame)
+        self.view.addSubview(comingSoonView)
         
     }
     
     func logout() {
+        
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let managedContext = appDelegate.managedObjectContext
         let fetchRequest = NSFetchRequest(entityName: "User")
@@ -473,16 +473,16 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         }else if indexPath.row == 1 {
             self.goToPulsify()
         }else if indexPath.row == 2 {
-            //promos
-            self.toggleMenuButton()
+            self.presentComingSoon()
+            self.goToHomePage()
         }else if indexPath.row == 3 {
             self.goToProducts()
         }else if indexPath.row == 4 {
-            //games
-            self.toggleMenuButton()
+            self.presentComingSoon()
+            self.goToHomePage()
         }else if indexPath.row == 5 {
-            //coupons
-            self.toggleMenuButton()
+            self.presentComingSoon()
+            self.goToHomePage()
         }else if indexPath.row == 6 {
             self.goToSurvey()
         }else if indexPath.row == 7 {
@@ -528,7 +528,6 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         
         self.buttonMenu.selected = !self.buttonMenu.selected
         self.presentComingSoon()
-        
     }
     
     func homeGoToGames() {
@@ -542,10 +541,12 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         
         self.buttonMenu.selected = !self.buttonMenu.selected
         self.goToProducts()
+        
     }
     
     func homeGoToPromos() {
         
+        self.presentComingSoon()
         
         
     }

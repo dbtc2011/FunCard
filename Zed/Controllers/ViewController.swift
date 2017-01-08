@@ -405,6 +405,21 @@ class ViewController: BaseViewController , UIScrollViewDelegate, WebServiceDeleg
         }
     }
     
+    func modifyCardNumber(cardNumber: String) -> String {
+        var newCardNumber = ""
+        
+        for char in cardNumber.characters {
+            newCardNumber.append(char)
+            
+            let strForComparison = newCardNumber.stringByReplacingOccurrencesOfString("-", withString: "")
+            if strForComparison.characters.count%4 == 0 && newCardNumber.characters.count < 19 {
+                newCardNumber += "-"
+            }
+        }
+        
+        return newCardNumber
+    }
+    
     //MARK: WebService Delegate
     func webServiceDidFinishLoadingWithResponseDictionary(parsedDictionary: NSDictionary) {
         print(parsedDictionary)
@@ -414,45 +429,31 @@ class ViewController: BaseViewController , UIScrollViewDelegate, WebServiceDeleg
         
         if status == "0" {
             self.user!.points = parsedDictionary["TOTALPOINTS"] as! String
-            self.user!.cardNumber = parsedDictionary["PRIMARYCARDNUMBER"] as! String
             
             if parsedDictionary["LinkedCards"] != nil {
-                let cards = parsedDictionary["LinkedCards"] as! NSArray
                 
-                for card in cards {
-                    let index = cards.indexOfObject(card)
+                let linkedCardsArray = parsedDictionary["LinkedCards"] as! [[String: AnyObject]]
+                //self.user!.cardNumber = parsedDictionary["PRIMARYCARDNUMBER"] as! String
+                
+                for card in linkedCardsArray {
+                    let index = (linkedCardsArray as NSArray).indexOfObject(card)
+                    let oldCardNumber = "\(card["CARDNUMBER"]!)"
+                    let newCardNumber = self.modifyCardNumber(oldCardNumber)
                     
                     switch index {
                     case 0:
-                        self.user!.cardNumber2 = card["CARDNUMBER"] as! String
-                        
-                        var cardNumber2 = ""
-                        for char in self.user!.cardNumber2.characters {
-                            cardNumber2.append(char)
-                            
-                            let strForComparison = cardNumber2.stringByReplacingOccurrencesOfString("-", withString: "")
-                            if strForComparison.characters.count%4 == 0 && cardNumber2.characters.count < 19 {
-                                cardNumber2 += "-"
-                            }
-                        }
-                        
-                        self.cardInfo.labelCard2.text = cardNumber2
+                        self.user!.cardNumber = oldCardNumber
+                        self.cardInfo.labelCard1.text = newCardNumber
                         
                         break
                     case 1:
-                        self.user!.cardNumber3 = card["CARDNUMBER"] as! String
+                        self.user!.cardNumber2 = oldCardNumber
+                        self.cardInfo.labelCard2.text = newCardNumber
                         
-                        var cardNumber3 = ""
-                        for char in self.user!.cardNumber3.characters {
-                            cardNumber3.append(char)
-                            
-                            let strForComparison = cardNumber3.stringByReplacingOccurrencesOfString("-", withString: "")
-                            if strForComparison.characters.count%4 == 0 && cardNumber3.characters.count < 19 {
-                                cardNumber3 += "-"
-                            }
-                        }
-                        
-                        self.cardInfo.labelCard3.text = cardNumber3
+                        break
+                    case 2:
+                        self.user!.cardNumber3 = oldCardNumber
+                        self.cardInfo.labelCard3.text = newCardNumber
                         
                         break
                     default:
