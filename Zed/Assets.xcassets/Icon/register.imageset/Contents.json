@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "register.png",
+      "filename" : "FUN-APP-REG_xN.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "register@2x.png",
+      "filename" : "FUN-APP-REG_x2.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "register@3x.png",
+      "filename" : "FUN-APP-REG_x3.png",
       "scale" : "3x"
     }
   ],

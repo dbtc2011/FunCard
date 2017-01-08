@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "product.png",
+      "filename" : "FUN-APP-PRD_xN.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "product@2x.png",
+      "filename" : "FUN-APP-PRD_x2.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "product@3x.png",
+      "filename" : "FUN-APP-PRD_x3.png",
       "scale" : "3x"
     }
   ],

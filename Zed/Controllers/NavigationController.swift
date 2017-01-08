@@ -283,33 +283,43 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
     }
     
     func logout() {
-        
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        let managedContext = appDelegate.managedObjectContext
-        let fetchRequest = NSFetchRequest(entityName: "User")
-        
-        do {
-            let results = try managedContext.executeFetchRequest(fetchRequest) as! [User]
+        let alertView = UIAlertController(title: "Fun Card PH", message: "Are you sure you want to log out?", preferredStyle: .Alert)
+        alertView.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.Default)
+        { action -> Void in
+            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+            let managedContext = appDelegate.managedObjectContext
+            let fetchRequest = NSFetchRequest(entityName: "User")
             
-            if results.count > 0 {
-                let predicate = NSPredicate(format: "self.isLoggedIn == 1")
-                let arrayFiltered = (results as NSArray).filteredArrayUsingPredicate(predicate)
+            do {
+                let results = try managedContext.executeFetchRequest(fetchRequest) as! [User]
                 
-                if arrayFiltered.count > 0 {
-                    let user = arrayFiltered.first as! User
-                    user.isLoggedIn = 0
+                if results.count > 0 {
+                    let predicate = NSPredicate(format: "self.isLoggedIn == 1")
+                    let arrayFiltered = (results as NSArray).filteredArrayUsingPredicate(predicate)
                     
-                    try managedContext.save()
-                    
-                    //back to start
-                    let storyboard = UIStoryboard(name: "Registration", bundle: nil)
-                    let vc = storyboard.instantiateInitialViewController()
-                    appDelegate.window!.rootViewController = vc
+                    if arrayFiltered.count > 0 {
+                        let user = arrayFiltered.first as! User
+                        user.isLoggedIn = 0
+                        
+                        try managedContext.save()
+                        
+                        //back to start
+                        let storyboard = UIStoryboard(name: "Registration", bundle: nil)
+                        let vc = storyboard.instantiateInitialViewController()
+                        appDelegate.window!.rootViewController = vc
+                    }
                 }
+                
+            } catch let error as NSError {
+                print("Could not fetch \(error), \(error.userInfo)")
             }
+            })
+        alertView.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel)
+        { action -> Void in
             
-        } catch let error as NSError {
-            print("Could not fetch \(error), \(error.userInfo)")
+        })
+        
+        self.presentViewController(alertView, animated: true) {
         }
     }
     
@@ -490,6 +500,7 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         }else if indexPath.row == 8 {
             self.goToBranches()
         }else if indexPath.row == 9 {
+            self.toggleMenuButton()
             self.logout()
         }
      

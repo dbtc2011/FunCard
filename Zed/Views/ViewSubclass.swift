@@ -13,6 +13,7 @@ import CoreData
 //MARK: - Point Header View
 protocol PointHeaderViewDelegate {
     func pointHeaderViewDidRefresh()
+    func pointHeaderDidLogout()
 }
 
 class PointHeaderView: UIView {
@@ -68,34 +69,7 @@ class PointHeaderView: UIView {
     }
     
     func logoffButtonClicked(sender: UIButton) {
-        
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        let managedContext = appDelegate.managedObjectContext
-        let fetchRequest = NSFetchRequest(entityName: "User")
-        
-        do {
-            let results = try managedContext.executeFetchRequest(fetchRequest) as! [User]
-            
-            if results.count > 0 {
-                let predicate = NSPredicate(format: "self.isLoggedIn == 1")
-                let arrayFiltered = (results as NSArray).filteredArrayUsingPredicate(predicate)
-                
-                if arrayFiltered.count > 0 {
-                    let user = arrayFiltered.first as! User
-                    user.isLoggedIn = 0
-                    
-                    try managedContext.save()
-                    
-                    //back to start
-                    let storyboard = UIStoryboard(name: "Registration", bundle: nil)
-                    let vc = storyboard.instantiateInitialViewController()
-                    appDelegate.window!.rootViewController = vc
-                }
-            }
-            
-        } catch let error as NSError {
-            print("Could not fetch \(error), \(error.userInfo)")
-        }
+        self.delegate?.pointHeaderDidLogout()
     }
     
 }
