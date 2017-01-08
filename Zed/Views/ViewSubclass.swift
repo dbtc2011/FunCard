@@ -685,7 +685,9 @@ class ComingSoonView : UIView {
     
     func didClickOkay(sender: UIButton) {
         self.removeFromSuperview()
+        
     }
+    
 }
 
 //MARK: - Extension UI

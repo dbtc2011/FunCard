@@ -528,6 +528,7 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         
         self.buttonMenu.selected = !self.buttonMenu.selected
         self.presentComingSoon()
+        
     }
     
     func homeGoToGames() {
@@ -547,7 +548,6 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
     func homeGoToPromos() {
         
         self.presentComingSoon()
-        
         
         
     }
