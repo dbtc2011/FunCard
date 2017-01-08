@@ -127,7 +127,10 @@ class ViewController: BaseViewController , UIScrollViewDelegate, WebServiceDeleg
     var user: UserModelRepresentation?
     let webService = WebService()
     var delegate: HomePageDelegate?
-
+    
+    var hideGuilde : Bool = true
+    var viewGuide : UIView?
+    
     @IBOutlet weak var pageIndicator: UIPageControl!
     @IBOutlet weak var scrollView: UIScrollView!
     
@@ -146,7 +149,7 @@ class ViewController: BaseViewController , UIScrollViewDelegate, WebServiceDeleg
         self.view.bringSubviewToFront(self.header)
         self.getDashboardInfo()
     }
-
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
@@ -220,6 +223,7 @@ class ViewController: BaseViewController , UIScrollViewDelegate, WebServiceDeleg
         
         self.webService.delegate = self
         dispatch_async(dispatch_get_main_queue()) { () -> Void in
+            
             self.view.backgroundColor = UIColor.blackColor()
             self.pageIndicator.enabled = false
             self.pageIndicator.numberOfPages = 8
@@ -254,6 +258,8 @@ class ViewController: BaseViewController , UIScrollViewDelegate, WebServiceDeleg
             self.header.setupView()
             self.view.addSubview(self.header)
             
+            
+            
             self.cardInfo.frame = CGRectMake(10, UIScreen.mainScreen().bounds.size.height - ((UIScreen.mainScreen().bounds.size.height * 0.43) + 200), UIScreen.mainScreen().bounds.size.width - 20, 155)
             
             if UIScreen.mainScreen().bounds.size.height == 480 {
@@ -261,6 +267,87 @@ class ViewController: BaseViewController , UIScrollViewDelegate, WebServiceDeleg
             }
             self.cardInfo.setupView()
             self.view.addSubview(self.cardInfo)
+            
+            if self.hideGuilde == false {
+                
+                var guideFrame = CGRectMake(0, 0, UIScreen.mainScreen().bounds.size.width, UIScreen.mainScreen().bounds.size.height)
+                
+                self.viewGuide = UIView(frame: guideFrame)
+                self.view.window!.addSubview(self.viewGuide!)
+                
+                let blackBG = UIImageView(frame: guideFrame)
+                blackBG.backgroundColor = UIColor.blackColor()
+                blackBG.alpha = 0.5
+                self.viewGuide!.addSubview(blackBG)
+                
+                guideFrame.origin.y = CGRectGetMinY(self.cardInfo.frame) + 5
+                guideFrame.origin.x = 10
+                guideFrame.size.width = self.cardInfo.frame.size.width
+                guideFrame.size.height = 25
+                
+                let imageRect = UIImageView(frame: guideFrame)
+                imageRect.image = UIImage(named: "rect")
+                self.viewGuide!.addSubview(imageRect)
+                
+                guideFrame.origin.x = 10
+                guideFrame.origin.y = 0
+                guideFrame.size.width = 120
+                guideFrame.size.height = 25
+                
+                let labelCard = UILabel(frame: guideFrame)
+                labelCard.text = "Card 1:"
+                labelCard.font = UIFont.systemFontOfSize(13)
+                labelCard.textAlignment = NSTextAlignment.Left
+                labelCard.textColor = UIColor(red: 248/255, green: 227/255, blue: 56/255, alpha: 1.0)
+                imageRect.addSubview(labelCard)
+                
+                
+                guideFrame.origin.x = 130
+                guideFrame.size.width = self.cardInfo.frame.size.width - 140
+                
+                let guideCardNumber = UILabel(frame: guideFrame)
+                guideCardNumber.text = self.modifyCardNumber(self.user!.cardNumber)
+                guideCardNumber.font = UIFont.systemFontOfSize(13)
+                guideCardNumber.textAlignment = NSTextAlignment.Right
+                guideCardNumber.backgroundColor = UIColor.clearColor()
+                guideCardNumber.textColor = UIColor.whiteColor()
+                imageRect.addSubview(guideCardNumber)
+                
+                guideFrame.origin.x = self.cardInfo.frame.size.width - 70
+                guideFrame.size.width = 25
+                guideFrame.size.height = 100
+                guideFrame.origin.y = CGRectGetMaxY(imageRect.frame) + 20
+                
+                let imageArrow = UIImageView(frame: guideFrame)
+                imageArrow.image = UIImage(named: "arrow")
+                self.viewGuide!.addSubview(imageArrow)
+                
+                
+                guideFrame.origin.x = 0
+                guideFrame.origin.y = CGRectGetMaxY(imageArrow.frame) - 20
+                guideFrame.size.width = self.viewGuide!.frame.size.width
+                guideFrame.size.height = 55
+                
+                let labelHere = UILabel(frame: guideFrame)
+                labelHere.font = UIFont.systemFontOfSize(22)
+                labelHere.textAlignment = NSTextAlignment.Center
+                labelHere.textColor = UIColor(red: 248/255, green: 227/255, blue: 56/255, alpha: 1.0)
+                labelHere.text = "Here is your\nnew VCard Number!"
+                labelHere.numberOfLines = 2
+                self.viewGuide!.addSubview(labelHere)
+                
+                guideFrame.origin.x = -25
+                guideFrame.origin.y = self.viewGuide!.frame.size.height - 170
+                guideFrame.size.width = 200
+                guideFrame.size.height = 200
+                
+                let ninjaImage = UIImageView(frame: guideFrame)
+                ninjaImage.image = UIImage(named: "register")
+                ninjaImage.transform = CGAffineTransformMakeRotation(CGFloat(0.4));
+                self.viewGuide!.addSubview(ninjaImage)
+                
+                
+            }
             
             self.fetchUserFromCoreData()
         }
@@ -424,7 +511,7 @@ class ViewController: BaseViewController , UIScrollViewDelegate, WebServiceDeleg
         counter = (Int)(scrollView.contentOffset.x / UIScreen.mainScreen().bounds.width)
         self.pageIndicator.currentPage = counter
         
-    
+        
         print("scroll offset = \(scrollView.contentOffset.x) view = \(self.view.frame.size.width)")
         print("Page is == \((Int)(scrollView.contentOffset.x / self.view.frame.size.width))")
     }
@@ -564,8 +651,8 @@ class ViewController: BaseViewController , UIScrollViewDelegate, WebServiceDeleg
     func webServiceDidFailWithError(error: NSError) {
         displayAlertWithError(error)
     }
-   
-
+    
+    
 }
 
 //MARK: - Menu View Controller
