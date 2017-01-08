@@ -333,48 +333,53 @@ class PulsifyViewController : BaseViewController, WebServiceDelegate, CustomAler
     //MARK: Custom
     func setButtonColors() {
         
-        for views in self.viewOption1.subviews {
-            
-            let button = views as! UIButton
-            let graySmiley = "graysmiley" + "\(6 - button.tag)"
-            button.setImage(UIImage(named: graySmiley), forState: UIControlState.Normal)
-            let smiley = "smiley" + "\(6 - button.tag)"
-            button.setImage(UIImage(named: smiley), forState: UIControlState.Selected)
-            button.backgroundColor = UIColor.clearColor()
-        }
         
-        for views in self.viewOption2.subviews {
+        dispatch_async(dispatch_get_main_queue()) { 
             
-            let button = views as! UIButton
-            button.backgroundColor = UIColor.clearColor()
-            let graySmiley = "graysmiley" + "\(6 - button.tag)"
-            button.setImage(UIImage(named: graySmiley), forState: UIControlState.Normal)
-            let smiley = "smiley" + "\(6 - button.tag)"
-            button.setImage(UIImage(named: smiley), forState: UIControlState.Selected)
+            print("Set Images!!!!!!")
+            for views in self.viewOption1.subviews {
+                
+                let button = views as! UIButton
+                let graySmiley = "graysmiley" + "\(6 - button.tag)"
+                button.setImage(UIImage(named: graySmiley), forState: UIControlState.Normal)
+                let smiley = "smiley" + "\(6 - button.tag)"
+                button.setImage(UIImage(named: smiley), forState: UIControlState.Selected)
+                button.backgroundColor = UIColor.clearColor()
+            }
             
+            for views in self.viewOption2.subviews {
+                
+                let button = views as! UIButton
+                button.backgroundColor = UIColor.clearColor()
+                let graySmiley = "graysmiley" + "\(6 - button.tag)"
+                button.setImage(UIImage(named: graySmiley), forState: UIControlState.Normal)
+                let smiley = "smiley" + "\(6 - button.tag)"
+                button.setImage(UIImage(named: smiley), forState: UIControlState.Selected)
+                
+            }
+            
+            for views in self.viewOption3.subviews {
+                
+                let button = views as! UIButton
+                button.backgroundColor = UIColor.clearColor()
+                let graySmiley = "graysmiley" + "\(6 - button.tag)"
+                button.setImage(UIImage(named: graySmiley), forState: UIControlState.Normal)
+                let smiley = "smiley" + "\(6 - button.tag)"
+                button.setImage(UIImage(named: smiley), forState: UIControlState.Selected)
+                
+            }
+            
+            for views in self.viewOption4.subviews {
+                let button = views as! UIButton
+                button.backgroundColor = UIColor.clearColor()
+                let graySmiley = "graysmiley" + "\(6 - button.tag)"
+                button.setImage(UIImage(named: graySmiley), forState: UIControlState.Normal)
+                let smiley = "smiley" + "\(6 - button.tag)"
+                button.setImage(UIImage(named: smiley), forState: UIControlState.Selected)
+                
+            }
         }
-        
-        for views in self.viewOption3.subviews {
-            
-            let button = views as! UIButton
-            button.backgroundColor = UIColor.clearColor()
-            let graySmiley = "graysmiley" + "\(6 - button.tag)"
-            button.setImage(UIImage(named: graySmiley), forState: UIControlState.Normal)
-            let smiley = "smiley" + "\(6 - button.tag)"
-            button.setImage(UIImage(named: smiley), forState: UIControlState.Selected)
-            
-        }
-        
-        for views in self.viewOption4.subviews {
-            let button = views as! UIButton
-            button.backgroundColor = UIColor.clearColor()
-            let graySmiley = "graysmiley" + "\(6 - button.tag)"
-            button.setImage(UIImage(named: graySmiley), forState: UIControlState.Normal)
-            let smiley = "smiley" + "\(6 - button.tag)"
-            button.setImage(UIImage(named: smiley), forState: UIControlState.Selected)
-            
-        }
-        
+    
     }
     
     //MARK: Functions
