@@ -531,7 +531,7 @@ class CustomAlertView: UIView {
         centerView.layer.cornerRadius = 5.0
         self.addSubview(centerView)
         
-        self.lblTitle = UILabel(frame: CGRect(x: 20, y: centerView.frame.minY-50, width: centerView.frame.width, height: 50))
+        self.lblTitle = UILabel(frame: CGRect(x: 20, y: centerView.frame.minY+5, width: centerView.frame.width, height: 30))
         self.lblTitle!.text = ""
         self.lblTitle!.textAlignment = .Center
         self.lblTitle!.adjustsFontSizeToFitWidth = true
@@ -540,7 +540,7 @@ class CustomAlertView: UIView {
         self.lblTitle!.textColor = UIColor(red: 30.0/255.0, green: 158.0/255.0, blue: 230.0/255.0, alpha: 1.0)
         self.addSubview(self.lblTitle!)
         
-        self.lblMessage = UILabel(frame: CGRect(x: 10, y: 20, width: centerView.frame.width-20, height: centerView.frame.height-104))
+        self.lblMessage = UILabel(frame: CGRect(x: 10, y: 40, width: centerView.frame.width-20, height: centerView.frame.height-104))
         self.lblMessage!.text = ""
         self.lblMessage!.textAlignment = .Center
         self.lblMessage!.numberOfLines = 0

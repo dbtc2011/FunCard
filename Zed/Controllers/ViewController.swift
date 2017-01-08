@@ -79,8 +79,13 @@ class BaseViewController: UIViewController {
     }
     
     func displayAlertWithError(error: NSError) {
-        self.displayAlert("\(error.code): \(error.localizedDescription)",
-                          title: "Internal Error")
+        if error.code == -1009 {
+            self.displayAlertNoConnection()
+            return
+        }
+        
+        self.displayAlert("Something went wrong with the app.",
+                          title: "Internal Server Error")
     }
     
     func displayAlertNoConnection() {
