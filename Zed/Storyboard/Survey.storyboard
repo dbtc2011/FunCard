@@ -100,7 +100,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zlb-d9-Qwl">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uDB-N9-oPg">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uDB-N9-oPg">
                                         <rect key="frame" x="-42" y="-21" width="42" height="21"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="40" id="Tiy-kS-xwf"/>
@@ -397,21 +397,21 @@
                                 <exclude reference="bFe-uT-oTU"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="E1z-vB-p2g"/>
-                                <exclude reference="RPj-Vy-eeF"/>
+                                <exclude reference="VGd-NX-m5q"/>
                                 <exclude reference="bUB-O0-5e1"/>
                                 <exclude reference="ohc-5M-JLZ"/>
                                 <exclude reference="uiV-Bu-K1x"/>
-                                <exclude reference="07Z-kn-LNL"/>
-                                <exclude reference="F6I-aq-eNo"/>
-                                <exclude reference="VGd-NX-m5q"/>
-                                <exclude reference="9R0-qS-otB"/>
-                                <exclude reference="TYU-60-Dle"/>
                                 <exclude reference="2Q0-Ho-zRx"/>
                                 <exclude reference="pti-Q3-Pu9"/>
                                 <exclude reference="YDd-Mr-3Rc"/>
                                 <exclude reference="fv6-bt-Zmz"/>
                                 <exclude reference="vtD-83-LVw"/>
+                                <exclude reference="9R0-qS-otB"/>
+                                <exclude reference="TYU-60-Dle"/>
+                                <exclude reference="07Z-kn-LNL"/>
+                                <exclude reference="F6I-aq-eNo"/>
+                                <exclude reference="E1z-vB-p2g"/>
+                                <exclude reference="RPj-Vy-eeF"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
@@ -424,21 +424,21 @@
                                 <include reference="bFe-uT-oTU"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="E1z-vB-p2g"/>
-                                <include reference="RPj-Vy-eeF"/>
+                                <include reference="VGd-NX-m5q"/>
                                 <include reference="bUB-O0-5e1"/>
                                 <include reference="ohc-5M-JLZ"/>
                                 <include reference="uiV-Bu-K1x"/>
-                                <include reference="07Z-kn-LNL"/>
-                                <include reference="F6I-aq-eNo"/>
-                                <include reference="VGd-NX-m5q"/>
-                                <include reference="9R0-qS-otB"/>
-                                <include reference="TYU-60-Dle"/>
                                 <include reference="2Q0-Ho-zRx"/>
                                 <include reference="pti-Q3-Pu9"/>
                                 <include reference="YDd-Mr-3Rc"/>
                                 <include reference="fv6-bt-Zmz"/>
                                 <include reference="vtD-83-LVw"/>
+                                <include reference="9R0-qS-otB"/>
+                                <include reference="TYU-60-Dle"/>
+                                <include reference="07Z-kn-LNL"/>
+                                <include reference="F6I-aq-eNo"/>
+                                <include reference="E1z-vB-p2g"/>
+                                <include reference="RPj-Vy-eeF"/>
                             </mask>
                         </variation>
                     </view>

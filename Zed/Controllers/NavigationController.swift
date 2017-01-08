@@ -67,7 +67,6 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         self.home!.delegate = self
         self.addChildViewController(self.home!)
         self.viewMain.addSubview(self.home!.view)
-        
         self.home!.willMoveToParentViewController(self)
         self.home!.setupUI()
     }
@@ -282,7 +281,6 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
     }
     
     func removeSubviewsOfMain() {
-        
         if self.home != nil {
             
             self.home!.willMoveToParentViewController(nil)
@@ -328,8 +326,8 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
             self.products = nil
             
         }
-
     }
+    
     func toggleMenuButton() {
         
         dispatch_async(dispatch_get_main_queue()) { () -> Void in

@@ -1247,6 +1247,7 @@ class ProductsViewController : BaseViewController, UIWebViewDelegate {
     @IBOutlet var webView: UIWebView!
     
     var delegate : ModuleViewControllerDelegate?
+    var firstLoad = true
     
     //MARK: View Life Cycle
     
@@ -1268,7 +1269,10 @@ class ProductsViewController : BaseViewController, UIWebViewDelegate {
     }
     
     func webViewDidStartLoad(webView: UIWebView) {
-        displayLoadingScreen()
+        if firstLoad == true {
+            displayLoadingScreen()
+            firstLoad = false
+        }
     }
     
     func webViewDidFinishLoad(webView: UIWebView) {
