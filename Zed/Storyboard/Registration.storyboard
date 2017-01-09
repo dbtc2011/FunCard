@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="QgT-bI-5Tu">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="QgT-bI-5Tu">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -2173,6 +2173,29 @@
                                     </mask>
                                 </variation>
                             </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="register" translatesAutoresizingMaskIntoConstraints="NO" id="iLE-f4-nzv">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="150" id="BT1-bQ-cil">
+                                        <variation key="heightClass=regular-widthClass=compact" constant="148"/>
+                                    </constraint>
+                                    <constraint firstAttribute="width" constant="160" id="con-Us-kHV">
+                                        <variation key="heightClass=regular-widthClass=compact" constant="136"/>
+                                    </constraint>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="BT1-bQ-cil"/>
+                                        <exclude reference="con-Us-kHV"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="BT1-bQ-cil"/>
+                                        <include reference="con-Us-kHV"/>
+                                    </mask>
+                                </variation>
+                            </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rPi-ax-nLZ">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                 <subviews>
@@ -2389,29 +2412,6 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="register" translatesAutoresizingMaskIntoConstraints="NO" id="iLE-f4-nzv">
-                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="150" id="BT1-bQ-cil">
-                                        <variation key="heightClass=regular-widthClass=compact" constant="148"/>
-                                    </constraint>
-                                    <constraint firstAttribute="width" constant="160" id="con-Us-kHV">
-                                        <variation key="heightClass=regular-widthClass=compact" constant="136"/>
-                                    </constraint>
-                                </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="BT1-bQ-cil"/>
-                                        <exclude reference="con-Us-kHV"/>
-                                    </mask>
-                                </variation>
-                                <variation key="heightClass=regular-widthClass=compact">
-                                    <mask key="constraints">
-                                        <include reference="BT1-bQ-cil"/>
-                                        <include reference="con-Us-kHV"/>
-                                    </mask>
-                                </variation>
-                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -2434,8 +2434,8 @@
                             <mask key="subviews">
                                 <exclude reference="vlu-mO-Uuz"/>
                                 <exclude reference="qgU-bv-iWA"/>
-                                <exclude reference="rPi-ax-nLZ"/>
                                 <exclude reference="iLE-f4-nzv"/>
+                                <exclude reference="rPi-ax-nLZ"/>
                             </mask>
                             <mask key="constraints">
                                 <exclude reference="a56-Rn-KTi"/>
@@ -2456,8 +2456,8 @@
                             <mask key="subviews">
                                 <include reference="vlu-mO-Uuz"/>
                                 <include reference="qgU-bv-iWA"/>
-                                <include reference="rPi-ax-nLZ"/>
                                 <include reference="iLE-f4-nzv"/>
+                                <include reference="rPi-ax-nLZ"/>
                             </mask>
                             <mask key="constraints">
                                 <include reference="a56-Rn-KTi"/>
@@ -2503,7 +2503,7 @@
         <image name="withoutcard" width="278" height="299"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ewa-Pj-hKg"/>
         <segue reference="7LK-UH-luW"/>
+        <segue reference="VhR-aV-RMN"/>
     </inferredMetricsTieBreakers>
 </document>

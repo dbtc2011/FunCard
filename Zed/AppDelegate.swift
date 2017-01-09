@@ -57,6 +57,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         application.registerForRemoteNotifications()
         
+        let defaults = NSUserDefaults.standardUserDefaults()
+        defaults.setObject("true", forKey: "identify_card")
+        
+        
         GMSServices.provideAPIKey("AIzaSyD6JXMgaHDYTeiDB0eGplaWIGtLlZs4nKE")
         syncBranchesData()
         
