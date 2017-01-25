@@ -55,6 +55,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: Delegate with Facebook api
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
+        //639066285538
+        //6788 8800 0000 1347
+        
         application.registerForRemoteNotifications()
         
         let defaults = NSUserDefaults.standardUserDefaults()
