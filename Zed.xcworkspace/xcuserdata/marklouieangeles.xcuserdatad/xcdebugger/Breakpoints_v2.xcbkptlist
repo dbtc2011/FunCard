@@ -9,13 +9,29 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Zed/Controllers/ViewController.swift"
-            timestampString = "510667225.268832"
+            filePath = "Zed/Controllers/NavigationController.swift"
+            timestampString = "510684902.160118"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1455"
-            endingLineNumber = "1455"
-            landmarkName = "webServiceDidFinishLoadingWithResponseDictionary(_:)"
+            startingLineNumber = "623"
+            endingLineNumber = "623"
+            landmarkName = "URLSession(_:downloadTask:didFinishDownloadingToURL:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Zed/Controllers/NavigationController.swift"
+            timestampString = "510684949.105875"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "112"
+            endingLineNumber = "112"
+            landmarkName = "setupUser()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

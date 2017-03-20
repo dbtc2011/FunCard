@@ -303,12 +303,13 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
                         
                         try managedContext.save()
                         
+                        let storyboard = UIStoryboard(name: "Registration", bundle: nil)
+                        let vc = storyboard.instantiateInitialViewController()
+                        appDelegate.window!.rootViewController = vc
                         //back to start
                         self.dismissViewControllerAnimated(true, completion: {
                             
-                            let storyboard = UIStoryboard(name: "Registration", bundle: nil)
-                            let vc = storyboard.instantiateInitialViewController()
-                            appDelegate.window!.rootViewController = vc
+                            
                             
                         })
                     }

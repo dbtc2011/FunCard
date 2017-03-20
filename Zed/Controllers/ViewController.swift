@@ -56,7 +56,10 @@ class BaseViewController: UIViewController {
     //alert
     func displayAlert(message: String, title: String) {
         if self.alertView == nil {
-            self.alertView = CustomAlertView(frame: self.view.frame)
+            
+            let alertFrame = CGRectMake(0, 0, UIScreen.mainScreen().bounds.size.width, UIScreen.mainScreen().bounds.size.height)
+            
+            self.alertView = CustomAlertView(frame: alertFrame)
         }
         
         self.alertView!.setAlertMessageAndTitle(message, title: title)
@@ -186,6 +189,7 @@ class ViewController: BaseViewController , UIScrollViewDelegate, WebServiceDeleg
     
     //MARK: PointHeaderView Delegate
     func pointHeaderViewDidRefresh() {
+        
         self.getDashboardInfo()
     }
     
@@ -211,11 +215,12 @@ class ViewController: BaseViewController , UIScrollViewDelegate, WebServiceDeleg
                         try managedContext.save()
                         
                         //back to start
+                        let storyboard = UIStoryboard(name: "Registration", bundle: nil)
+                        let vc = storyboard.instantiateInitialViewController()
+                        appDelegate.window!.rootViewController = vc
                         self.dismissViewControllerAnimated(true, completion: {
                             
-                            let storyboard = UIStoryboard(name: "Registration", bundle: nil)
-                            let vc = storyboard.instantiateInitialViewController()
-                            appDelegate.window!.rootViewController = vc
+                            
                             
                         })
                     }
@@ -327,7 +332,7 @@ class ViewController: BaseViewController , UIScrollViewDelegate, WebServiceDeleg
         guideFrame.size.width = self.cardInfo.frame.size.width - 140
         
         let guideCardNumber = UILabel(frame: guideFrame)
-        guideCardNumber.text = self.modifyCardNumber(self.user!.cardNumber)
+        guideCardNumber.text = self.user!.cardNumber
         guideCardNumber.font = UIFont.systemFontOfSize(13)
         guideCardNumber.textAlignment = NSTextAlignment.Right
         guideCardNumber.backgroundColor = UIColor.clearColor()
@@ -590,6 +595,8 @@ class ViewController: BaseViewController , UIScrollViewDelegate, WebServiceDeleg
     func webServiceDidFinishLoadingWithResponseDictionary(parsedDictionary: NSDictionary) {
         print(parsedDictionary)
         
+        header.userInteractionEnabled = true
+        
         let status = parsedDictionary["STATUS"] as! String
         let description = parsedDictionary["DESCRIPTION"] as! String
         
@@ -604,7 +611,7 @@ class ViewController: BaseViewController , UIScrollViewDelegate, WebServiceDeleg
                 for card in linkedCardsArray {
                     let index = (linkedCardsArray as NSArray).indexOfObject(card)
                     let oldCardNumber = "\(card["CARDNUMBER"]!)"
-                    let newCardNumber = self.modifyCardNumber(oldCardNumber)
+                    let newCardNumber = oldCardNumber
                     
                     switch index {
                     case 0:
@@ -989,6 +996,15 @@ class RegsitrationFormViewController : BaseViewController, UITableViewDataSource
         }
     }
     
+    func getGenderForAPI(gender: String) -> String {
+        
+        if gender == "male" {
+            return "M"
+        }
+        
+        return "F"
+    }
+    
     //MARK: Delegate
     //MARK: Tableview
     // MARK: UITableViewDataSource
@@ -1192,6 +1208,7 @@ class RegsitrationFormViewController : BaseViewController, UITableViewDataSource
         dictParams["lastName"] = self.tableContents[1]["value"] as! String
         dictParams["firstName"] = self.tableContents[0]["value"] as! String
         dictParams["secondName"] = " "
+        print("Value = \(self.tableContents[2]["value"] as! String)")
         dictParams["birthday"] = self.tableContents[2]["value"] as! String
         dictParams["gender"] = self.tableContents[3]["value"] as! String
         dictParams["address"] = self.tableContents[4]["value"] as! String
@@ -1223,10 +1240,13 @@ class RegsitrationFormViewController : BaseViewController, UITableViewDataSource
         if self.user!.facebookID == "" {
             //no fb
             let dictParams = NSMutableDictionary()
-            dictParams["dateOfBirth"] = self.tableContents[2]["value"] as! String
+            
+            let date = (self.tableContents[2]["value"] as! String).stringByReplacingOccurrencesOfString("-", withString: "")
+            dictParams["dateOfBirth"] = date
+            print("Value date = \(self.tableContents[2]["value"] as! String)")
             dictParams["email"] = self.tableContents[5]["value"] as! String
             dictParams["firstName"] = self.tableContents[0]["value"] as! String
-            dictParams["gender"] = self.tableContents[3]["value"] as! String
+            dictParams["gender"] = self.getGenderForAPI((self.tableContents[3]["value"] as! String))
             dictParams["lastName"] = self.tableContents[1]["value"] as! String
             
             displayLoadingScreen()
@@ -1395,8 +1415,8 @@ class RegsitrationFormViewController : BaseViewController, UITableViewDataSource
             break
         
         case WebServiceFor.FunMember_Email.rawValue:
-            let status = parsedDictionary["Status"] as! String
-            let errorMessage = parsedDictionary["Description"] as! String
+            let status = parsedDictionary["STATUS"] as! String
+            let errorMessage = parsedDictionary["DESCRIPTION"] as! String
             
             if status == "0" {
                 //proceed with updateFbInfo
@@ -1438,7 +1458,7 @@ class RegsitrationFormViewController : BaseViewController, UITableViewDataSource
             break
             
         case WebServiceFor.UpdateFbInfo.rawValue:
-            let status = parsedDictionary["Status"] as! String
+            let status = parsedDictionary["STATUS"] as! String
             let errorMessage = parsedDictionary["StatusDescription"] as! String
             
             if status == "0" {
@@ -1839,6 +1859,7 @@ class RegistrationCardNumberViewController : BaseViewController, WebServiceDeleg
     
     
     //MARK: Methods
+
     private func processRegColResponse(parsedDict: NSDictionary) {
         let status = parsedDict["Status"] as! String
         let description = parsedDict["Description"] as! String
@@ -1853,13 +1874,12 @@ class RegistrationCardNumberViewController : BaseViewController, WebServiceDeleg
             dictParams["userId"] = userID
             dictParams["password"] = password
             dictParams["merchantId"] = merchantID
-            dictParams["cardNumber"] = self.txtCardNumber.text!
+            dictParams["cardNumber"] = self.txtCardNumber.text!.stringByReplacingOccurrencesOfString("-", withString: "")
             dictParams["msisdn"] = self.txtMobileNumber.text!
             dictParams["channel"] = channel
             dictParams["requestTimezone"] = timezone
             dictParams["requestTimestamp"] = timeStamp
             
-            //print(dictParams)
             self.webService.connectAndRegisterWithInfo(dictParams)
             break
             

@@ -65,11 +65,18 @@ class PointHeaderView: UIView {
     
     //MARK: Button Actions
     func refreshButtonClicked(sender: UIButton) {
+        self.userInteractionEnabled = false
         self.delegate?.pointHeaderViewDidRefresh()
     }
     
     func logoffButtonClicked(sender: UIButton) {
+        sender.enabled = false
         self.delegate?.pointHeaderDidLogout()
+        
+        let dispatchTime: dispatch_time_t = dispatch_time(DISPATCH_TIME_NOW, Int64(1.0 * Double(NSEC_PER_SEC)))
+        dispatch_after(dispatchTime, dispatch_get_main_queue(), {
+            sender.enabled = true
+        })
     }
     
 }
