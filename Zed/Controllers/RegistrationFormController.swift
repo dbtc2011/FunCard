@@ -107,9 +107,7 @@ class RegsitrationFormViewController : BaseViewController, UITableViewDataSource
         self.tableContents.addObject(gender)
         self.tableContents.addObject(address)
         self.tableContents.addObject(email)
-        self.tableContents.addObject(pin)
         
-        /*
         if self.user!.cardPin.characters.count > 0 {
             
             if self.user!.cardNumber.characters.count == 0 {
@@ -122,7 +120,7 @@ class RegsitrationFormViewController : BaseViewController, UITableViewDataSource
             //hide resend pin button
             self.btnResend.hidden = true
         }
-        */
+ 
     }
     
     func getGenderForAPI(gender: String) -> String {
@@ -348,24 +346,7 @@ class RegsitrationFormViewController : BaseViewController, UITableViewDataSource
     }
     
     private func callRegisterWithCardAPI() -> Void {
-        
-        let timeStamp = generateTimeStamp()
-        
-        let dictParams = NSMutableDictionary()
-        dictParams["transactionId"] = generateTransactionIDWithTimestamp(timeStamp)
-        dictParams["userId"] = userID
-        dictParams["password"] = password
-        dictParams["merchantId"] = merchantID
-        dictParams["cardNumber"] = self.user!.cardNumber
-        dictParams["msisdn"] = self.user!.mobileNumber
-        dictParams["cardPin"] = self.user!.cardPin
-        dictParams["channel"] = channel
-        dictParams["requestTimezone"] = timezone
-        dictParams["requestTimestamp"] = timeStamp
-        
-        self.webService.connectAndValidateCardPinWithInfo(dictParams)
-        
-        
+    
         if self.user!.facebookID == "" {
             //no fb
             let dictParams = NSMutableDictionary()
@@ -445,6 +426,7 @@ class RegsitrationFormViewController : BaseViewController, UITableViewDataSource
     
     @IBAction func saveButtonClicked(sender: UIButton) {
         //validate form here
+        
         for content in self.tableContents {
             let dictionary = content as! NSMutableDictionary
             
@@ -454,17 +436,12 @@ class RegsitrationFormViewController : BaseViewController, UITableViewDataSource
                 return
             }
         }
+ 
         
         sender.enabled = false
         btnSender = sender
         
-        //identify if with/without pin
-        if self.user!.cardPin.characters.count == 0 {
-            
-            self.callRegisterWithCardAPI()
-            return
-        }
-        
+
         //identify with or without card
         if self.user!.cardNumber.characters.count == 0 {
             //without card
@@ -495,10 +472,11 @@ class RegsitrationFormViewController : BaseViewController, UITableViewDataSource
         
         switch(request) {
         case WebServiceFor.ValidateVirtualCard.rawValue:
-            let status = parsedDictionary["STATUS"] as! String
-            let description = parsedDictionary["DESCRIPTION"] as! String
+            let status = parsedDictionary["STATUS"] as? String ?? ""
+            let description = parsedDictionary["DESCRIPTION"] as? String ?? parsedDictionary["StatusDescription"] as! String
+            let STATUS = parsedDictionary["Status"] as? String ?? ""
             
-            if status == "0" {
+            if status == "0" || STATUS == "0" {
                 hideLoadingScreen()
                 
                 //save to core data
@@ -515,6 +493,7 @@ class RegsitrationFormViewController : BaseViewController, UITableViewDataSource
                 
                 return
             }
+            
             
             btnSender!.enabled = true
             hideLoadingScreen()
@@ -544,8 +523,9 @@ class RegsitrationFormViewController : BaseViewController, UITableViewDataSource
             break
             
         case WebServiceFor.FunMember_Email.rawValue:
-            let status = parsedDictionary["STATUS"] as! String
-            let errorMessage = parsedDictionary["DESCRIPTION"] as! String
+            
+            let status = parsedDictionary["STATUS"] as? String ?? ""
+            let errorMessage = parsedDictionary["DESCRIPTION"] as? String ?? parsedDictionary["StatusDescription"] as! String
             
             if status == "0" {
                 //proceed with updateFbInfo

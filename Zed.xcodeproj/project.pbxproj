@@ -22,6 +22,7 @@
 		5028C1B41E8245CD0005070F /* RegistrationCardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5028C1B31E8245CD0005070F /* RegistrationCardController.swift */; };
 		5028C1B61E824D9E0005070F /* PinVerificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5028C1B51E824D9E0005070F /* PinVerificationController.swift */; };
 		5028C1B81E8270F70005070F /* RegistrationFormController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5028C1B71E8270F70005070F /* RegistrationFormController.swift */; };
+		5028C1BA1E8276560005070F /* RegistrationNumberController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5028C1B91E8276560005070F /* RegistrationNumberController.swift */; };
 		50E116D61D49DFA90012F6DB /* Registration.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50E116D51D49DFA90012F6DB /* Registration.storyboard */; };
 		50EAD4291D409D160086704F /* Pulsify.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50EAD4281D409D160086704F /* Pulsify.storyboard */; };
 		67003D351DAA8669006C78F1 /* FunCard.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 67003D331DAA8669006C78F1 /* FunCard.xcdatamodeld */; };
@@ -60,6 +61,7 @@
 		5028C1B31E8245CD0005070F /* RegistrationCardController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RegistrationCardController.swift; path = Controllers/RegistrationCardController.swift; sourceTree = "<group>"; };
 		5028C1B51E824D9E0005070F /* PinVerificationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PinVerificationController.swift; path = Controllers/PinVerificationController.swift; sourceTree = "<group>"; };
 		5028C1B71E8270F70005070F /* RegistrationFormController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RegistrationFormController.swift; path = Controllers/RegistrationFormController.swift; sourceTree = "<group>"; };
+		5028C1B91E8276560005070F /* RegistrationNumberController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RegistrationNumberController.swift; path = Controllers/RegistrationNumberController.swift; sourceTree = "<group>"; };
 		50E116D51D49DFA90012F6DB /* Registration.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Registration.storyboard; path = Storyboard/Registration.storyboard; sourceTree = "<group>"; };
 		50EAD4281D409D160086704F /* Pulsify.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Pulsify.storyboard; path = Storyboard/Pulsify.storyboard; sourceTree = "<group>"; };
 		67003D341DAA8669006C78F1 /* FunCard.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FunCard.xcdatamodel; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 				5025E4811D34D99900699AFB /* ModulesViewController.swift */,
 				500748AE1DACB7F800094D4D /* NavigationController.swift */,
 				5028C1B31E8245CD0005070F /* RegistrationCardController.swift */,
+				5028C1B91E8276560005070F /* RegistrationNumberController.swift */,
 				5028C1B71E8270F70005070F /* RegistrationFormController.swift */,
 				5028C1B51E824D9E0005070F /* PinVerificationController.swift */,
 			);
@@ -348,6 +351,7 @@
 				676171F51D6EC12E00389472 /* XMLParser.swift in Sources */,
 				676171F41D6EC12E00389472 /* WebService.swift in Sources */,
 				5025E48B1D34E93300699AFB /* ViewController.swift in Sources */,
+				5028C1BA1E8276560005070F /* RegistrationNumberController.swift in Sources */,
 				67003D3D1DAA89F4006C78F1 /* Branch.swift in Sources */,
 				5028C1B41E8245CD0005070F /* RegistrationCardController.swift in Sources */,
 				67003D351DAA8669006C78F1 /* FunCard.xcdatamodeld in Sources */,

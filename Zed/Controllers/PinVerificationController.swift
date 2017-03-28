@@ -78,29 +78,29 @@ class PinVerificationViewController : BaseViewController, WebServiceDelegate, UI
         }
     }
     
-    //MARK: UITextfield Delegate
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
+    private func callValidateCard() -> Void {
+        
+        let timeStamp = generateTimeStamp()
+        
+        let dictParams = NSMutableDictionary()
+        dictParams["transactionId"] = generateTransactionIDWithTimestamp(timeStamp)
+        dictParams["userId"] = userID
+        dictParams["password"] = password
+        dictParams["merchantId"] = merchantID
+        dictParams["cardNumber"] = self.user!.cardNumber.stringByReplacingOccurrencesOfString("-", withString: "")
+        dictParams["msisdn"] = self.user!.mobileNumber
+        dictParams["cardPin"] = self.user!.cardPin
+        dictParams["channel"] = channel
+        dictParams["requestTimezone"] = timezone
+        dictParams["requestTimestamp"] = timeStamp
+        
+        print("Parameter = \(dictParams)")
+        self.webService.connectAndValidateCardPinWithInfo(dictParams)
+        
+    
     }
     
-    //MARK: IBAction Delegate
-    @IBAction func didPressOkay(sender: UIButton) {
-        if self.txtPinCode.text!.characters.count == 0 {
-            displayAlertValidationError()
-            
-            return
-        }
-        
-        sender.enabled = false
-        
-        if self.user!.cardPin != self.txtPinCode.text! {
-            displayAlert("Pin code entered is incorrect.\nPlease try again.", title: "")
-            
-            sender.enabled = true
-            
-            return
-        }
+    private func proceedSignup() {
         
         //proceed
         if self.user!.firstName != "" { //means the user has profile already
@@ -126,6 +126,39 @@ class PinVerificationViewController : BaseViewController, WebServiceDelegate, UI
         }
         
         self.performSegueWithIdentifier("goToConnectToFacebook", sender: self)
+        
+    }
+    
+    //MARK: UITextfield Delegate
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    //MARK: IBAction Delegate
+    @IBAction func didPressOkay(sender: UIButton) {
+        if self.txtPinCode.text!.characters.count == 0 {
+            displayAlertValidationError()
+            
+            return
+        }
+        
+        sender.enabled = false
+        btnSender = sender
+        if self.user!.cardPin != self.txtPinCode.text! {
+            displayAlert("Pin code entered is incorrect.\nPlease try again.", title: "")
+            
+            sender.enabled = true
+            
+            return
+        }
+        
+        if self.user!.cardNumber != "" {
+            self.callValidateCard()
+        }else {
+            self.proceedSignup()
+        }
+        
     }
     
     @IBAction func didPressResend(sender: UIButton) {
@@ -151,9 +184,6 @@ class PinVerificationViewController : BaseViewController, WebServiceDelegate, UI
             let status = parsedDictionary["STATUS"] as! String
             let description = parsedDictionary["DESCRIPTION"] as! String
             
-            self.btnSender!.enabled = true
-            hideLoadingScreen()
-            
             if status == "0" {
                 let pinCode = parsedDictionary["PIN"] as! String
                 self.user!.cardPin = pinCode
@@ -166,6 +196,29 @@ class PinVerificationViewController : BaseViewController, WebServiceDelegate, UI
             
             btnSender!.enabled = true
             displayAlertRequestError(status, descripion: description)
+            break
+            
+        case WebServiceFor.ValidateCardPin.rawValue:
+            
+            self.btnSender!.enabled = true
+            
+            let status = parsedDictionary["Status"] as? String ?? ""
+            let description = parsedDictionary["StatusDescription"] as? String ?? ""
+            btnSender!.enabled = true
+            if status == "0" {
+                
+                self.proceedSignup()
+                
+            }else {
+                
+//                displayAlertRequestError(status, descripion: description)
+                
+                self.dismissViewControllerAnimated(true, completion: { 
+                    
+                })
+                
+            }
+            
             break
             
         default:

@@ -155,8 +155,6 @@ class RegistrationCardNumberViewController : BaseViewController, WebServiceDeleg
             self.user.middleName = parsedDict["MiddleName"] as! String
             self.user.cardNumber = parsedDict["PrimaryCardNumber"] as! String
             
-            
-            
             let dictParams = NSMutableDictionary()
             dictParams["transactionId"] = generateTransactionIDWithTimestamp(generateTimeStamp())
             dictParams["mobileNumber"] = self.txtMobileNumber.text!
@@ -175,16 +173,9 @@ class RegistrationCardNumberViewController : BaseViewController, WebServiceDeleg
     private func callForgotPin (parsedDict: NSDictionary) {
         
         //mobile number found with profile, proceed to forgotpin
-        self.user.address = parsedDict["Address"] as! String
-        self.user.birthday = parsedDict["Birthday"] as! String
-        self.user.email = parsedDict["Email"] as! String
-        self.user.firstName = parsedDict["FirstName"] as! String
-        self.user.gender = parsedDict["Gender"] as! String
-        self.user.lastName = parsedDict["LastName"] as! String
-        self.user.middleName = parsedDict["MiddleName"] as! String
-        self.user.cardNumber = parsedDict["PrimaryCardNumber"] as! String
-        
-        
+       
+        self.user.mobileNumber = self.txtMobileNumber.text!
+        self.user.cardNumber = self.txtCardNumber.text!
         
         let dictParams = NSMutableDictionary()
         dictParams["transactionId"] = generateTransactionIDWithTimestamp(generateTimeStamp())
@@ -210,9 +201,7 @@ class RegistrationCardNumberViewController : BaseViewController, WebServiceDeleg
         case  WebServiceFor.Register.rawValue:
             
             let status = parsedDictionary["Status"] as! String
-            
-            
-            
+        
             if status == "0" {
                 
                 let cardPin = parsedDictionary["CardPin"] as! String
@@ -243,20 +232,26 @@ class RegistrationCardNumberViewController : BaseViewController, WebServiceDeleg
         case WebServiceFor.ForgotPin.rawValue:
             let status = parsedDictionary["STATUS"] as! String
             let description = parsedDictionary["DESCRIPTION"] as! String
+            btnSender!.enabled = true
+            hideLoadingScreen()
             
             if status == "0" {
                 let pinCode = parsedDictionary["PIN"] as! String
                 self.user.cardPin = pinCode
                 print(pinCode)
                 
-                self.performSegueWithIdentifier("goToConnectToFacebook", sender: nil)
+                self.performSegueWithIdentifier("goToPinVerification", sender: nil)
                 
                 return
+            }else if status == "3" {
+                
+                if parsedDictionary["Status"] as! String == "77" {
+                    self.performSegueWithIdentifier("goToConnectToFacebook", sender: nil)
+                }
+                
+            }else {
+                displayAlertRequestError(status, descripion: description)
             }
-            
-            btnSender!.enabled = true
-            hideLoadingScreen()
-            displayAlertRequestError(status, descripion: description)
             
             break
             
