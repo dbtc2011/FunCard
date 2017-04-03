@@ -213,7 +213,9 @@ class RegistrationCardNumberViewController : BaseViewController, WebServiceDeleg
                 
             }else if status == "77" {
                 
-                self.callForgotPin(parsedDictionary)
+                btnSender!.enabled = true
+                hideLoadingScreen()
+                displayAlertRequestError("Error", descripion: "Multiple card number not allowed.")
                 
                 
             }else {

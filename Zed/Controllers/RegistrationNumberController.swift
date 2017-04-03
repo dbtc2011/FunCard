@@ -118,38 +118,6 @@ class RegistrationMobileNumberViewController : BaseViewController, WebServiceDel
         case WebServiceFor.FunRegCol_Msisdn.rawValue:
             self.processRegColResponse(parsedDictionary)
             
-            /*
-             let isRegistered = parsedDictionary["IsRegistered"] as! String
-             
-             if isRegistered == "YES" {
-             //let cardNumber = parsedDictionary["CardNumber"] as! String
-             let facebookID = parsedDictionary["FacebookId"] as? String
-             //print("cardnumber: \(cardNumber)\nfacebookid: \(facebookID)")
-             
-             if facebookID?.characters.count == 0 || facebookID == nil {
-             //proceed with registration
-             self.performSegueWithIdentifier("goToConnectToFacebook", sender: nil)
-             return
-             }
-             
-             let cardNumber = parsedDictionary["CardNumber"] as? String
-             self.user.facebookID = facebookID!
-             self.user.cardNumber = cardNumber!
-             //proceed to dashboard
-             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-             let vc = storyboard.instantiateViewControllerWithIdentifier("main") as! ViewController
-             vc.user = self.user
-             
-             self.presentViewController(vc, animated: true, completion: nil)
-             } else {
-             //send pin to the indicated mobile number
-             let dictParams = NSMutableDictionary()
-             dictParams["transactionId"] = generateTransactionIDWithTimestamp(generateTimeStamp())
-             dictParams["mobileNumber"] = self.textNumber.text!
-             
-             self.webService.connectAndRegisterVirtualCardWithInfo(dictParams)
-             }*/
-            
             break
             
         case WebServiceFor.ForgotPin.rawValue:
