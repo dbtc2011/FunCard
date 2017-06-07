@@ -19,6 +19,8 @@ class RegsitrationFormViewController : BaseViewController, UITableViewDataSource
     let webService = WebService()
     var user: UserModelRepresentation?
     
+    var isEditingProfile = false //for edit profile
+    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet var btnResend: UIButton!
     
@@ -50,11 +52,18 @@ class RegsitrationFormViewController : BaseViewController, UITableViewDataSource
             let email = self.tableContents[5] as! NSMutableDictionary
             email.setObject(self.user!.email, forKey: "value")
             
+            let birthday = self.tableContents[2] as! NSMutableDictionary
+            birthday.setObject(self.user!.birthday, forKey: "value")
+            
+            let address = self.tableContents[4] as! NSMutableDictionary
+            address.setObject(self.user!.address, forKey: "value")
             
             self.tableContents.replaceObjectAtIndex(0, withObject: firstName)
             self.tableContents.replaceObjectAtIndex(1, withObject: lastName)
             self.tableContents.replaceObjectAtIndex(3, withObject: gender)
             self.tableContents.replaceObjectAtIndex(5, withObject: email)
+            self.tableContents.replaceObjectAtIndex(2, withObject: birthday)
+            self.tableContents.replaceObjectAtIndex(4, withObject: address)
             
             self.tableView.reloadData()
         }
@@ -108,6 +117,11 @@ class RegsitrationFormViewController : BaseViewController, UITableViewDataSource
         self.tableContents.addObject(address)
         self.tableContents.addObject(email)
         
+        if self.isEditingProfile == true {
+            self.btnResend.hidden = true
+            return
+        }
+        
         if self.user!.cardPin.characters.count > 0 {
             
             if self.user!.cardNumber.characters.count == 0 {
@@ -125,7 +139,7 @@ class RegsitrationFormViewController : BaseViewController, UITableViewDataSource
     
     func getGenderForAPI(gender: String) -> String {
         
-        if gender == "male" {
+        if gender == "Male" {
             return "M"
         }
         
@@ -234,7 +248,7 @@ class RegsitrationFormViewController : BaseViewController, UITableViewDataSource
             
         case "gender":
             //gender
-            let genders = ["male","female"]
+            let genders = ["Male","Female"]
             
             ActionSheetStringPicker.showPickerWithTitle("", rows: genders, initialSelection: 0, doneBlock: { (picker, index, value) -> Void in
                 //print(index)
@@ -369,6 +383,22 @@ class RegsitrationFormViewController : BaseViewController, UITableViewDataSource
         self.callRegisterFBInfoAPI()
     }
     
+    private func callEditProfileAPI() {
+        let dictParams = NSMutableDictionary()
+        dictParams["transactionId"] = generateTransactionIDWithTimestamp(generateTimeStamp())
+        dictParams["msisdn"] = self.user!.mobileNumber
+        dictParams["lastName"] = self.tableContents[1]["value"] as! String
+        dictParams["firstName"] = self.tableContents[0]["value"] as! String
+        dictParams["middleName"] = " "
+        dictParams["birthday"] = self.tableContents[2]["value"] as! String
+        dictParams["gender"] = self.tableContents[3]["value"] as! String
+        dictParams["address"] = self.tableContents[4]["value"] as! String
+        dictParams["email"] = self.tableContents[5]["value"] as! String
+        
+        displayLoadingScreen()
+        self.webService.connectAndUpdateFbInfoWithInfo(dictParams)
+    }
+    
     private func callResendPin() -> Void {
         //resend pin to the mobile number provided earlier
         let dictParams = NSMutableDictionary()
@@ -422,6 +452,24 @@ class RegsitrationFormViewController : BaseViewController, UITableViewDataSource
         }
     }
     
+    private func updateUserFromCoreData() {
+        self.user!.firstName = self.tableContents[0]["value"] as! String
+        self.user!.lastName = self.tableContents[1]["value"] as! String
+        self.user!.gender = self.tableContents[3]["value"] as! String
+        self.user!.birthday = self.tableContents[2]["value"] as! String
+        self.user!.address = self.tableContents[4]["value"] as! String
+        self.user!.email = self.tableContents[5]["value"] as! String
+        
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let managedContext = appDelegate.managedObjectContext
+        
+        do {
+            try managedContext.save()
+        } catch let error as NSError  {
+            print("Could not save \(error), \(error.userInfo)")
+        }
+    }
+    
     //MARK: Button Actions
     
     @IBAction func saveButtonClicked(sender: UIButton) {
@@ -436,12 +484,16 @@ class RegsitrationFormViewController : BaseViewController, UITableViewDataSource
                 return
             }
         }
- 
         
         sender.enabled = false
         btnSender = sender
-        
 
+        if self.isEditingProfile == true {
+            self.callEditProfileAPI()
+            
+            return
+        }
+        
         //identify with or without card
         if self.user!.cardNumber.characters.count == 0 {
             //without card
@@ -475,6 +527,7 @@ class RegsitrationFormViewController : BaseViewController, UITableViewDataSource
             let status = parsedDictionary["STATUS"] as? String ?? ""
             let description = parsedDictionary["DESCRIPTION"] as? String ?? parsedDictionary["StatusDescription"] as! String
             let STATUS = parsedDictionary["Status"] as? String ?? ""
+            self.user!.cardNumber = parsedDictionary["CARDNUMBER"] as! String
             
             if status == "0" || STATUS == "0" {
                 hideLoadingScreen()
@@ -548,6 +601,32 @@ class RegsitrationFormViewController : BaseViewController, UITableViewDataSource
                 self.hideLoadingScreen()
                 
                 self.saveUserToCoreData()
+                /*
+                 //proceed to dashboard
+                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                 let vc = storyboard.instantiateViewControllerWithIdentifier("main")
+                 */
+                let storyboard = UIStoryboard(name: "Navigation", bundle: nil)
+                let vc = storyboard.instantiateViewControllerWithIdentifier("navigationView") as! FunNavigationController
+                self.presentViewController(vc, animated: true, completion: nil)
+                
+                return
+            }
+            
+            btnSender!.enabled = true
+            hideLoadingScreen()
+            displayAlertRequestError(status, descripion: errorMessage)
+            
+            break
+            
+        case WebServiceFor.UpdateFbInfo.rawValue:
+            let status = parsedDictionary["Status"] as! String
+            let errorMessage = parsedDictionary["StatusDescription"] as! String
+            
+            if status == "0" {
+                self.hideLoadingScreen()
+                
+                self.updateUserFromCoreData()
                 /*
                  //proceed to dashboard
                  let storyboard = UIStoryboard(name: "Main", bundle: nil)
