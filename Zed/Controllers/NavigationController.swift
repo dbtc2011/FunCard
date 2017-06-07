@@ -68,6 +68,11 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
         
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.labelProfile.text = self.user!.firstName + " " + self.user!.lastName
+    }
+    
     //MARK: Method
     func setupNavigation() {
         
@@ -417,6 +422,14 @@ class FunNavigationController : UIViewController, UITableViewDelegate, UITableVi
     //MARK: Button Actions
     @IBAction func buttonPageClicked(sender: UIButton) {
         
+        let storyboard = UIStoryboard(name: "Registration", bundle: NSBundle.mainBundle())
+        let controller = storyboard.instantiateViewControllerWithIdentifier("regForm") as! RegsitrationFormViewController
+        controller.user = self.user!
+        controller.isEditingProfile = true
+        self.presentViewController(controller, animated: true) { 
+            
+            
+        }
         
     }
     

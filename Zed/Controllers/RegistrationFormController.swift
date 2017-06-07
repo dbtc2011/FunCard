@@ -627,6 +627,7 @@ class RegsitrationFormViewController : BaseViewController, UITableViewDataSource
                 self.hideLoadingScreen()
                 
                 self.updateUserFromCoreData()
+                
                 /*
                  //proceed to dashboard
                  let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -637,6 +638,14 @@ class RegsitrationFormViewController : BaseViewController, UITableViewDataSource
                 self.presentViewController(vc, animated: true, completion: nil)
                 
                 return
+            }else if status == "28" && errorMessage == "Updated successfully" {
+                
+                self.updateUserFromCoreData()
+                self.dismissViewControllerAnimated(true, completion: { 
+                    
+                    
+                })
+                
             }
             
             btnSender!.enabled = true

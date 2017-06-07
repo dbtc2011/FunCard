@@ -129,6 +129,27 @@ class PinVerificationViewController : BaseViewController, WebServiceDelegate, UI
         
     }
     
+    private func mobileNumberAlreadyRegistered() {
+        
+        self.saveUserToCoreData()
+        /*
+         //proceed to dashboard
+         let storyboard = UIStoryboard(name: "Main", bundle: nil)
+         let vc = storyboard.instantiateViewControllerWithIdentifier("main") as! ViewController
+         vc.user = self.user
+         
+         self.presentViewController(vc, animated: true, completion: nil)
+         */
+        
+        hideLoadingScreen()
+        
+        let storyboard = UIStoryboard(name: "Navigation", bundle: nil)
+        let vc = storyboard.instantiateViewControllerWithIdentifier("navigationView") as! FunNavigationController
+        self.presentViewController(vc, animated: true, completion: nil)
+        
+        return
+    }
+    
     //MARK: UITextfield Delegate
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         textField.resignFirstResponder()
@@ -209,14 +230,19 @@ class PinVerificationViewController : BaseViewController, WebServiceDelegate, UI
                 
                 self.proceedSignup()
                 
+            }else if status == "73" && description == "Sorry, mobile number provided has already been in used."  {
+             
+                
+                self.user?.mobileNumber = parsedDictionary["Msisdn"] as? String ?? ""
+                self.user?.cardNumber = parsedDictionary["CardNumber"] as? String ?? ""
+                
+                self.mobileNumberAlreadyRegistered()
+                
             }else {
-                
-//                displayAlertRequestError(status, descripion: description)
-                
-                self.dismissViewControllerAnimated(true, completion: { 
+                hideLoadingScreen()
+                self.dismissViewControllerAnimated(true, completion: {
                     
                 })
-                
             }
             
             break
