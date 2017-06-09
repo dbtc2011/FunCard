@@ -171,7 +171,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func syncBranchesData() {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-            let url:NSURL = NSURL(string: "http://180.87.143.52/funapp/GetBranches.aspx")!
+            let url:NSURL = NSURL(string: "http://180.87.143.45/FunApp/GetBranches.aspx")!
             let session = NSURLSession.sharedSession()
             
             let request = NSMutableURLRequest(URL: url)
