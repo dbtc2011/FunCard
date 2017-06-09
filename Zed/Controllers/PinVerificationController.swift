@@ -230,7 +230,7 @@ class PinVerificationViewController : BaseViewController, WebServiceDelegate, UI
                 
                 self.proceedSignup()
                 
-            }else if status == "73" && description == "Sorry, mobile number provided has already been in used."  {
+            } else if status == "73" && description == "Sorry, mobile number provided has already been in used."  {
              
                 
                 self.user?.mobileNumber = parsedDictionary["Msisdn"] as? String ?? ""
@@ -238,11 +238,18 @@ class PinVerificationViewController : BaseViewController, WebServiceDelegate, UI
                 
                 self.mobileNumberAlreadyRegistered()
                 
-            }else {
+            } else {
                 hideLoadingScreen()
-                self.dismissViewControllerAnimated(true, completion: {
+                
+                if self.alertView == nil {
                     
-                })
+                    let alertFrame = CGRectMake(0, 0, UIScreen.mainScreen().bounds.size.width, UIScreen.mainScreen().bounds.size.height)
+                    
+                    self.alertView = CustomAlertView(frame: alertFrame)
+                }
+                
+                self.alertView!.setAlertMessageAndTitle("\(description)", title: "Error")
+                self.view.addSubview(self.alertView!)
             }
             
             break

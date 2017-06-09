@@ -623,7 +623,7 @@ class RegsitrationFormViewController : BaseViewController, UITableViewDataSource
             let status = parsedDictionary["Status"] as! String
             let errorMessage = parsedDictionary["StatusDescription"] as! String
             
-            if status == "0" {
+            if isEditingProfile == false {
                 self.hideLoadingScreen()
                 
                 self.updateUserFromCoreData()
@@ -638,7 +638,7 @@ class RegsitrationFormViewController : BaseViewController, UITableViewDataSource
                 self.presentViewController(vc, animated: true, completion: nil)
                 
                 return
-            }else if status == "28" && errorMessage == "Updated successfully" {
+            } else {
                 
                 self.updateUserFromCoreData()
                 self.dismissViewControllerAnimated(true, completion: { 

@@ -107,7 +107,7 @@ class BaseViewController: UIViewController {
     }
     
     func hideLoadingScreen() {
-        self.loadingView!.removeFromSuperview()
+        self.loadingView?.removeFromSuperview()
     }
     
     //internet checking

@@ -64,7 +64,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let defaults = NSUserDefaults.standardUserDefaults()
         defaults.setObject("true", forKey: "identify_card")
         
-        
         GMSServices.provideAPIKey("AIzaSyD6JXMgaHDYTeiDB0eGplaWIGtLlZs4nKE")
         syncBranchesData()
         
